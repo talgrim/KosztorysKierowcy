@@ -1,0 +1,12 @@
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.exe.config
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.exe
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.pdb
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csprojResolveAssemblyReference.cache
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.Properties.Resources.resources
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csproj.GenerateResource.Cache
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csproj.CoreCompileInputs.cache
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.exe
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.pdb
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\MySql.Data.dll
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\MySql.Data.xml
+c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.MainWindow.resources
