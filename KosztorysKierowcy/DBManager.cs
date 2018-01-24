@@ -133,14 +133,12 @@ namespace KosztorysKierowcy
         }
 
         //Select statement
-        public List<string>[] getDrivers()
+        public List<Person> getDrivers()
         {
-            string query = "SELECT driverid, name, surname FROM drivers";
+            string query = "SELECT personid, name, surname FROM persons WHERE driver IS NOT NULL";
 
             //Create a list to store the result
-            List<string>[] list = new List<string>[2];
-            list[0] = new List<string>();
-            list[1] = new List<string>();
+            List<Person> drivers = new List<Person>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -152,10 +150,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                {
-                    list[0].Add(dataReader["driverid"] + "");
-                    list[1].Add(dataReader["name"] + " " + dataReader["surname"]);
-                }
+                    drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString()));
 
                 //close Data Reader
                 dataReader.Close();
@@ -164,21 +159,18 @@ namespace KosztorysKierowcy
                 this.CloseConnection();
 
                 //return list to be displayed
-                return list;
+                return drivers;
             }
             else
-                return list;
+                return drivers;
         }
 
-        public List<string>[] getRoutes()
+        public List<Route> getRoutes()
         {
             string query = "SELECT routeid, name, distance FROM routes";
 
             //Create a list to store the result
-            List<string>[] list = new List<string>[3];
-            list[0] = new List<string>();
-            list[1] = new List<string>();
-            list[2] = new List<string>();
+            List<Route> routes = new List<Route>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -190,11 +182,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                {
-                    list[0].Add(dataReader["routeid"] + "");
-                    list[1].Add(dataReader["name"] + ", " + dataReader["distance"].ToString() + "km");
-                    list[2].Add(dataReader["distance"] + "");
-                }
+                    routes.Add(new Route((int)dataReader["routeid"], dataReader["name"].ToString(), (int)dataReader["distance"]));
 
                 //close Data Reader
                 dataReader.Close();
@@ -203,21 +191,18 @@ namespace KosztorysKierowcy
                 this.CloseConnection();
 
                 //return list to be displayed
-                return list;
+                return routes;
             }
             else
-                return list;
+                return routes;
         }
 
-        public List<string>[] getCarsByID(int id)
+        public List<Car> getCarsByID(int id)
         {
-            string query = "SELECT cars.carid, cars.name, cars.consumption FROM cars INNER JOIN owned ON cars.carid = owned.carid WHERE owned.driverid = "+id;
+            string query = "SELECT cars.carid, cars.name, cars.consumption FROM cars INNER JOIN owned ON cars.carid = owned.carid WHERE owned.ownerid = " + id;
 
             //Create a list to store the result
-            List<string>[] list = new List<string>[3];
-            list[0] = new List<string>();
-            list[1] = new List<string>();
-            list[2] = new List<string>();
+            List<Car> cars = new List<Car>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -229,11 +214,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                {
-                    list[0].Add(dataReader["carid"] + "");
-                    list[1].Add(dataReader["name"] + ", " + dataReader["consumption"].ToString() + "/100");
-                    list[2].Add(dataReader["consumption"] + "");
-                }
+                    cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"]));
 
                 //close Data Reader
                 dataReader.Close();
@@ -242,10 +223,42 @@ namespace KosztorysKierowcy
                 this.CloseConnection();
 
                 //return list to be displayed
-                return list;
+                return cars;
             }
             else
-                return list;
+                return cars;
+        }
+
+        public List<Person> getPassengersWithoutDriver(int id)
+        {
+            string query = "SELECT personid, name, surname FROM persons WHERE personid <> " + id;
+
+            //Create a list to store the result
+            List <Person> passengers = new List<Person>();
+
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //Create Command
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                //Create a data reader and Execute the command
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Read the data and store them in the list
+                while (dataReader.Read())
+                        passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString()));
+
+                //close Data Reader
+                dataReader.Close();
+
+                //close Connection
+                this.CloseConnection();
+
+                //return list to be displayed
+                return passengers;
+            }
+            else
+                return passengers;
         }
 
         //Count statement

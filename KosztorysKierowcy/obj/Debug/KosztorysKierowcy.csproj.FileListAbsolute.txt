@@ -10,3 +10,15 @@ c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\Kosztorys
 c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\MySql.Data.dll
 c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\bin\Debug\MySql.Data.xml
 c:\users\admin\documents\visual studio 2017\Projects\KosztorysKierowcy\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.MainWindow.resources
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.exe.config
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.exe
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\bin\Debug\KosztorysKierowcy.pdb
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\bin\Debug\MySql.Data.dll
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\bin\Debug\MySql.Data.xml
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csprojResolveAssemblyReference.cache
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.MainWindow.resources
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.Properties.Resources.resources
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csproj.GenerateResource.Cache
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.exe
+C:\Users\Admin\Documents\Visual Studio 2017\Projects\KosztorysKierowcy.git\trunk\KosztorysKierowcy\obj\Debug\KosztorysKierowcy.pdb

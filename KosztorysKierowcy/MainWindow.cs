@@ -14,30 +14,41 @@ namespace KosztorysKierowcy
     public partial class MainWindow : Form
     {
         private DBManager dbm;
-        private List<string>[] drivers;
-        private List<string>[] routes;
-        private List<string>[] cars;
+        private List<Person> drivers;
+        private List<Route> routes;
+        private List<Car> cars;
+        private List<Person> passengers;
+
 
         public MainWindow()
         {
             InitializeComponent();
-            this.cCars.SelectedIndexChanged += new System.EventHandler(this.Calculate);
-            this.cRoutes.SelectedIndexChanged += new System.EventHandler(this.Calculate);
-            this.tPetroleum.TextChanged += new System.EventHandler(this.Calculate);
+            this.cCars.SelectedIndexChanged += new EventHandler(this.Calculate);
+            this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
+            this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
+            this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
+
             dbm = new DBManager();
             drivers = dbm.getDrivers();
+            cDrivers.ValueMember = "Id";
+            cDrivers.DisplayMember = "FullName";
+            cDrivers.DataSource = drivers;
+
             routes = dbm.getRoutes();
-            BindingSource bsDrivers = new BindingSource();
-            BindingSource bsRoutes = new BindingSource();
-            BindingSource bsCars = new BindingSource();
-            bsDrivers.DataSource = drivers[1];
-            bsRoutes.DataSource = routes[1];
-            cDrivers.DataSource = bsDrivers.DataSource;
-            cRoutes.DataSource = bsRoutes.DataSource;
-            int id = Int16.Parse(drivers[0][cDrivers.SelectedIndex]);
+            cRoutes.ValueMember = "Id";
+            cRoutes.DisplayMember = "Information";
+            cRoutes.DataSource = routes;
+
+            int id = (int)cDrivers.SelectedValue;
             cars = dbm.getCarsByID(id);
-            bsCars.DataSource = cars[1];
-            cCars.DataSource = bsCars.DataSource;
+            cCars.ValueMember = "Id";
+            cCars.DisplayMember = "Information";
+            cCars.DataSource = cars;
+
+            passengers = dbm.getPassengersWithoutDriver(id);
+            lPassengers.ValueMember = "Id";
+            lPassengers.DisplayMember = "FullName";
+            lPassengers.DataSource = passengers;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -56,23 +67,27 @@ namespace KosztorysKierowcy
 
         private void cDrivers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int id = Int16.Parse(drivers[0][cDrivers.SelectedIndex]);
+            int id = (int)cDrivers.SelectedValue;
             cars = dbm.getCarsByID(id);
-            BindingSource bsCars = new BindingSource();
-            bsCars.DataSource = cars[1];
-            cCars.DataSource = bsCars.DataSource;
+            passengers = dbm.getPassengersWithoutDriver(id);
+            cCars.DisplayMember = "Information";
+            cCars.DataSource = cars;
+            lPassengers.DisplayMember = "FullName";
+            lPassengers.DataSource = passengers;
         }
 
         private void Calculate(object sender, EventArgs e)
         {
             double petroleum = Double.Parse(tPetroleum.Text);
             if (cRoutes.SelectedIndex > -1 && cCars.SelectedIndex > -1)
-            { 
-                int distance = Int16.Parse(routes[2][cRoutes.SelectedIndex]);
-                int consumption = Int16.Parse(cars[2][cCars.SelectedIndex]);
+            {
+                int distance = routes[cRoutes.SelectedIndex].Distance;
+                int consumption = cars[cCars.SelectedIndex].Consumption;
 
                 double result = distance * ((double)consumption / 100) * petroleum;
-                tOut.Text = result.ToString("F") + " zł";
+                tRouteCost.Text = result.ToString("F") + " zł";
+                int passengers = lPassengers.SelectedItems.Count+1;
+                tPassengersCost.Text = (result / passengers).ToString("F") + " zł";
             }
         }
 
@@ -89,6 +104,17 @@ namespace KosztorysKierowcy
             {
                 e.Handled = true;
             }
+        }
+
+        private void RefreshTables()
+        {
+            drivers = dbm.getDrivers();
+            routes = dbm.getRoutes();
+        }
+
+        private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tPassengersCount.Text = lPassengers.SelectedItems.Count.ToString() + " + kierowca";
         }
     }
 }
