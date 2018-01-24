@@ -22,7 +22,7 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
-            bAddPerson.Click += (s, e) => { showDialogBox(new Person(0,"","",false)); };
+            bAddPerson.Click += (s, e) => { showDialogBox(new Person(0,"","","null")); };
             bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,"",0)); };
             bAddCar.Click += (s, e) => { showDialogBox(new Car(0,"",0)); };
             bEditRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
