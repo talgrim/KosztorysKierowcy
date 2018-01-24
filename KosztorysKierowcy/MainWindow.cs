@@ -18,7 +18,8 @@ namespace KosztorysKierowcy
         private List<Route> routes;
         private List<Car> cars;
         private List<Person> passengers;
-
+        private List<Transit> transits;
+        private double result;
 
         public MainWindow()
         {
@@ -30,23 +31,19 @@ namespace KosztorysKierowcy
 
             dbm = new DBManager();
             drivers = dbm.getDrivers();
-            cDrivers.ValueMember = "Id";
             cDrivers.DisplayMember = "FullName";
             cDrivers.DataSource = drivers;
 
             routes = dbm.getRoutes();
-            cRoutes.ValueMember = "Id";
             cRoutes.DisplayMember = "Information";
             cRoutes.DataSource = routes;
 
-            int id = (int)cDrivers.SelectedValue;
+            int id = (cDrivers.SelectedValue as Person).Id;
             cars = dbm.getCarsByID(id);
-            cCars.ValueMember = "Id";
             cCars.DisplayMember = "Information";
             cCars.DataSource = cars;
 
             passengers = dbm.getPassengersWithoutDriver(id);
-            lPassengers.ValueMember = "Id";
             lPassengers.DisplayMember = "FullName";
             lPassengers.DataSource = passengers;
         }
@@ -67,7 +64,7 @@ namespace KosztorysKierowcy
 
         private void cDrivers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int id = (int)cDrivers.SelectedValue;
+            int id = (cDrivers.SelectedValue as Person).Id;
             cars = dbm.getCarsByID(id);
             passengers = dbm.getPassengersWithoutDriver(id);
             cCars.DisplayMember = "Information";
@@ -84,10 +81,11 @@ namespace KosztorysKierowcy
                 int distance = routes[cRoutes.SelectedIndex].Distance;
                 int consumption = cars[cCars.SelectedIndex].Consumption;
 
-                double result = distance * ((double)consumption / 100) * petroleum;
+                result = distance * ((double)consumption / 100) * petroleum;
                 tRouteCost.Text = result.ToString("F") + " zł";
                 int passengers = lPassengers.SelectedItems.Count+1;
-                tPassengersCost.Text = (result / passengers).ToString("F") + " zł";
+                result /= passengers;
+                tPassengersCost.Text = result.ToString("F") + " zł";
             }
         }
 
@@ -115,6 +113,39 @@ namespace KosztorysKierowcy
         private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
         {
             tPassengersCount.Text = lPassengers.SelectedItems.Count.ToString() + " + kierowca";
+        }
+
+        private void bAddTransit_Click(object sender, EventArgs e)
+        {
+            List<int> passengerids = new List<int>();
+            string text;
+            text = "Czy na pewno chcesz dodać przejazd:\n";
+            text += "Kierowca: " + (cDrivers.SelectedValue as Person).FullName + "\n";
+            text += "Auto: " + (cCars.SelectedValue as Car).Name + "\n";
+            text += "Trasa: " + (cRoutes.SelectedValue as Route).Name + "\n";
+            text += "Pasażerowie: ";
+            foreach (Person passenger in lPassengers.SelectedItems)
+            {
+                text += passenger.FullName + ", ";
+                passengerids.Add(passenger.Id);
+            }
+            text += "\nKoszt: " + result.ToString("F") + " zł.";
+            DialogResult dialogResult = MessageBox.Show(text, "Potwierdź", MessageBoxButtons.OKCancel);
+            if(dialogResult == DialogResult.OK)
+            {
+                int driverid = (cDrivers.SelectedValue as Person).Id;
+                int carid = (cCars.SelectedValue as Car).Id;
+                int routeid = (cRoutes.SelectedValue as Route).Id;
+                dbm.insertTransit(driverid, carid, routeid);
+                dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
+                bCheckTransits.PerformClick();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+            gTransits.DataSource = transits;
         }
     }
 }

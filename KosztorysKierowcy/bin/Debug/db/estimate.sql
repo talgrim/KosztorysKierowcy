@@ -56,8 +56,8 @@ CREATE TABLE `debts` (
   PRIMARY KEY (`debtid`),
   KEY `driverid` (`driverid`),
   KEY `passengerid` (`passengerid`),
-  CONSTRAINT `debts_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `drivers` (`driverid`),
-  CONSTRAINT `debts_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `passengers` (`passengerid`)
+  CONSTRAINT `debts_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `persons` (`personid`),
+  CONSTRAINT `debts_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `persons` (`personid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -71,31 +71,6 @@ LOCK TABLES `debts` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `drivers`
---
-
-DROP TABLE IF EXISTS `drivers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drivers` (
-  `driverid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `surname` varchar(50) NOT NULL,
-  PRIMARY KEY (`driverid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `drivers`
---
-
-LOCK TABLES `drivers` WRITE;
-/*!40000 ALTER TABLE `drivers` DISABLE KEYS */;
-INSERT INTO `drivers` VALUES (1,'Witold','DomaĹ„ski'),(2,'Maciej','Hyla');
-/*!40000 ALTER TABLE `drivers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `owned`
 --
 
@@ -104,11 +79,11 @@ DROP TABLE IF EXISTS `owned`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `owned` (
   `carid` int(11) NOT NULL,
-  `driverid` int(11) NOT NULL,
-  PRIMARY KEY (`carid`,`driverid`),
-  KEY `driverid` (`driverid`),
+  `ownerid` int(11) NOT NULL,
+  PRIMARY KEY (`carid`,`ownerid`),
+  KEY `ownerid` (`ownerid`),
   CONSTRAINT `owned_ibfk_1` FOREIGN KEY (`carid`) REFERENCES `cars` (`carid`),
-  CONSTRAINT `owned_ibfk_2` FOREIGN KEY (`driverid`) REFERENCES `drivers` (`driverid`)
+  CONSTRAINT `owned_ibfk_2` FOREIGN KEY (`ownerid`) REFERENCES `persons` (`personid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -120,31 +95,6 @@ LOCK TABLES `owned` WRITE;
 /*!40000 ALTER TABLE `owned` DISABLE KEYS */;
 INSERT INTO `owned` VALUES (1,1),(2,2);
 /*!40000 ALTER TABLE `owned` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `passengers`
---
-
-DROP TABLE IF EXISTS `passengers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `passengers` (
-  `passengerid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `surname` varchar(50) NOT NULL,
-  PRIMARY KEY (`passengerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `passengers`
---
-
-LOCK TABLES `passengers` WRITE;
-/*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
-INSERT INTO `passengers` VALUES (1,'Witold','DomaĹ„ski'),(2,'Maciej','Hyla'),(3,'Adam','Strachanowski'),(4,'Dawid','Pasek');
-/*!40000 ALTER TABLE `passengers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -160,7 +110,7 @@ CREATE TABLE `passengerstotransit` (
   PRIMARY KEY (`transitid`,`passengerid`),
   KEY `passengerid` (`passengerid`),
   CONSTRAINT `passengerstotransit_ibfk_1` FOREIGN KEY (`transitid`) REFERENCES `transits` (`transitid`),
-  CONSTRAINT `passengerstotransit_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `passengers` (`passengerid`)
+  CONSTRAINT `passengerstotransit_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `persons` (`personid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -170,7 +120,34 @@ CREATE TABLE `passengerstotransit` (
 
 LOCK TABLES `passengerstotransit` WRITE;
 /*!40000 ALTER TABLE `passengerstotransit` DISABLE KEYS */;
+INSERT INTO `passengerstotransit` VALUES (1,2),(1,3),(1,4),(2,2),(2,4),(3,2),(3,4),(4,1),(4,3),(5,1),(5,4),(6,4),(7,2),(7,3),(7,4),(8,2),(8,4),(9,2),(9,4),(10,3);
 /*!40000 ALTER TABLE `passengerstotransit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `persons`
+--
+
+DROP TABLE IF EXISTS `persons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `persons` (
+  `personid` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `surname` varchar(50) NOT NULL,
+  `driver` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`personid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `persons`
+--
+
+LOCK TABLES `persons` WRITE;
+/*!40000 ALTER TABLE `persons` DISABLE KEYS */;
+INSERT INTO `persons` VALUES (1,'Witold','DomaĹ„ski',1),(2,'Maciej','Hyla',1),(3,'Adam','Strachanowski',NULL),(4,'Dawid','Pasek',NULL);
+/*!40000 ALTER TABLE `persons` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -215,10 +192,10 @@ CREATE TABLE `transits` (
   KEY `driverid` (`driverid`),
   KEY `carid` (`carid`),
   KEY `routeid` (`routeid`),
-  CONSTRAINT `transits_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `drivers` (`driverid`),
+  CONSTRAINT `transits_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `persons` (`personid`),
   CONSTRAINT `transits_ibfk_2` FOREIGN KEY (`carid`) REFERENCES `cars` (`carid`),
   CONSTRAINT `transits_ibfk_3` FOREIGN KEY (`routeid`) REFERENCES `routes` (`routeid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,6 +204,7 @@ CREATE TABLE `transits` (
 
 LOCK TABLES `transits` WRITE;
 /*!40000 ALTER TABLE `transits` DISABLE KEYS */;
+INSERT INTO `transits` VALUES (1,1,1,1,'2018-01-24 19:58:03'),(2,1,1,1,'2018-01-24 19:58:05'),(3,1,1,2,'2018-01-24 19:58:08'),(4,2,2,2,'2018-01-24 19:58:12'),(5,2,2,1,'2018-01-24 19:58:17'),(6,2,2,1,'2018-01-24 19:58:19'),(7,1,1,1,'2018-01-24 19:59:06'),(8,1,1,1,'2018-01-24 20:00:52'),(9,1,1,1,'2018-01-24 20:01:06'),(10,1,1,1,'2018-01-24 20:18:26');
 /*!40000 ALTER TABLE `transits` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -239,5 +217,5 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-24 13:37:29
+-- Dump completed on 2018-01-24 20:37:30
 
