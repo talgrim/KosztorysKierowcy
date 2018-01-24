@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace KosztorysKierowcy
 {
@@ -28,6 +22,9 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
+            bAddPerson.Click += (s, e) => { showDialogBox(cDrivers.SelectedValue as Person); };
+            bAddRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
+            bAddCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
 
             dbm = new DBManager();
             drivers = dbm.getDrivers();
@@ -136,16 +133,32 @@ namespace KosztorysKierowcy
                 int driverid = (cDrivers.SelectedValue as Person).Id;
                 int carid = (cCars.SelectedValue as Car).Id;
                 int routeid = (cRoutes.SelectedValue as Route).Id;
-                dbm.insertTransit(driverid, carid, routeid);
+                dbm.insertTransit(driverid, carid, routeid, result);
                 dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
                 bCheckTransits.PerformClick();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bCheckTransits_Click(object sender, EventArgs e)
         {
             transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
             gTransits.DataSource = transits;
+        }
+
+        private void showDialogBox(object obj)
+        {
+            using (DialogBox form = new DialogBox(obj))
+            {
+                form.ShowDialog();
+            }
+        }
+
+        private void showDialogBox(object obj, object[] args)
+        {
+            using (DialogBox form = new DialogBox(obj,args ))
+            {
+                form.ShowDialog();
+            }
         }
     }
 }

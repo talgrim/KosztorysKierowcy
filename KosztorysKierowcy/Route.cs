@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KosztorysKierowcy
 {
-    class Route
+    public class Route
     {
         public int Id { get; }
         public String Name { get; }

@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace KosztorysKierowcy
 {
-    class Person
+    public class Person
     {
         public int Id { get; }
-        public String Name { get; }
-        public String Surname { get; }
+        public string Name { get; }
+        public string Surname { get; }
         public Person []Persons { get; private set; }
+        public bool Driver { get; }
 
-        public Person(int id, string name, string surname)
+        public Person(int id, string name, string surname, bool driver)
         {
             this.Id = id;
             this.Name = name;
             this.Surname = surname;
+            Driver = driver;
         }
 
-        public String FullName { get { return Name + " " + Surname; } }
+        public string FullName { get { return Name + " " + Surname; } }
 
         public void ListToArray(List<Person> list)
         {

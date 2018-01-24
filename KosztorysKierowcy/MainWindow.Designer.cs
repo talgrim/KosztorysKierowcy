@@ -41,20 +41,20 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.bCheckTransits = new System.Windows.Forms.Button();
+            this.bAddTransit = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tPassengersCost = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tPassengersCount = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.lPassengers = new System.Windows.Forms.ListBox();
             this.bEditRoute = new System.Windows.Forms.Button();
+            this.bEditPerson = new System.Windows.Forms.Button();
+            this.lPassengers = new System.Windows.Forms.ListBox();
             this.bAddRoute = new System.Windows.Forms.Button();
             this.bEditCar = new System.Windows.Forms.Button();
             this.bAddCar = new System.Windows.Forms.Button();
-            this.bEditPerson = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tPassengersCount = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.tPassengersCost = new System.Windows.Forms.TextBox();
-            this.bAddTransit = new System.Windows.Forms.Button();
-            this.bCheckTransits = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
@@ -201,6 +201,60 @@
             this.pMainPanel.Size = new System.Drawing.Size(1017, 265);
             this.pMainPanel.TabIndex = 12;
             // 
+            // bCheckTransits
+            // 
+            this.bCheckTransits.Location = new System.Drawing.Point(184, 224);
+            this.bCheckTransits.Name = "bCheckTransits";
+            this.bCheckTransits.Size = new System.Drawing.Size(177, 23);
+            this.bCheckTransits.TabIndex = 25;
+            this.bCheckTransits.Text = "Sprawdź przejazdy kierowcy";
+            this.bCheckTransits.UseVisualStyleBackColor = true;
+            this.bCheckTransits.Click += new System.EventHandler(this.bCheckTransits_Click);
+            // 
+            // bAddTransit
+            // 
+            this.bAddTransit.Location = new System.Drawing.Point(208, 195);
+            this.bAddTransit.Name = "bAddTransit";
+            this.bAddTransit.Size = new System.Drawing.Size(125, 23);
+            this.bAddTransit.TabIndex = 24;
+            this.bAddTransit.Text = "Dodaj przejazd";
+            this.bAddTransit.UseVisualStyleBackColor = true;
+            this.bAddTransit.Click += new System.EventHandler(this.bAddTransit_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(399, 153);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(94, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "Koszt na pasażera";
+            // 
+            // tPassengersCost
+            // 
+            this.tPassengersCost.Location = new System.Drawing.Point(402, 169);
+            this.tPassengersCost.Name = "tPassengersCost";
+            this.tPassengersCost.ReadOnly = true;
+            this.tPassengersCost.Size = new System.Drawing.Size(100, 20);
+            this.tPassengersCost.TabIndex = 22;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(293, 153);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(92, 13);
+            this.label11.TabIndex = 21;
+            this.label11.Text = "Liczba pasażerów";
+            // 
+            // tPassengersCount
+            // 
+            this.tPassengersCount.Location = new System.Drawing.Point(296, 169);
+            this.tPassengersCount.Name = "tPassengersCount";
+            this.tPassengersCount.ReadOnly = true;
+            this.tPassengersCount.Size = new System.Drawing.Size(100, 20);
+            this.tPassengersCount.TabIndex = 20;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -209,6 +263,24 @@
             this.label10.Size = new System.Drawing.Size(67, 13);
             this.label10.TabIndex = 19;
             this.label10.Text = "Pasażerowie";
+            // 
+            // bEditRoute
+            // 
+            this.bEditRoute.Location = new System.Drawing.Point(862, 126);
+            this.bEditRoute.Name = "bEditRoute";
+            this.bEditRoute.Size = new System.Drawing.Size(118, 23);
+            this.bEditRoute.TabIndex = 17;
+            this.bEditRoute.Text = "Edytuj trasę";
+            this.bEditRoute.UseVisualStyleBackColor = true;
+            // 
+            // bEditPerson
+            // 
+            this.bEditPerson.Location = new System.Drawing.Point(862, 68);
+            this.bEditPerson.Name = "bEditPerson";
+            this.bEditPerson.Size = new System.Drawing.Size(118, 23);
+            this.bEditPerson.TabIndex = 13;
+            this.bEditPerson.Text = "Edytuj osobę";
+            this.bEditPerson.UseVisualStyleBackColor = true;
             // 
             // lPassengers
             // 
@@ -219,15 +291,6 @@
             this.lPassengers.Size = new System.Drawing.Size(224, 121);
             this.lPassengers.TabIndex = 18;
             this.lPassengers.SelectedIndexChanged += new System.EventHandler(this.lPassengers_SelectedIndexChanged);
-            // 
-            // bEditRoute
-            // 
-            this.bEditRoute.Location = new System.Drawing.Point(862, 126);
-            this.bEditRoute.Name = "bEditRoute";
-            this.bEditRoute.Size = new System.Drawing.Size(118, 23);
-            this.bEditRoute.TabIndex = 17;
-            this.bEditRoute.Text = "Edytuj trasę";
-            this.bEditRoute.UseVisualStyleBackColor = true;
             // 
             // bAddRoute
             // 
@@ -256,15 +319,6 @@
             this.bAddCar.Text = "Dodaj auto";
             this.bAddCar.UseVisualStyleBackColor = true;
             // 
-            // bEditPerson
-            // 
-            this.bEditPerson.Location = new System.Drawing.Point(862, 68);
-            this.bEditPerson.Name = "bEditPerson";
-            this.bEditPerson.Size = new System.Drawing.Size(118, 23);
-            this.bEditPerson.TabIndex = 13;
-            this.bEditPerson.Text = "Edytuj osobę";
-            this.bEditPerson.UseVisualStyleBackColor = true;
-            // 
             // bAddPerson
             // 
             this.bAddPerson.Location = new System.Drawing.Point(738, 68);
@@ -274,67 +328,19 @@
             this.bAddPerson.Text = "Dodaj osobę";
             this.bAddPerson.UseVisualStyleBackColor = true;
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(293, 153);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(92, 13);
-            this.label11.TabIndex = 21;
-            this.label11.Text = "Liczba pasażerów";
-            // 
-            // tPassengersCount
-            // 
-            this.tPassengersCount.Location = new System.Drawing.Point(296, 169);
-            this.tPassengersCount.Name = "tPassengersCount";
-            this.tPassengersCount.ReadOnly = true;
-            this.tPassengersCount.Size = new System.Drawing.Size(100, 20);
-            this.tPassengersCount.TabIndex = 20;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(399, 153);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(94, 13);
-            this.label12.TabIndex = 23;
-            this.label12.Text = "Koszt na pasażera";
-            // 
-            // tPassengersCost
-            // 
-            this.tPassengersCost.Location = new System.Drawing.Point(402, 169);
-            this.tPassengersCost.Name = "tPassengersCost";
-            this.tPassengersCost.ReadOnly = true;
-            this.tPassengersCost.Size = new System.Drawing.Size(100, 20);
-            this.tPassengersCost.TabIndex = 22;
-            // 
-            // bAddTransit
-            // 
-            this.bAddTransit.Location = new System.Drawing.Point(208, 195);
-            this.bAddTransit.Name = "bAddTransit";
-            this.bAddTransit.Size = new System.Drawing.Size(125, 23);
-            this.bAddTransit.TabIndex = 24;
-            this.bAddTransit.Text = "Dodaj przejazd";
-            this.bAddTransit.UseVisualStyleBackColor = true;
-            this.bAddTransit.Click += new System.EventHandler(this.bAddTransit_Click);
-            // 
-            // bCheckTransits
-            // 
-            this.bCheckTransits.Location = new System.Drawing.Point(184, 224);
-            this.bCheckTransits.Name = "bCheckTransits";
-            this.bCheckTransits.Size = new System.Drawing.Size(177, 23);
-            this.bCheckTransits.TabIndex = 25;
-            this.bCheckTransits.Text = "Sprawdź przejazdy kierowcy";
-            this.bCheckTransits.UseVisualStyleBackColor = true;
-            this.bCheckTransits.Click += new System.EventHandler(this.button1_Click);
-            // 
             // gTransits
             // 
+            this.gTransits.AllowUserToAddRows = false;
+            this.gTransits.AllowUserToDeleteRows = false;
+            this.gTransits.AllowUserToResizeColumns = false;
+            this.gTransits.AllowUserToResizeRows = false;
+            this.gTransits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.gTransits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gTransits.Location = new System.Drawing.Point(12, 345);
             this.gTransits.Name = "gTransits";
             this.gTransits.ReadOnly = true;
-            this.gTransits.Size = new System.Drawing.Size(1017, 295);
+            this.gTransits.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.gTransits.Size = new System.Drawing.Size(856, 295);
             this.gTransits.TabIndex = 13;
             // 
             // MainWindow
@@ -346,6 +352,7 @@
             this.Controls.Add(this.pMainPanel);
             this.Controls.Add(this.bRestore);
             this.Controls.Add(this.bBackup);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Kosztorys kierowcy";

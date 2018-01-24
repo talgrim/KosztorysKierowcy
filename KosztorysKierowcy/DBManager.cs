@@ -78,10 +78,10 @@ namespace KosztorysKierowcy
         }
 
         //Insert statement
-        public void insertTransit(int driverid, int carid, int routeid)
+        public void insertTransit(int driverid, int carid, int routeid, double cost)
         {
-            string query = "INSERT INTO transits (driverid, carid, routeid, driven) " +
-                "VALUES (" + driverid.ToString() + ", " + carid.ToString() + ", " + routeid.ToString() + ", NOW() );";
+            string query = "INSERT INTO transits (driverid, carid, routeid, driven, cost) " +
+                "VALUES (" + driverid.ToString() + ", " + carid.ToString() + ", " + routeid.ToString() + ", NOW(), " + cost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + " );";
 
             //open connection
             if (this.OpenConnection() == true)
@@ -174,7 +174,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                    drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString()));
+                    drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), true));
 
                 //close Data Reader
                 dataReader.Close();
@@ -252,14 +252,14 @@ namespace KosztorysKierowcy
         public List<Transit> getTransitsByDriver(int id)
         {
             string query =
-                "SELECT transitid, p1.personid, p1.name, p1.surname, cars.carid, cars.name, cars.consumption, routes.routeid, routes.name, routes.distance, transits.driven " +
+                "SELECT transitid, p1.personid, p1.name, p1.surname, cars.carid, cars.name, cars.consumption, routes.routeid, routes.name, routes.distance, transits.driven, cost " +
                 "FROM persons p1, transits, cars, routes "+
                 "WHERE "+
                     "transits.carid = cars.carid AND "+
                     "transits.routeid = routes.routeid AND "+
                     "transits.driverid = p1.personid AND "+
-                    "transits.driverid = " + id +
-               " ORDER BY transits.transitid";
+                    "transits.driverid = " + id + " "+
+               "ORDER BY transits.transitid";
 
             //Create a list to store the result
             List<Transit> transits = new List<Transit>();
@@ -276,7 +276,8 @@ namespace KosztorysKierowcy
                     while (dataReader.Read())
                         transits.Add(new Transit(
                                 (int)dataReader[0],
-                                new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString()),
+                                (double)dataReader[11],
+                                new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), true),
                                 new Car((int)dataReader[4], dataReader[5].ToString(), (int)dataReader[6]),
                                 new Route((int)dataReader[7], dataReader[8].ToString(), (int)dataReader[9]),
                                 (DateTime)dataReader[10]
@@ -293,7 +294,7 @@ namespace KosztorysKierowcy
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
                         {
                             while (dataReader.Read())
-                                passengers.Add(new Person((int)dataReader["passengerid"], dataReader["name"].ToString(), dataReader["surname"].ToString()));
+                                passengers.Add(new Person((int)dataReader["passengerid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), false));
                             element.Passengers = passengers.ToArray();
                         }
                     }
@@ -390,7 +391,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                        passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString()));
+                        passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), false));
 
                 //close Data Reader
                 dataReader.Close();
