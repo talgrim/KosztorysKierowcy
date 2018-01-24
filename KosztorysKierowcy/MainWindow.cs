@@ -22,9 +22,18 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
-            bAddPerson.Click += (s, e) => { showDialogBox(cDrivers.SelectedValue as Person); };
-            bAddRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
-            bAddCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
+            bAddPerson.Click += (s, e) => { showDialogBox(new Person(0,"","",false)); };
+            bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,"",0)); };
+            bAddCar.Click += (s, e) => { showDialogBox(new Car(0,"",0)); };
+            bEditRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
+            bEditCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
+            bEditPerson.Click += (s, e) => 
+            {
+                if(lPassengers.SelectedItems.Count == 1)
+                    showDialogBox(lPassengers.SelectedItem as Person);
+                else
+                    showDialogBox(cDrivers.SelectedValue as Person);
+            };
 
             dbm = new DBManager();
             drivers = dbm.getDrivers();
@@ -148,14 +157,6 @@ namespace KosztorysKierowcy
         private void showDialogBox(object obj)
         {
             using (DialogBox form = new DialogBox(obj))
-            {
-                form.ShowDialog();
-            }
-        }
-
-        private void showDialogBox(object obj, object[] args)
-        {
-            using (DialogBox form = new DialogBox(obj,args ))
             {
                 form.ShowDialog();
             }
