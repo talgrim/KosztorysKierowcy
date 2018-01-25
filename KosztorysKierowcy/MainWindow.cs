@@ -40,47 +40,31 @@ namespace KosztorysKierowcy
             };
 
             dbm = new DBManager();
-            drivers = dbm.getDrivers();
-            cDrivers.DisplayMember = "FullName";
-            cDrivers.DataSource = drivers;
-
-            routes = dbm.getRoutes();
-            cRoutes.DisplayMember = "Information";
-            cRoutes.DataSource = routes;
-
-            int id = (cDrivers.SelectedValue as Person).Id;
-            cars = dbm.getCarsByID(id);
-            cCars.DisplayMember = "Information";
-            cCars.DataSource = cars;
-
-            passengers = dbm.getPassengersWithoutDriver(id);
-            lPassengers.DisplayMember = "FullName";
-            lPassengers.DataSource = passengers;
+            if (dbm.IsCorrect)
+            {
+                bRetry.Visible = false;
+                InitFields();
+            }
+            else
+                bRetry.Visible = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
         }
 
-        private void bRestore_Click(object sender, EventArgs e)
-        {
-            dbm.Restore();
-        }
-
-        private void bBackup_Click(object sender, EventArgs e)
-        {
-            dbm.Backup();
-        }
-
         private void cDrivers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int id = (cDrivers.SelectedValue as Person).Id;
-            cars = dbm.getCarsByID(id);
-            passengers = dbm.getPassengersWithoutDriver(id);
-            cCars.DisplayMember = "Information";
-            cCars.DataSource = cars;
-            lPassengers.DisplayMember = "FullName";
-            lPassengers.DataSource = passengers;
+            if (dbm.IsCorrect)
+            {
+                int id = (cDrivers.SelectedValue as Person).Id;
+                cars = dbm.getCarsByID(id);
+                passengers = dbm.getPassengersWithoutDriver(id);
+                cCars.DisplayMember = "Information";
+                cCars.DataSource = cars;
+                lPassengers.DisplayMember = "FullName";
+                lPassengers.DataSource = passengers;
+            }
         }
 
         private void Calculate(object sender, EventArgs e)
@@ -93,7 +77,7 @@ namespace KosztorysKierowcy
 
                 result = distance * ((double)consumption / 100) * petroleum;
                 tRouteCost.Text = result.ToString("F") + " zł";
-                int passengers = lPassengers.SelectedItems.Count+1;
+                int passengers = lPassengers.SelectedItems.Count + 1;
                 result /= passengers;
                 tPassengersCost.Text = result.ToString("F") + " zł";
             }
@@ -114,7 +98,7 @@ namespace KosztorysKierowcy
             }
         }
 
-        private void RefreshTables()
+        private void InitFields()
         {
             drivers = dbm.getDrivers();
             cDrivers.DisplayMember = "FullName";
@@ -123,6 +107,15 @@ namespace KosztorysKierowcy
             routes = dbm.getRoutes();
             cRoutes.DisplayMember = "Information";
             cRoutes.DataSource = routes;
+
+            int id = (cDrivers.SelectedValue as Person).Id;
+            cars = dbm.getCarsByID(id);
+            cCars.DisplayMember = "Information";
+            cCars.DataSource = cars;
+
+            passengers = dbm.getPassengersWithoutDriver(id);
+            lPassengers.DisplayMember = "FullName";
+            lPassengers.DataSource = passengers;
         }
 
         private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
@@ -136,47 +129,53 @@ namespace KosztorysKierowcy
 
         private void bAddTransit_Click(object sender, EventArgs e)
         {
-            List<int> passengerids = new List<int>();
-            string text;
-            text = "Czy na pewno chcesz dodać przejazd:\n";
-            text += "Kierowca: " + (cDrivers.SelectedValue as Person).FullName + "\n";
-            text += "Auto: " + (cCars.SelectedValue as Car).Name + "\n";
-            text += "Trasa: " + (cRoutes.SelectedValue as Route).Name + "\n";
-            text += "Pasażerowie: ";
-            foreach (Person passenger in lPassengers.SelectedItems)
+            if (dbm.IsCorrect)
             {
-                text += passenger.FullName + ", ";
-                passengerids.Add(passenger.Id);
-            }
-            text += "\nKoszt: " + result.ToString("F") + " zł.";
-            DialogResult dialogResult = MessageBox.Show(text, "Potwierdź", MessageBoxButtons.OKCancel);
-            if(dialogResult == DialogResult.OK)
-            {
-                int driverid = (cDrivers.SelectedValue as Person).Id;
-                int carid = (cCars.SelectedValue as Car).Id;
-                int routeid = (cRoutes.SelectedValue as Route).Id;
-                dbm.insertTransit(driverid, carid, routeid, result);
-                dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
-                bCheckTransits.PerformClick();
+                List<int> passengerids = new List<int>();
+                string text;
+                text = "Czy na pewno chcesz dodać przejazd:\n";
+                text += "Kierowca: " + (cDrivers.SelectedValue as Person).FullName + "\n";
+                text += "Auto: " + (cCars.SelectedValue as Car).Name + "\n";
+                text += "Trasa: " + (cRoutes.SelectedValue as Route).Name + "\n";
+                text += "Pasażerowie: ";
+                foreach (Person passenger in lPassengers.SelectedItems)
+                {
+                    text += passenger.FullName + ", ";
+                    passengerids.Add(passenger.Id);
+                }
+                text += "\nKoszt: " + result.ToString("F") + " zł.";
+                DialogResult dialogResult = MessageBox.Show(text, "Potwierdź", MessageBoxButtons.OKCancel);
+                if (dialogResult == DialogResult.OK)
+                {
+                    int driverid = (cDrivers.SelectedValue as Person).Id;
+                    int carid = (cCars.SelectedValue as Car).Id;
+                    int routeid = (cRoutes.SelectedValue as Route).Id;
+                    dbm.insertTransit(driverid, carid, routeid, result);
+                    dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
+                    bCheckTransits.PerformClick();
+                }
             }
         }
 
         private void bCheckTransits_Click(object sender, EventArgs e)
         {
-            if (cbTransitPassengers.Checked)
+            if (dbm.IsCorrect)
             {
-                List<string> ids = new List<string>();
-                foreach (Person person in lPassengers.SelectedItems)
-                    ids.Add(person.Id.ToString());
-                string tabids = String.Join(", ", ids);
-                if(cbNotGrouped.Checked)
-                    transits = dbm.getTransitsByPassengersNotGrouped(tabids);
+                if (cbTransitPassengers.Checked)
+                {
+                    List<string> ids = new List<string>();
+                    foreach (Person person in lPassengers.SelectedItems)
+                        ids.Add(person.Id.ToString());
+                    string tabids = String.Join(", ", ids);
+                    if (cbNotGrouped.Checked)
+                        transits = dbm.getTransitsByPassengersNotGrouped(tabids);
+                    else
+                        transits = dbm.getTransitsByPassengers(tabids);
+                }
                 else
-                    transits = dbm.getTransitsByPassengers(tabids);
+                    transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                gTransits.DataSource = transits;
             }
-            else
-                transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
-            gTransits.DataSource = transits;
         }
 
         private void showDialogBox(object obj)
@@ -185,7 +184,8 @@ namespace KosztorysKierowcy
             {
                 DialogResult dr = form.ShowDialog();
                 if (dr == DialogResult.OK)
-                    RefreshTables();
+                    if(dbm.IsCorrect)
+                        InitFields();
             }
         }
 
@@ -195,6 +195,16 @@ namespace KosztorysKierowcy
                 cbNotGrouped.Enabled = true;
             else
                 cbNotGrouped.Enabled = false;
+        }
+
+        private void bRetry_Click(object sender, EventArgs e)
+        {
+            dbm = new DBManager();
+            if (dbm.IsCorrect)
+            {
+                bRetry.Visible = false;
+                InitFields();
+            }
         }
     }
 }

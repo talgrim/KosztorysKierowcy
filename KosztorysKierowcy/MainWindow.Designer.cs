@@ -58,6 +58,7 @@
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
             this.bSettings = new System.Windows.Forms.Button();
+            this.bRetry = new System.Windows.Forms.Button();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +67,7 @@
             // 
             this.cDrivers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cDrivers.FormattingEnabled = true;
-            this.cDrivers.Location = new System.Drawing.Point(30, 68);
+            this.cDrivers.Location = new System.Drawing.Point(30, 36);
             this.cDrivers.Name = "cDrivers";
             this.cDrivers.Size = new System.Drawing.Size(121, 21);
             this.cDrivers.TabIndex = 2;
@@ -75,7 +76,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(58, 38);
+            this.label1.Location = new System.Drawing.Point(58, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 3;
@@ -85,7 +86,7 @@
             // 
             this.cCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cCars.FormattingEnabled = true;
-            this.cCars.Location = new System.Drawing.Point(164, 68);
+            this.cCars.Location = new System.Drawing.Point(164, 36);
             this.cCars.Name = "cCars";
             this.cCars.Size = new System.Drawing.Size(121, 21);
             this.cCars.TabIndex = 4;
@@ -93,7 +94,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(196, 39);
+            this.label2.Location = new System.Drawing.Point(196, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 5;
@@ -102,7 +103,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(377, 38);
+            this.label3.Location = new System.Drawing.Point(377, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 6;
@@ -112,7 +113,7 @@
             // 
             this.cRoutes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cRoutes.FormattingEnabled = true;
-            this.cRoutes.Location = new System.Drawing.Point(291, 68);
+            this.cRoutes.Location = new System.Drawing.Point(291, 36);
             this.cRoutes.Name = "cRoutes";
             this.cRoutes.Size = new System.Drawing.Size(211, 21);
             this.cRoutes.TabIndex = 7;
@@ -120,7 +121,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 153);
+            this.label4.Location = new System.Drawing.Point(12, 121);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(109, 13);
             this.label4.TabIndex = 8;
@@ -128,7 +129,7 @@
             // 
             // tPetroleum
             // 
-            this.tPetroleum.Location = new System.Drawing.Point(15, 169);
+            this.tPetroleum.Location = new System.Drawing.Point(15, 137);
             this.tPetroleum.Name = "tPetroleum";
             this.tPetroleum.Size = new System.Drawing.Size(100, 20);
             this.tPetroleum.TabIndex = 9;
@@ -137,7 +138,7 @@
             // 
             // tRouteCost
             // 
-            this.tRouteCost.Location = new System.Drawing.Point(184, 169);
+            this.tRouteCost.Location = new System.Drawing.Point(184, 137);
             this.tRouteCost.Name = "tRouteCost";
             this.tRouteCost.ReadOnly = true;
             this.tRouteCost.Size = new System.Drawing.Size(100, 20);
@@ -146,7 +147,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(181, 153);
+            this.label5.Location = new System.Drawing.Point(181, 121);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(106, 13);
             this.label5.TabIndex = 11;
@@ -181,16 +182,16 @@
             this.pMainPanel.Controls.Add(this.label4);
             this.pMainPanel.Controls.Add(this.label2);
             this.pMainPanel.Controls.Add(this.label3);
-            this.pMainPanel.Location = new System.Drawing.Point(12, 74);
+            this.pMainPanel.Location = new System.Drawing.Point(12, 41);
             this.pMainPanel.Name = "pMainPanel";
-            this.pMainPanel.Size = new System.Drawing.Size(1062, 265);
+            this.pMainPanel.Size = new System.Drawing.Size(1062, 226);
             this.pMainPanel.TabIndex = 12;
             // 
             // cbNotGrouped
             // 
             this.cbNotGrouped.AutoSize = true;
             this.cbNotGrouped.Enabled = false;
-            this.cbNotGrouped.Location = new System.Drawing.Point(477, 228);
+            this.cbNotGrouped.Location = new System.Drawing.Point(477, 196);
             this.cbNotGrouped.Name = "cbNotGrouped";
             this.cbNotGrouped.Size = new System.Drawing.Size(74, 17);
             this.cbNotGrouped.TabIndex = 28;
@@ -200,7 +201,7 @@
             // cbTransitPassengers
             // 
             this.cbTransitPassengers.AutoSize = true;
-            this.cbTransitPassengers.Location = new System.Drawing.Point(380, 228);
+            this.cbTransitPassengers.Location = new System.Drawing.Point(380, 196);
             this.cbTransitPassengers.Name = "cbTransitPassengers";
             this.cbTransitPassengers.Size = new System.Drawing.Size(91, 17);
             this.cbTransitPassengers.TabIndex = 27;
@@ -211,7 +212,7 @@
             // cbPassengerEdit
             // 
             this.cbPassengerEdit.AutoSize = true;
-            this.cbPassengerEdit.Location = new System.Drawing.Point(986, 72);
+            this.cbPassengerEdit.Location = new System.Drawing.Point(986, 40);
             this.cbPassengerEdit.Name = "cbPassengerEdit";
             this.cbPassengerEdit.Size = new System.Drawing.Size(64, 17);
             this.cbPassengerEdit.TabIndex = 26;
@@ -220,7 +221,7 @@
             // 
             // bCheckTransits
             // 
-            this.bCheckTransits.Location = new System.Drawing.Point(184, 224);
+            this.bCheckTransits.Location = new System.Drawing.Point(184, 192);
             this.bCheckTransits.Name = "bCheckTransits";
             this.bCheckTransits.Size = new System.Drawing.Size(177, 23);
             this.bCheckTransits.TabIndex = 25;
@@ -230,7 +231,7 @@
             // 
             // bAddTransit
             // 
-            this.bAddTransit.Location = new System.Drawing.Point(208, 195);
+            this.bAddTransit.Location = new System.Drawing.Point(208, 163);
             this.bAddTransit.Name = "bAddTransit";
             this.bAddTransit.Size = new System.Drawing.Size(125, 23);
             this.bAddTransit.TabIndex = 24;
@@ -241,7 +242,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(399, 153);
+            this.label12.Location = new System.Drawing.Point(399, 121);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(94, 13);
             this.label12.TabIndex = 23;
@@ -249,7 +250,7 @@
             // 
             // tPassengersCost
             // 
-            this.tPassengersCost.Location = new System.Drawing.Point(402, 169);
+            this.tPassengersCost.Location = new System.Drawing.Point(402, 137);
             this.tPassengersCost.Name = "tPassengersCost";
             this.tPassengersCost.ReadOnly = true;
             this.tPassengersCost.Size = new System.Drawing.Size(100, 20);
@@ -258,7 +259,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(293, 153);
+            this.label11.Location = new System.Drawing.Point(293, 121);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(92, 13);
             this.label11.TabIndex = 21;
@@ -266,7 +267,7 @@
             // 
             // tPassengersCount
             // 
-            this.tPassengersCount.Location = new System.Drawing.Point(296, 169);
+            this.tPassengersCount.Location = new System.Drawing.Point(296, 137);
             this.tPassengersCount.Name = "tPassengersCount";
             this.tPassengersCount.ReadOnly = true;
             this.tPassengersCount.Size = new System.Drawing.Size(100, 20);
@@ -275,7 +276,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(574, 39);
+            this.label10.Location = new System.Drawing.Point(574, 7);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(67, 13);
             this.label10.TabIndex = 19;
@@ -283,7 +284,7 @@
             // 
             // bEditRoute
             // 
-            this.bEditRoute.Location = new System.Drawing.Point(862, 126);
+            this.bEditRoute.Location = new System.Drawing.Point(862, 94);
             this.bEditRoute.Name = "bEditRoute";
             this.bEditRoute.Size = new System.Drawing.Size(118, 23);
             this.bEditRoute.TabIndex = 17;
@@ -292,7 +293,7 @@
             // 
             // bEditPerson
             // 
-            this.bEditPerson.Location = new System.Drawing.Point(862, 68);
+            this.bEditPerson.Location = new System.Drawing.Point(862, 36);
             this.bEditPerson.Name = "bEditPerson";
             this.bEditPerson.Size = new System.Drawing.Size(118, 23);
             this.bEditPerson.TabIndex = 13;
@@ -302,7 +303,7 @@
             // lPassengers
             // 
             this.lPassengers.FormattingEnabled = true;
-            this.lPassengers.Location = new System.Drawing.Point(508, 68);
+            this.lPassengers.Location = new System.Drawing.Point(508, 36);
             this.lPassengers.Name = "lPassengers";
             this.lPassengers.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lPassengers.Size = new System.Drawing.Size(224, 121);
@@ -311,7 +312,7 @@
             // 
             // bAddRoute
             // 
-            this.bAddRoute.Location = new System.Drawing.Point(738, 126);
+            this.bAddRoute.Location = new System.Drawing.Point(738, 94);
             this.bAddRoute.Name = "bAddRoute";
             this.bAddRoute.Size = new System.Drawing.Size(118, 23);
             this.bAddRoute.TabIndex = 16;
@@ -320,7 +321,7 @@
             // 
             // bEditCar
             // 
-            this.bEditCar.Location = new System.Drawing.Point(862, 97);
+            this.bEditCar.Location = new System.Drawing.Point(862, 65);
             this.bEditCar.Name = "bEditCar";
             this.bEditCar.Size = new System.Drawing.Size(118, 23);
             this.bEditCar.TabIndex = 15;
@@ -329,7 +330,7 @@
             // 
             // bAddCar
             // 
-            this.bAddCar.Location = new System.Drawing.Point(738, 97);
+            this.bAddCar.Location = new System.Drawing.Point(738, 65);
             this.bAddCar.Name = "bAddCar";
             this.bAddCar.Size = new System.Drawing.Size(118, 23);
             this.bAddCar.TabIndex = 14;
@@ -338,7 +339,7 @@
             // 
             // bAddPerson
             // 
-            this.bAddPerson.Location = new System.Drawing.Point(738, 68);
+            this.bAddPerson.Location = new System.Drawing.Point(738, 36);
             this.bAddPerson.Name = "bAddPerson";
             this.bAddPerson.Size = new System.Drawing.Size(118, 23);
             this.bAddPerson.TabIndex = 12;
@@ -353,7 +354,7 @@
             this.gTransits.AllowUserToResizeRows = false;
             this.gTransits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.gTransits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gTransits.Location = new System.Drawing.Point(12, 345);
+            this.gTransits.Location = new System.Drawing.Point(12, 273);
             this.gTransits.Name = "gTransits";
             this.gTransits.ReadOnly = true;
             this.gTransits.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -369,11 +370,22 @@
             this.bSettings.Text = "Ustawienia";
             this.bSettings.UseVisualStyleBackColor = true;
             // 
+            // bRetry
+            // 
+            this.bRetry.Location = new System.Drawing.Point(813, 12);
+            this.bRetry.Name = "bRetry";
+            this.bRetry.Size = new System.Drawing.Size(116, 23);
+            this.bRetry.TabIndex = 15;
+            this.bRetry.Text = "Ponów połączenie";
+            this.bRetry.UseVisualStyleBackColor = true;
+            this.bRetry.Click += new System.EventHandler(this.bRetry_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 652);
+            this.ClientSize = new System.Drawing.Size(1086, 575);
+            this.Controls.Add(this.bRetry);
             this.Controls.Add(this.bSettings);
             this.Controls.Add(this.gTransits);
             this.Controls.Add(this.pMainPanel);
@@ -420,6 +432,7 @@
         private System.Windows.Forms.CheckBox cbPassengerEdit;
         private System.Windows.Forms.Button bSettings;
         private System.Windows.Forms.CheckBox cbNotGrouped;
+        private System.Windows.Forms.Button bRetry;
     }
 }
 

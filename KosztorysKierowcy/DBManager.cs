@@ -16,25 +16,52 @@ namespace KosztorysKierowcy
         private MySqlConnection connection;
         private string server;
         private string database;
-        private string uid;
-        private string password;
-        public static string mysqlpath = "D:\\xampp\\mysql\\bin";
+        public static string uid;
+        public static string password;
+        public static string mysqlpath;
+        public bool IsCorrect { get; private set; }
         public DBManager()
         {
+            GetParams();
             Initialize();
+            IsCorrect = CheckConnection();
         }
-
+        private void GetParams()
+        {
+            StreamReader file = new StreamReader("config.ini");
+            string mysqlpathtemp = file.ReadLine();
+            mysqlpathtemp = mysqlpathtemp.Split('=')[1];
+            string uidtemp = file.ReadLine();
+            uidtemp = uidtemp.Split('=')[1];
+            string passwordtemp = file.ReadLine();
+            passwordtemp = passwordtemp.Split('=')[1];
+            mysqlpath = mysqlpathtemp;
+            uid = uidtemp;
+            password = passwordtemp;
+            file.Close();
+        }
         private void Initialize()
         {
             server = "localhost";
             database = "estimate";
-            uid = "root";
-            password = "test";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
 
             connection = new MySqlConnection(connectionString);
+        }
+
+        private bool CheckConnection()
+        {
+            bool result;
+            if (OpenConnection())
+            {
+                result = true;
+                CloseConnection();
+            }
+            else
+                result = false;
+            return result;
         }
 
         //open connection to database
@@ -45,20 +72,9 @@ namespace KosztorysKierowcy
                 connection.Open();
                 return true;
             }
-            catch(MySqlException ex)
+            catch(Exception ex)
             {
-                switch(ex.Number)
-                {
-                    case 0:
-                        MessageBox.Show("Connection error: Cannot connect to server (0).");
-                        break;
-                    case 1045:
-                        MessageBox.Show("Connection error: Invalid username/password (1045).");
-                        break;
-                    default:
-                        MessageBox.Show("Connection error (" + ex.Number.ToString() + "). "+ex.Message);
-                        break;
-                }
+                MessageBox.Show(ex.Message);
                 return false;
             }
         }
@@ -573,33 +589,6 @@ namespace KosztorysKierowcy
                 return passengers;
         }
 
-        //Count statement
-        //Count statement
-        public int Count()
-        {
-            string query = "SELECT Count(*) FROM tableinfo";
-            int Count = -1;
-
-            //Open Connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Mysql Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                //ExecuteScalar will return one value
-                Count = int.Parse(cmd.ExecuteScalar() + "");
-
-                //close Connection
-                this.CloseConnection();
-
-                return Count;
-            }
-            else
-            {
-                return Count;
-            }
-        }
-
         //Backup
         public void Backup()
         {
@@ -643,7 +632,7 @@ namespace KosztorysKierowcy
             }
             catch (IOException ex)
             {
-                MessageBox.Show("Error , unable to backup! "+ex.Message);
+                MessageBox.Show("Error, unable to backup! "+ex.Message);
             }
         }
 
@@ -676,7 +665,7 @@ namespace KosztorysKierowcy
             }
             catch (IOException ex)
             {
-                MessageBox.Show("Error , unable to Restore! "+ex.Message);
+                MessageBox.Show("Error, unable to restore! "+ex.Message);
             }
         }
     }
