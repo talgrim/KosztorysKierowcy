@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 
+
 namespace KosztorysKierowcy
 {
     class DBManager
@@ -17,7 +18,7 @@ namespace KosztorysKierowcy
         private string database;
         private string uid;
         private string password;
-
+        public static string mysqlpath = "D:\\xampp\\mysql\\bin";
         public DBManager()
         {
             Initialize();
@@ -287,14 +288,14 @@ namespace KosztorysKierowcy
         public List<Transit> getTransitsByDriver(int id)
         {
             string query =
-                "SELECT transitid, p1.personid, p1.name, p1.surname, cars.carid, cars.name, cars.consumption, routes.routeid, routes.name, routes.distance, transits.driven, cost, driver, ownerid " +
-                "FROM persons p1, transits, cars, routes "+
-                "WHERE "+
-                    "transits.carid = cars.carid AND "+
-                    "transits.routeid = routes.routeid AND "+
-                    "transits.driverid = p1.personid AND "+
-                    "transits.driverid = " + id + " "+
-               "ORDER BY transits.transitid";
+                "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
+                "FROM persons p1, transits, cars, routes " +
+                "WHERE " +
+                    "transits.carid = cars.carid AND " +
+                    "transits.routeid = routes.routeid AND " +
+                    "transits.driverid = p1.personid AND " +
+                    "transits.driverid = " + id + " " +
+                "ORDER BY transits.transitid";
 
             //Create a list to store the result
             List<Transit> transits = new List<Transit>();
@@ -306,20 +307,20 @@ namespace KosztorysKierowcy
                 {
                     //Create a data reader and Execute the command
                     using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                    { 
-                    //Read the data and store them in the list
-                    while (dataReader.Read())
-                        transits.Add(new Transit(
-                                (int)dataReader[0],
-                                (double)dataReader[11],
-                                new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), dataReader[12].ToString()),
-                                new Car((int)dataReader[4], dataReader[5].ToString(), (int)dataReader[6], (int) dataReader[13]),
-                                new Route((int)dataReader[7], dataReader[8].ToString(), (int)dataReader[9]),
-                                (DateTime)dataReader[10]
-                                ));
+                    {
+                        //Read the data and store them in the list
+                        while (dataReader.Read())
+                            transits.Add(new Transit(
+                                    (int)dataReader[0],
+                                    (double)dataReader[1],
+                                    new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                                    new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
+                                    new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
+                                    (DateTime)dataReader[13]
+                                    ));
                     }
                 }
-                
+
                 foreach (Transit element in transits)
                 {
                     List<Person> passengers = new List<Person>();
@@ -331,6 +332,137 @@ namespace KosztorysKierowcy
                             while (dataReader.Read())
                                 passengers.Add(new Person((int)dataReader["passengerid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
                             element.Passengers = passengers.ToArray();
+                        }
+                    }
+                }
+
+                //close Connection
+                this.CloseConnection();
+
+                //return list to be displayed
+                return transits;
+            }
+            else
+                return transits;
+        }
+
+        public List<Transit> getTransitsByPassengers(string ids)
+        {
+            string query =
+                "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY transitid ASC";
+
+            //Create a list to store the result
+            List<Transit> transits = new List<Transit>();
+            List<Passengers> passengers = new List<Passengers>();
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //Create Command
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    //Create a data reader and Execute the command
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    {
+                        //Read the data and store them in the list
+                        while (dataReader.Read())
+                            passengers.Add(new Passengers((int)dataReader["transitid"], new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString())));
+                    }
+                }
+
+                foreach (Passengers element in passengers)
+                {
+                    int transitid = element.TransitId;
+                    query =
+                        "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
+                        "FROM persons p1, transits, cars, routes " +
+                        "WHERE " +
+                            "transits.carid = cars.carid AND " +
+                            "transits.routeid = routes.routeid AND " +
+                            "transits.driverid = p1.personid AND " +
+                            "transits.transitid = " + transitid + " " +
+                        "ORDER BY transits.transitid";
+
+                    int id = transits.FindIndex(x => x.Transitid == transitid);
+                    if (id == -1)
+                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        {
+                            using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                            {
+                                if (dataReader.Read())
+                                    transits.Add(new Transit(
+                                        (int)dataReader[0],
+                                        (double)dataReader[1],
+                                        new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                                        new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
+                                        new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
+                                        element.Passenger,
+                                        (DateTime)dataReader[13]
+                                        ));
+                            }
+                        }
+                    else
+                        transits[id].AddPassenger(element.Passenger);
+                }
+
+                //close Connection
+                this.CloseConnection();
+
+                //return list to be displayed
+                return transits;
+            }
+            else
+                return transits;
+        }
+
+        public List<Transit> getTransitsByPassengersNotGrouped(string ids)
+        {
+            string query =
+                "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY surname ASC";
+
+            //Create a list to store the result
+            List<Transit> transits = new List<Transit>();
+            List<Passengers> passengers = new List<Passengers>();
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //Create Command
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    //Create a data reader and Execute the command
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    {
+                        //Read the data and store them in the list
+                        while (dataReader.Read())
+                            passengers.Add(new Passengers((int)dataReader["transitid"], new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString())));
+                    }
+                }
+
+                foreach (Passengers element in passengers)
+                {
+                    int transitid = element.TransitId;
+                    query =
+                        "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
+                        "FROM persons p1, transits, cars, routes " +
+                        "WHERE " +
+                            "transits.carid = cars.carid AND " +
+                            "transits.routeid = routes.routeid AND " +
+                            "transits.driverid = p1.personid AND " +
+                            "transits.transitid = " + transitid + " " +
+                        "ORDER BY transits.transitid";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        {
+                            if (dataReader.Read())
+                                transits.Add(new Transit(
+                                    (int)dataReader[0],
+                                    (double)dataReader[1],
+                                    new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                                    new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
+                                    new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
+                                    element.Passenger,
+                                    (DateTime)dataReader[13]
+                                    ));
                         }
                     }
                 }
@@ -481,15 +613,16 @@ namespace KosztorysKierowcy
                 int minute = Time.Minute;
                 int second = Time.Second;
 
-                //Save file to C:\ with the current date as a filename
                 string path;
-                path = "db\\estimate" + year + "-" + month + "-" + day +
+                path = "db\\backup\\estimate" + year + "-" + month + "-" + day +
             "-" + hour + "-" + minute + "-" + second + ".sql";
                 StreamWriter file = new StreamWriter(path);
+                path = "db\\estimate.sql";
+                StreamWriter file2 = new StreamWriter(path);
 
 
                 ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "D:\\xampp\\mysql\\bin\\mysqldump.exe";
+                psi.FileName = mysqlpath+"\\mysqldump.exe";
                 psi.RedirectStandardInput = false;
                 psi.RedirectStandardOutput = true;
                 psi.Arguments = string.Format(@"-u{0} -p{1} -h{2} {3}",
@@ -503,6 +636,9 @@ namespace KosztorysKierowcy
                 file.WriteLine(output);
                 process.WaitForExit();
                 file.Close();
+                file2.WriteLine(output);
+                process.WaitForExit();
+                file2.Close();
                 process.Close();
             }
             catch (IOException ex)
@@ -524,7 +660,7 @@ namespace KosztorysKierowcy
                 file.Close();
 
                 ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "D:\\xampp\\mysql\\bin\\mysql.exe";
+                psi.FileName = mysqlpath + "\\mysql.exe";
                 psi.RedirectStandardInput = true;
                 psi.RedirectStandardOutput = false;
                 psi.Arguments = string.Format(@"-u{0} -p{1} -h{2} {3}",

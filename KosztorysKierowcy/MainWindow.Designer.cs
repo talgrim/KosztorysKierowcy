@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.bBackup = new System.Windows.Forms.Button();
-            this.bRestore = new System.Windows.Forms.Button();
             this.cDrivers = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cCars = new System.Windows.Forms.ComboBox();
@@ -41,6 +39,9 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.cbNotGrouped = new System.Windows.Forms.CheckBox();
+            this.cbTransitPassengers = new System.Windows.Forms.CheckBox();
+            this.cbPassengerEdit = new System.Windows.Forms.CheckBox();
             this.bCheckTransits = new System.Windows.Forms.Button();
             this.bAddTransit = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
@@ -56,29 +57,10 @@
             this.bAddCar = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
+            this.bSettings = new System.Windows.Forms.Button();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
-            // 
-            // bBackup
-            // 
-            this.bBackup.Location = new System.Drawing.Point(201, 12);
-            this.bBackup.Name = "bBackup";
-            this.bBackup.Size = new System.Drawing.Size(159, 23);
-            this.bBackup.TabIndex = 0;
-            this.bBackup.Text = "Backup database";
-            this.bBackup.UseVisualStyleBackColor = true;
-            this.bBackup.Click += new System.EventHandler(this.bBackup_Click);
-            // 
-            // bRestore
-            // 
-            this.bRestore.Location = new System.Drawing.Point(379, 12);
-            this.bRestore.Name = "bRestore";
-            this.bRestore.Size = new System.Drawing.Size(145, 23);
-            this.bRestore.TabIndex = 1;
-            this.bRestore.Text = "Restore database";
-            this.bRestore.UseVisualStyleBackColor = true;
-            this.bRestore.Click += new System.EventHandler(this.bRestore_Click);
             // 
             // cDrivers
             // 
@@ -172,6 +154,9 @@
             // 
             // pMainPanel
             // 
+            this.pMainPanel.Controls.Add(this.cbNotGrouped);
+            this.pMainPanel.Controls.Add(this.cbTransitPassengers);
+            this.pMainPanel.Controls.Add(this.cbPassengerEdit);
             this.pMainPanel.Controls.Add(this.bCheckTransits);
             this.pMainPanel.Controls.Add(this.bAddTransit);
             this.pMainPanel.Controls.Add(this.label12);
@@ -198,8 +183,40 @@
             this.pMainPanel.Controls.Add(this.label3);
             this.pMainPanel.Location = new System.Drawing.Point(12, 74);
             this.pMainPanel.Name = "pMainPanel";
-            this.pMainPanel.Size = new System.Drawing.Size(1017, 265);
+            this.pMainPanel.Size = new System.Drawing.Size(1062, 265);
             this.pMainPanel.TabIndex = 12;
+            // 
+            // cbNotGrouped
+            // 
+            this.cbNotGrouped.AutoSize = true;
+            this.cbNotGrouped.Enabled = false;
+            this.cbNotGrouped.Location = new System.Drawing.Point(477, 228);
+            this.cbNotGrouped.Name = "cbNotGrouped";
+            this.cbNotGrouped.Size = new System.Drawing.Size(74, 17);
+            this.cbNotGrouped.TabIndex = 28;
+            this.cbNotGrouped.Text = "Nie grupuj";
+            this.cbNotGrouped.UseVisualStyleBackColor = true;
+            // 
+            // cbTransitPassengers
+            // 
+            this.cbTransitPassengers.AutoSize = true;
+            this.cbTransitPassengers.Location = new System.Drawing.Point(380, 228);
+            this.cbTransitPassengers.Name = "cbTransitPassengers";
+            this.cbTransitPassengers.Size = new System.Drawing.Size(91, 17);
+            this.cbTransitPassengers.TabIndex = 27;
+            this.cbTransitPassengers.Text = "Pasażer/owie";
+            this.cbTransitPassengers.UseVisualStyleBackColor = true;
+            this.cbTransitPassengers.CheckedChanged += new System.EventHandler(this.enableTogether);
+            // 
+            // cbPassengerEdit
+            // 
+            this.cbPassengerEdit.AutoSize = true;
+            this.cbPassengerEdit.Location = new System.Drawing.Point(986, 72);
+            this.cbPassengerEdit.Name = "cbPassengerEdit";
+            this.cbPassengerEdit.Size = new System.Drawing.Size(64, 17);
+            this.cbPassengerEdit.TabIndex = 26;
+            this.cbPassengerEdit.Text = "Pasażer";
+            this.cbPassengerEdit.UseVisualStyleBackColor = true;
             // 
             // bCheckTransits
             // 
@@ -207,7 +224,7 @@
             this.bCheckTransits.Name = "bCheckTransits";
             this.bCheckTransits.Size = new System.Drawing.Size(177, 23);
             this.bCheckTransits.TabIndex = 25;
-            this.bCheckTransits.Text = "Sprawdź przejazdy kierowcy";
+            this.bCheckTransits.Text = "Sprawdź przejazdy osoby/osób";
             this.bCheckTransits.UseVisualStyleBackColor = true;
             this.bCheckTransits.Click += new System.EventHandler(this.bCheckTransits_Click);
             // 
@@ -343,15 +360,23 @@
             this.gTransits.Size = new System.Drawing.Size(856, 295);
             this.gTransits.TabIndex = 13;
             // 
+            // bSettings
+            // 
+            this.bSettings.Location = new System.Drawing.Point(935, 12);
+            this.bSettings.Name = "bSettings";
+            this.bSettings.Size = new System.Drawing.Size(139, 23);
+            this.bSettings.TabIndex = 14;
+            this.bSettings.Text = "Ustawienia";
+            this.bSettings.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1086, 652);
+            this.Controls.Add(this.bSettings);
             this.Controls.Add(this.gTransits);
             this.Controls.Add(this.pMainPanel);
-            this.Controls.Add(this.bRestore);
-            this.Controls.Add(this.bBackup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainWindow";
@@ -365,9 +390,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button bBackup;
-        private System.Windows.Forms.Button bRestore;
         private System.Windows.Forms.ComboBox cDrivers;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cCars;
@@ -394,6 +416,10 @@
         private System.Windows.Forms.Button bAddTransit;
         private System.Windows.Forms.Button bCheckTransits;
         private System.Windows.Forms.DataGridView gTransits;
+        private System.Windows.Forms.CheckBox cbTransitPassengers;
+        private System.Windows.Forms.CheckBox cbPassengerEdit;
+        private System.Windows.Forms.Button bSettings;
+        private System.Windows.Forms.CheckBox cbNotGrouped;
     }
 }
 

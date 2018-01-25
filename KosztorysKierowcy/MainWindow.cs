@@ -22,6 +22,7 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
+            bSettings.Click += (s, e) => { showDialogBox("Settings"); };
             bAddPerson.Click += (s, e) => { showDialogBox(new Person(0, null, null , null)); };
             bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,null,0)); };
             bAddCar.Click += (s, e) => { showDialogBox(new Car(0,null,0,0)); };
@@ -29,8 +30,11 @@ namespace KosztorysKierowcy
             bEditCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
             bEditPerson.Click += (s, e) => 
             {
-                if(lPassengers.SelectedItems.Count == 1)
-                    showDialogBox(lPassengers.SelectedItem as Person);
+                if (cbPassengerEdit.Checked)
+                {
+                    if (lPassengers.SelectedItems.Count == 1)
+                        showDialogBox(lPassengers.SelectedItem as Person);
+                }
                 else
                     showDialogBox(cDrivers.SelectedValue as Person);
             };
@@ -124,6 +128,10 @@ namespace KosztorysKierowcy
         private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
         {
             tPassengersCount.Text = lPassengers.SelectedItems.Count.ToString() + " + kierowca";
+            if (cbTransitPassengers.Checked && lPassengers.SelectedItems.Count > 1)
+                cbNotGrouped.Enabled = true;
+            else
+                cbNotGrouped.Enabled = false;
         }
 
         private void bAddTransit_Click(object sender, EventArgs e)
@@ -155,7 +163,19 @@ namespace KosztorysKierowcy
 
         private void bCheckTransits_Click(object sender, EventArgs e)
         {
-            transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+            if (cbTransitPassengers.Checked)
+            {
+                List<string> ids = new List<string>();
+                foreach (Person person in lPassengers.SelectedItems)
+                    ids.Add(person.Id.ToString());
+                string tabids = String.Join(", ", ids);
+                if(cbNotGrouped.Checked)
+                    transits = dbm.getTransitsByPassengersNotGrouped(tabids);
+                else
+                    transits = dbm.getTransitsByPassengers(tabids);
+            }
+            else
+                transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
             gTransits.DataSource = transits;
         }
 
@@ -167,6 +187,14 @@ namespace KosztorysKierowcy
                 if (dr == DialogResult.OK)
                     RefreshTables();
             }
+        }
+
+        private void enableTogether(object sender, EventArgs e)
+        {
+            if (cbTransitPassengers.Checked && lPassengers.SelectedItems.Count > 1)
+                cbNotGrouped.Enabled = true;
+            else
+                cbNotGrouped.Enabled = false;
         }
     }
 }
