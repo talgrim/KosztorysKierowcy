@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -20,12 +18,14 @@ namespace KosztorysKierowcy
         public static string password;
         public static string mysqlpath;
         public bool IsCorrect { get; private set; }
+
         public DBManager()
         {
             GetParams();
             Initialize();
             IsCorrect = CheckConnection();
         }
+
         private void GetParams()
         {
             StreamReader file = new StreamReader("config.ini");
@@ -40,6 +40,7 @@ namespace KosztorysKierowcy
             password = passwordtemp;
             file.Close();
         }
+
         private void Initialize()
         {
             server = "localhost";
@@ -54,17 +55,16 @@ namespace KosztorysKierowcy
         private bool CheckConnection()
         {
             bool result;
-            if (OpenConnection())
+            if (this.OpenConnection())
             {
                 result = true;
-                CloseConnection();
+                this.CloseConnection();
             }
             else
                 result = false;
             return result;
         }
-
-        //open connection to database
+        
         private bool OpenConnection()
         {
             try
@@ -78,8 +78,7 @@ namespace KosztorysKierowcy
                 return false;
             }
         }
-
-        //Close connection
+        
         private bool CloseConnection()
         {
             try
@@ -93,23 +92,16 @@ namespace KosztorysKierowcy
                 return false;
             }
         }
-
-        //Insert statement
+        
         public void insertTransit(int driverid, int carid, int routeid, double cost)
         {
             string query = "INSERT INTO transits (driverid, carid, routeid, driven, cost) " +
                 "VALUES (" + driverid.ToString() + ", " + carid.ToString() + ", " + routeid.ToString() + ", NOW(), " + cost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + " );";
-
-            //open connection
+            
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                //Execute command
-                cmd.ExecuteNonQuery();
-
-                //close connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -123,16 +115,22 @@ namespace KosztorysKierowcy
                 else
                     query += "(" + transitid.ToString() + ", " + x.ToString() + ")";
 
-            //open connection
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
 
-                //Execute command
-                cmd.ExecuteNonQuery();
+        public void deletePerson(int id)
+        {
+            string query = "DELETE FROM persons WHERE personid = " + id;
 
-                //close connection
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -143,8 +141,8 @@ namespace KosztorysKierowcy
 
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -155,8 +153,20 @@ namespace KosztorysKierowcy
 
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void deleteRoute(int id)
+        {
+            string query = "DELETE FROM routes WHERE routeid = " + id;
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -167,8 +177,8 @@ namespace KosztorysKierowcy
 
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -179,8 +189,20 @@ namespace KosztorysKierowcy
 
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void deleteCar(int id)
+        {
+            string query = "DELETE FROM cars WHERE carid = " + id;
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -191,8 +213,8 @@ namespace KosztorysKierowcy
 
             if (this.OpenConnection() == true)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
         }
@@ -212,29 +234,15 @@ namespace KosztorysKierowcy
         public List<Person> getDrivers()
         {
             string query = "SELECT personid, name, surname, driver FROM persons WHERE driver = 1";
-
-            //Create a list to store the result
             List<Person> drivers = new List<Person>();
-
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                    drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using(MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
+                
                 this.CloseConnection();
-
-                //return list to be displayed
                 return drivers;
             }
             else
@@ -244,57 +252,12 @@ namespace KosztorysKierowcy
         public int getLastTransitID()
         {
             string query = "SELECT MAX(transitid) as 'max' FROM transits";
-            int result = 0;
-
-            //Open connection
+            int result = -1;
             if (this.OpenConnection() == true)
             {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                dataReader.Read();
-                result = (int)dataReader["max"];
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    result = (int)cmd.ExecuteScalar();
                 this.CloseConnection();
-
-                //return list to be displayed
-                return result;
-            }
-            else
-                return result;
-        }
-
-        public int getPassengersCount(int transitid)
-        {
-            string query = "SELECT COUNT(passengerid) as 'count' FROM passengerstotransit GROUP BY transitid HAVING transitid = "+transitid;
-            int result = 0;
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                dataReader.Read();
-                result = (int)dataReader["count"];
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                //return list to be displayed
                 return result;
             }
             else
@@ -312,19 +275,12 @@ namespace KosztorysKierowcy
                     "transits.driverid = p1.personid AND " +
                     "transits.driverid = " + id + " " +
                 "ORDER BY transits.transitid";
-
-            //Create a list to store the result
+            
             List<Transit> transits = new List<Transit>();
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                {
-                    //Create a data reader and Execute the command
                     using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                    {
-                        //Read the data and store them in the list
                         while (dataReader.Read())
                             transits.Add(new Transit(
                                     (int)dataReader[0],
@@ -334,28 +290,18 @@ namespace KosztorysKierowcy
                                     new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
                                     (DateTime)dataReader[13]
                                     ));
-                    }
-                }
 
                 foreach (Transit element in transits)
                 {
                     List<Person> passengers = new List<Person>();
                     query = "SELECT * FROM passengerstotransit, persons WHERE passengerid = personid AND transitid = " + element.Transitid.ToString() + " ORDER BY name";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    {
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                        {
                             while (dataReader.Read())
                                 passengers.Add(new Person((int)dataReader["passengerid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
                             element.Passengers = passengers.ToArray();
-                        }
-                    }
                 }
-
-                //close Connection
                 this.CloseConnection();
-
-                //return list to be displayed
                 return transits;
             }
             else
@@ -365,26 +311,15 @@ namespace KosztorysKierowcy
         public List<Transit> getTransitsByPassengers(string ids)
         {
             string query =
-                "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY transitid ASC";
-
-            //Create a list to store the result
+                "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY transitid ASC, surname ASC";
             List<Transit> transits = new List<Transit>();
             List<Passengers> passengers = new List<Passengers>();
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                {
-                    //Create a data reader and Execute the command
                     using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                    {
-                        //Read the data and store them in the list
                         while (dataReader.Read())
                             passengers.Add(new Passengers((int)dataReader["transitid"], new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString())));
-                    }
-                }
-
                 foreach (Passengers element in passengers)
                 {
                     int transitid = element.TransitId;
@@ -400,10 +335,9 @@ namespace KosztorysKierowcy
 
                     int id = transits.FindIndex(x => x.Transitid == transitid);
                     if (id == -1)
+                    {
                         using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                        {
                             using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                            {
                                 if (dataReader.Read())
                                     transits.Add(new Transit(
                                         (int)dataReader[0],
@@ -414,16 +348,11 @@ namespace KosztorysKierowcy
                                         element.Passenger,
                                         (DateTime)dataReader[13]
                                         ));
-                            }
-                        }
+                    }
                     else
                         transits[id].AddPassenger(element.Passenger);
                 }
-
-                //close Connection
                 this.CloseConnection();
-
-                //return list to be displayed
                 return transits;
             }
             else
@@ -434,24 +363,14 @@ namespace KosztorysKierowcy
         {
             string query =
                 "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY surname ASC";
-
-            //Create a list to store the result
             List<Transit> transits = new List<Transit>();
             List<Passengers> passengers = new List<Passengers>();
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                {
-                    //Create a data reader and Execute the command
                     using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                    {
-                        //Read the data and store them in the list
                         while (dataReader.Read())
                             passengers.Add(new Passengers((int)dataReader["transitid"], new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString())));
-                    }
-                }
 
                 foreach (Passengers element in passengers)
                 {
@@ -466,9 +385,7 @@ namespace KosztorysKierowcy
                             "transits.transitid = " + transitid + " " +
                         "ORDER BY transits.transitid";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    {
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                        {
                             if (dataReader.Read())
                                 transits.Add(new Transit(
                                     (int)dataReader[0],
@@ -479,14 +396,8 @@ namespace KosztorysKierowcy
                                     element.Passenger,
                                     (DateTime)dataReader[13]
                                     ));
-                        }
-                    }
                 }
-
-                //close Connection
                 this.CloseConnection();
-
-                //return list to be displayed
                 return transits;
             }
             else
@@ -496,29 +407,14 @@ namespace KosztorysKierowcy
         public List<Route> getRoutes()
         {
             string query = "SELECT routeid, name, distance FROM routes";
-
-            //Create a list to store the result
             List<Route> routes = new List<Route>();
-
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                    routes.Add(new Route((int)dataReader["routeid"], dataReader["name"].ToString(), (int)dataReader["distance"]));
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            routes.Add(new Route((int)dataReader["routeid"], dataReader["name"].ToString(), (int)dataReader["distance"]));
                 this.CloseConnection();
-
-                //return list to be displayed
                 return routes;
             }
             else
@@ -528,29 +424,31 @@ namespace KosztorysKierowcy
         public List<Car> getCarsByID(int id)
         {
             string query = "SELECT cars.carid, cars.name, cars.consumption, ownerid FROM cars  WHERE ownerid = " + id;
-
-            //Create a list to store the result
             List<Car> cars = new List<Car>();
-
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                    cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (int)dataReader["ownerid"]));
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (int)dataReader["ownerid"]));
                 this.CloseConnection();
+                return cars;
+            }
+            else
+                return cars;
+        }
 
-                //return list to be displayed
+        public List<Car> getCars()
+        {
+            string query = "SELECT cars.carid, cars.name, cars.consumption, ownerid FROM cars";
+            List<Car> cars = new List<Car>();
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (int)dataReader["ownerid"]));
+                this.CloseConnection();
                 return cars;
             }
             else
@@ -560,36 +458,20 @@ namespace KosztorysKierowcy
         public List<Person> getPassengersWithoutDriver(int id)
         {
             string query = "SELECT personid, name, surname, driver FROM persons WHERE personid <> " + id;
-
-            //Create a list to store the result
             List <Person> passengers = new List<Person>();
-
-            //Open connection
             if (this.OpenConnection() == true)
             {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                        passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using(MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
                 this.CloseConnection();
-
-                //return list to be displayed
                 return passengers;
             }
             else
                 return passengers;
         }
-
-        //Backup
+        
         public void Backup()
         {
             try
@@ -636,12 +518,10 @@ namespace KosztorysKierowcy
             }
         }
 
-        //Restore
         public void Restore()
         {
             try
             {
-                //Read file from C:\
                 string path;
                 path = "db\\estimate.sql";
                 StreamReader file = new StreamReader(path);

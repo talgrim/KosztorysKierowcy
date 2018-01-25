@@ -26,10 +26,10 @@ CREATE TABLE `cars` (
   `carid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `consumption` int(11) NOT NULL,
-  `ownerid` int(11) NOT NULL,
+  `ownerid` int(11) DEFAULT NULL,
   PRIMARY KEY (`carid`),
   KEY `ownerid` (`ownerid`),
-  CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`ownerid`) REFERENCES `persons` (`personid`)
+  CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`ownerid`) REFERENCES `persons` (`personid`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,7 +39,7 @@ CREATE TABLE `cars` (
 
 LOCK TABLES `cars` WRITE;
 /*!40000 ALTER TABLE `cars` DISABLE KEYS */;
-INSERT INTO `cars` VALUES (1,'Skoda',5,1),(2,'Opel',8,2);
+INSERT INTO `cars` VALUES (1,'Skoda',5,1),(2,'Opel',8,2),(3,'Volkswagen Golf',6,5);
 /*!40000 ALTER TABLE `cars` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,11 +82,11 @@ DROP TABLE IF EXISTS `passengerstotransit`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `passengerstotransit` (
   `transitid` int(11) NOT NULL,
-  `passengerid` int(11) NOT NULL,
-  PRIMARY KEY (`transitid`,`passengerid`),
+  `passengerid` int(11) DEFAULT NULL,
+  UNIQUE KEY `UNIQUE` (`transitid`,`passengerid`) USING BTREE,
   KEY `passengerid` (`passengerid`),
   CONSTRAINT `passengerstotransit_ibfk_1` FOREIGN KEY (`transitid`) REFERENCES `transits` (`transitid`),
-  CONSTRAINT `passengerstotransit_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `persons` (`personid`)
+  CONSTRAINT `passengerstotransit_ibfk_2` FOREIGN KEY (`passengerid`) REFERENCES `persons` (`personid`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,7 +96,7 @@ CREATE TABLE `passengerstotransit` (
 
 LOCK TABLES `passengerstotransit` WRITE;
 /*!40000 ALTER TABLE `passengerstotransit` DISABLE KEYS */;
-INSERT INTO `passengerstotransit` VALUES (1,2),(1,3),(1,4),(2,2),(2,4),(3,2),(3,4),(4,1),(4,3),(5,1),(5,4),(6,4),(7,2),(7,3),(7,4),(8,2),(8,4),(9,2),(9,4),(10,3),(11,2),(12,1);
+INSERT INTO `passengerstotransit` VALUES (1,2),(1,3),(1,4),(2,2),(2,4),(3,2),(3,4),(4,1),(4,3),(5,1),(5,4),(6,4),(7,2),(7,3),(7,4),(8,2),(8,4),(9,2),(9,4),(10,3),(11,2),(12,1),(13,1),(13,2),(14,1),(14,3),(14,4),(14,5),(15,1),(15,3),(15,4),(15,5),(16,1),(16,3),(16,4),(16,5);
 /*!40000 ALTER TABLE `passengerstotransit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +113,7 @@ CREATE TABLE `persons` (
   `surname` varchar(50) NOT NULL,
   `driver` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`personid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `persons` (
 
 LOCK TABLES `persons` WRITE;
 /*!40000 ALTER TABLE `persons` DISABLE KEYS */;
-INSERT INTO `persons` VALUES (1,'Witold','Domanski',1),(2,'Maciej','Hyla',1),(3,'Adam','Strachanowski',0),(4,'Dawid','Pasek',NULL);
+INSERT INTO `persons` VALUES (1,'Witold','Domanski',1),(2,'Maciej','Hyla',1),(3,'Adam','Strachanowski',0),(4,'Dawid','Pasek',NULL),(5,'Dawid','Zugaj',1);
 /*!40000 ALTER TABLE `persons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,19 +160,19 @@ DROP TABLE IF EXISTS `transits`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transits` (
   `transitid` int(11) NOT NULL AUTO_INCREMENT,
-  `driverid` int(11) NOT NULL,
-  `carid` int(11) NOT NULL,
-  `routeid` int(11) NOT NULL,
+  `driverid` int(11) DEFAULT NULL,
+  `carid` int(11) DEFAULT NULL,
+  `routeid` int(11) DEFAULT NULL,
   `driven` datetime NOT NULL,
   `cost` double(10,2) NOT NULL,
   PRIMARY KEY (`transitid`),
   KEY `driverid` (`driverid`),
   KEY `carid` (`carid`),
   KEY `routeid` (`routeid`),
-  CONSTRAINT `transits_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `persons` (`personid`),
-  CONSTRAINT `transits_ibfk_2` FOREIGN KEY (`carid`) REFERENCES `cars` (`carid`),
-  CONSTRAINT `transits_ibfk_3` FOREIGN KEY (`routeid`) REFERENCES `routes` (`routeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+  CONSTRAINT `transits_ibfk_1` FOREIGN KEY (`driverid`) REFERENCES `persons` (`personid`) ON DELETE SET NULL,
+  CONSTRAINT `transits_ibfk_2` FOREIGN KEY (`carid`) REFERENCES `cars` (`carid`) ON DELETE SET NULL,
+  CONSTRAINT `transits_ibfk_3` FOREIGN KEY (`routeid`) REFERENCES `routes` (`routeid`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +181,7 @@ CREATE TABLE `transits` (
 
 LOCK TABLES `transits` WRITE;
 /*!40000 ALTER TABLE `transits` DISABLE KEYS */;
-INSERT INTO `transits` VALUES (1,1,1,1,'2018-01-24 19:58:03',2.50),(2,1,1,1,'2018-01-24 19:58:05',2.50),(3,1,1,2,'2018-01-24 19:58:08',2.50),(4,2,2,2,'2018-01-24 19:58:12',2.50),(5,2,2,1,'2018-01-24 19:58:17',2.50),(6,2,2,1,'2018-01-24 19:58:19',2.50),(7,1,1,1,'2018-01-24 19:59:06',2.50),(8,1,1,1,'2018-01-24 20:00:52',2.50),(9,1,1,1,'2018-01-24 20:01:06',2.50),(10,1,1,1,'2018-01-24 20:18:26',2.50),(11,1,1,2,'2018-01-24 23:30:48',4.65),(12,2,2,2,'2018-01-24 23:31:13',7.44);
+INSERT INTO `transits` VALUES (1,1,1,1,'2018-01-24 19:58:03',2.50),(2,1,1,1,'2018-01-24 19:58:05',2.50),(3,1,1,2,'2018-01-24 19:58:08',2.50),(4,2,2,2,'2018-01-24 19:58:12',2.50),(5,2,2,1,'2018-01-24 19:58:17',2.50),(6,2,2,1,'2018-01-24 19:58:19',2.50),(7,1,1,1,'2018-01-24 19:59:06',2.50),(8,1,1,1,'2018-01-24 20:00:52',2.50),(9,1,1,1,'2018-01-24 20:01:06',2.50),(10,1,1,1,'2018-01-24 20:18:26',2.50),(11,1,1,2,'2018-01-24 23:30:48',4.65),(12,2,2,2,'2018-01-24 23:31:13',7.44),(13,5,3,2,'2018-01-25 22:29:58',3.10),(14,2,2,2,'2018-01-26 00:05:21',3.22),(15,2,2,1,'2018-01-26 00:08:03',1.92),(16,2,2,2,'2018-01-26 00:14:59',3.22);
 /*!40000 ALTER TABLE `transits` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -194,5 +194,5 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-25 15:16:54
+-- Dump completed on 2018-01-26  0:20:56
 

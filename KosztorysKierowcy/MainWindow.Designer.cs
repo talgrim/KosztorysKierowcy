@@ -39,6 +39,10 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.cbAddDriver = new System.Windows.Forms.CheckBox();
+            this.bDeleteRoute = new System.Windows.Forms.Button();
+            this.bDeleteCar = new System.Windows.Forms.Button();
+            this.bDeletePerson = new System.Windows.Forms.Button();
             this.cbNotGrouped = new System.Windows.Forms.CheckBox();
             this.cbTransitPassengers = new System.Windows.Forms.CheckBox();
             this.cbPassengerEdit = new System.Windows.Forms.CheckBox();
@@ -67,7 +71,7 @@
             // 
             this.cDrivers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cDrivers.FormattingEnabled = true;
-            this.cDrivers.Location = new System.Drawing.Point(30, 36);
+            this.cDrivers.Location = new System.Drawing.Point(9, 36);
             this.cDrivers.Name = "cDrivers";
             this.cDrivers.Size = new System.Drawing.Size(121, 21);
             this.cDrivers.TabIndex = 2;
@@ -76,7 +80,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(58, 6);
+            this.label1.Location = new System.Drawing.Point(37, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 3;
@@ -86,9 +90,9 @@
             // 
             this.cCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cCars.FormattingEnabled = true;
-            this.cCars.Location = new System.Drawing.Point(164, 36);
+            this.cCars.Location = new System.Drawing.Point(136, 36);
             this.cCars.Name = "cCars";
-            this.cCars.Size = new System.Drawing.Size(121, 21);
+            this.cCars.Size = new System.Drawing.Size(149, 21);
             this.cCars.TabIndex = 4;
             // 
             // label2
@@ -155,6 +159,10 @@
             // 
             // pMainPanel
             // 
+            this.pMainPanel.Controls.Add(this.cbAddDriver);
+            this.pMainPanel.Controls.Add(this.bDeleteRoute);
+            this.pMainPanel.Controls.Add(this.bDeleteCar);
+            this.pMainPanel.Controls.Add(this.bDeletePerson);
             this.pMainPanel.Controls.Add(this.cbNotGrouped);
             this.pMainPanel.Controls.Add(this.cbTransitPassengers);
             this.pMainPanel.Controls.Add(this.cbPassengerEdit);
@@ -184,14 +192,53 @@
             this.pMainPanel.Controls.Add(this.label3);
             this.pMainPanel.Location = new System.Drawing.Point(12, 41);
             this.pMainPanel.Name = "pMainPanel";
-            this.pMainPanel.Size = new System.Drawing.Size(1062, 226);
+            this.pMainPanel.Size = new System.Drawing.Size(1108, 226);
             this.pMainPanel.TabIndex = 12;
+            // 
+            // cbAddDriver
+            // 
+            this.cbAddDriver.AutoSize = true;
+            this.cbAddDriver.Enabled = false;
+            this.cbAddDriver.Location = new System.Drawing.Point(477, 196);
+            this.cbAddDriver.Name = "cbAddDriver";
+            this.cbAddDriver.Size = new System.Drawing.Size(100, 17);
+            this.cbAddDriver.TabIndex = 32;
+            this.cbAddDriver.Text = "Dodaj kierowcę";
+            this.cbAddDriver.UseVisualStyleBackColor = true;
+            this.cbAddDriver.CheckedChanged += new System.EventHandler(this.cbAddDriver_CheckedChanged);
+            // 
+            // bDeleteRoute
+            // 
+            this.bDeleteRoute.Location = new System.Drawing.Point(986, 94);
+            this.bDeleteRoute.Name = "bDeleteRoute";
+            this.bDeleteRoute.Size = new System.Drawing.Size(119, 23);
+            this.bDeleteRoute.TabIndex = 31;
+            this.bDeleteRoute.Text = "Usuń trasę";
+            this.bDeleteRoute.UseVisualStyleBackColor = true;
+            // 
+            // bDeleteCar
+            // 
+            this.bDeleteCar.Location = new System.Drawing.Point(986, 65);
+            this.bDeleteCar.Name = "bDeleteCar";
+            this.bDeleteCar.Size = new System.Drawing.Size(119, 23);
+            this.bDeleteCar.TabIndex = 30;
+            this.bDeleteCar.Text = "Usuń auto";
+            this.bDeleteCar.UseVisualStyleBackColor = true;
+            // 
+            // bDeletePerson
+            // 
+            this.bDeletePerson.Location = new System.Drawing.Point(986, 36);
+            this.bDeletePerson.Name = "bDeletePerson";
+            this.bDeletePerson.Size = new System.Drawing.Size(119, 23);
+            this.bDeletePerson.TabIndex = 29;
+            this.bDeletePerson.Text = "Usuń osobę";
+            this.bDeletePerson.UseVisualStyleBackColor = true;
             // 
             // cbNotGrouped
             // 
             this.cbNotGrouped.AutoSize = true;
             this.cbNotGrouped.Enabled = false;
-            this.cbNotGrouped.Location = new System.Drawing.Point(477, 196);
+            this.cbNotGrouped.Location = new System.Drawing.Point(583, 196);
             this.cbNotGrouped.Name = "cbNotGrouped";
             this.cbNotGrouped.Size = new System.Drawing.Size(74, 17);
             this.cbNotGrouped.TabIndex = 28;
@@ -207,12 +254,12 @@
             this.cbTransitPassengers.TabIndex = 27;
             this.cbTransitPassengers.Text = "Pasażer/owie";
             this.cbTransitPassengers.UseVisualStyleBackColor = true;
-            this.cbTransitPassengers.CheckedChanged += new System.EventHandler(this.enableTogether);
+            this.cbTransitPassengers.CheckedChanged += new System.EventHandler(this.enableCheckboxes);
             // 
             // cbPassengerEdit
             // 
             this.cbPassengerEdit.AutoSize = true;
-            this.cbPassengerEdit.Location = new System.Drawing.Point(986, 40);
+            this.cbPassengerEdit.Location = new System.Drawing.Point(892, 13);
             this.cbPassengerEdit.Name = "cbPassengerEdit";
             this.cbPassengerEdit.Size = new System.Drawing.Size(64, 17);
             this.cbPassengerEdit.TabIndex = 26;
@@ -363,7 +410,7 @@
             // 
             // bSettings
             // 
-            this.bSettings.Location = new System.Drawing.Point(935, 12);
+            this.bSettings.Location = new System.Drawing.Point(978, 12);
             this.bSettings.Name = "bSettings";
             this.bSettings.Size = new System.Drawing.Size(139, 23);
             this.bSettings.TabIndex = 14;
@@ -372,7 +419,7 @@
             // 
             // bRetry
             // 
-            this.bRetry.Location = new System.Drawing.Point(813, 12);
+            this.bRetry.Location = new System.Drawing.Point(856, 12);
             this.bRetry.Name = "bRetry";
             this.bRetry.Size = new System.Drawing.Size(116, 23);
             this.bRetry.TabIndex = 15;
@@ -384,7 +431,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 575);
+            this.ClientSize = new System.Drawing.Size(1132, 575);
             this.Controls.Add(this.bRetry);
             this.Controls.Add(this.bSettings);
             this.Controls.Add(this.gTransits);
@@ -433,6 +480,10 @@
         private System.Windows.Forms.Button bSettings;
         private System.Windows.Forms.CheckBox cbNotGrouped;
         private System.Windows.Forms.Button bRetry;
+        private System.Windows.Forms.Button bDeletePerson;
+        private System.Windows.Forms.Button bDeleteRoute;
+        private System.Windows.Forms.Button bDeleteCar;
+        private System.Windows.Forms.CheckBox cbAddDriver;
     }
 }
 

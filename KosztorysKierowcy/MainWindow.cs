@@ -12,9 +12,8 @@ namespace KosztorysKierowcy
         private List<Route> routes;
         private List<Car> cars;
         private List<Person> passengers;
-        private List<Transit> transits;
         private double result;
-
+        private bool justAdded;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,10 +21,12 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
-            bSettings.Click += (s, e) => { showDialogBox("Settings"); };
+            bSettings.Click += (s, e) => { showDialogBox("Ustawienia"); };
+
             bAddPerson.Click += (s, e) => { showDialogBox(new Person(0, null, null , null)); };
             bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,null,0)); };
             bAddCar.Click += (s, e) => { showDialogBox(new Car(0,null,0,0)); };
+
             bEditRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
             bEditCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
             bEditPerson.Click += (s, e) => 
@@ -38,6 +39,10 @@ namespace KosztorysKierowcy
                 else
                     showDialogBox(cDrivers.SelectedValue as Person);
             };
+
+            bDeletePerson.Click += (s, e) => { showDialogBox("Usuń osobę"); };
+            bDeleteRoute.Click += (s, e) => { showDialogBox("Usuń trasę"); };
+            bDeleteCar.Click += (s, e) => { showDialogBox("Usuń auto"); };
 
             dbm = new DBManager();
             if (dbm.IsCorrect)
@@ -124,7 +129,10 @@ namespace KosztorysKierowcy
             if (cbTransitPassengers.Checked && lPassengers.SelectedItems.Count > 1)
                 cbNotGrouped.Enabled = true;
             else
+            {
+                cbNotGrouped.Checked = false;
                 cbNotGrouped.Enabled = false;
+            }
         }
 
         private void bAddTransit_Click(object sender, EventArgs e)
@@ -152,6 +160,7 @@ namespace KosztorysKierowcy
                     int routeid = (cRoutes.SelectedValue as Route).Id;
                     dbm.insertTransit(driverid, carid, routeid, result);
                     dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
+                    justAdded = true;
                     bCheckTransits.PerformClick();
                 }
             }
@@ -161,19 +170,30 @@ namespace KosztorysKierowcy
         {
             if (dbm.IsCorrect)
             {
-                if (cbTransitPassengers.Checked)
+                List<Transit> transits = new List<Transit>();
+                if (justAdded)
                 {
-                    List<string> ids = new List<string>();
-                    foreach (Person person in lPassengers.SelectedItems)
-                        ids.Add(person.Id.ToString());
-                    string tabids = String.Join(", ", ids);
-                    if (cbNotGrouped.Checked)
-                        transits = dbm.getTransitsByPassengersNotGrouped(tabids);
-                    else
-                        transits = dbm.getTransitsByPassengers(tabids);
+                    transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                    justAdded = false;
                 }
                 else
-                    transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                {
+                    if (cbTransitPassengers.Checked && lPassengers.SelectedItems.Count >= 1)
+                    {
+                        List<string> ids = new List<string>();
+                        foreach (Person person in lPassengers.SelectedItems)
+                            ids.Add(person.Id.ToString());
+                        if (cbAddDriver.Checked)
+                            ids.Add((cDrivers.SelectedValue as Person).Id.ToString());
+                        string tabids = String.Join(", ", ids);
+                        if (cbNotGrouped.Checked)
+                            transits = dbm.getTransitsByPassengersNotGrouped(tabids);
+                        else
+                            transits = dbm.getTransitsByPassengers(tabids);
+                    }
+                    else
+                        transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                }
                 gTransits.DataSource = transits;
             }
         }
@@ -189,12 +209,24 @@ namespace KosztorysKierowcy
             }
         }
 
-        private void enableTogether(object sender, EventArgs e)
+        private void enableCheckboxes(object sender, EventArgs e)
         {
-            if (cbTransitPassengers.Checked && lPassengers.SelectedItems.Count > 1)
-                cbNotGrouped.Enabled = true;
+            if (cbTransitPassengers.Checked)
+            {
+                cbAddDriver.Enabled = true;
+                if (lPassengers.SelectedItems.Count > 1)
+                    cbNotGrouped.Enabled = true;
+                else
+                {
+                    cbNotGrouped.Checked = false;
+                    cbNotGrouped.Enabled = false;
+                }
+            }
             else
-                cbNotGrouped.Enabled = false;
+            {
+                cbAddDriver.Checked = false;
+                cbAddDriver.Enabled = false;
+            }
         }
 
         private void bRetry_Click(object sender, EventArgs e)
@@ -205,6 +237,18 @@ namespace KosztorysKierowcy
                 bRetry.Visible = false;
                 InitFields();
             }
+        }
+
+        private void cbAddDriver_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAddDriver.Checked)
+                cbNotGrouped.Enabled = true;
+            else if (lPassengers.SelectedItems.Count < 2)
+            {
+                cbNotGrouped.Checked = false;
+                cbNotGrouped.Enabled = false;
+            }
+                
         }
     }
 }
