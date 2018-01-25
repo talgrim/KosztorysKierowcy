@@ -22,9 +22,9 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
-            bAddPerson.Click += (s, e) => { showDialogBox(new Person(0,"","","null")); };
-            bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,"",0)); };
-            bAddCar.Click += (s, e) => { showDialogBox(new Car(0,"",0)); };
+            bAddPerson.Click += (s, e) => { showDialogBox(new Person(0, null, null , null)); };
+            bAddRoute.Click += (s, e) => { showDialogBox(new Route(0,null,0)); };
+            bAddCar.Click += (s, e) => { showDialogBox(new Car(0,null,0,0)); };
             bEditRoute.Click += (s, e) => { showDialogBox(cRoutes.SelectedValue as Route); };
             bEditCar.Click += (s, e) => { showDialogBox(cCars.SelectedValue as Car); };
             bEditPerson.Click += (s, e) => 
@@ -113,7 +113,12 @@ namespace KosztorysKierowcy
         private void RefreshTables()
         {
             drivers = dbm.getDrivers();
+            cDrivers.DisplayMember = "FullName";
+            cDrivers.DataSource = drivers;
+
             routes = dbm.getRoutes();
+            cRoutes.DisplayMember = "Information";
+            cRoutes.DataSource = routes;
         }
 
         private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
@@ -158,7 +163,9 @@ namespace KosztorysKierowcy
         {
             using (DialogBox form = new DialogBox(obj))
             {
-                form.ShowDialog();
+                DialogResult dr = form.ShowDialog();
+                if (dr == DialogResult.OK)
+                    RefreshTables();
             }
         }
     }

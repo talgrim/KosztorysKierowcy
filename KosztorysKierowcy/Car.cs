@@ -11,11 +11,13 @@ namespace KosztorysKierowcy
         public int Id { get; }
         public String Name { get; }
         public int Consumption { get; }
-        public Car(int id, string name, int consumption)
+        public int OwnerID { get; }
+        public Car(int id, string name, int consumption, int ownerid)
         {
             Id = id;
             Name = name;
             Consumption = consumption;
+            OwnerID = ownerid;
         }
         public String Information { get { return Name + ", " + Consumption + "/100"; } }
     }

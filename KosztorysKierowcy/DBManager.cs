@@ -120,33 +120,9 @@ namespace KosztorysKierowcy
             }
         }
 
-        //Update statement
-        public void Update()
+        public void editPerson(int id, string name, string surname, int driver)
         {
-            string query = "UPDATE tableinfo SET name='Joe', age='22' WHERE name='John Smith'";
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //create mysql command
-                MySqlCommand cmd = new MySqlCommand();
-                //Assign the query using CommandText
-                cmd.CommandText = query;
-                //Assign the connection using Connection
-                cmd.Connection = connection;
-
-                //Execute query
-                cmd.ExecuteNonQuery();
-
-                //close connection
-                this.CloseConnection();
-            }
-        }
-
-        //Delete statement
-        public void Delete()
-        {
-            string query = "DELETE FROM tableinfo WHERE name='John Smith'";
+            string query = "UPDATE persons SET name='" + name + "', surname='" + surname + "', driver= " + driver + " WHERE personid = " + id;
 
             if (this.OpenConnection() == true)
             {
@@ -156,10 +132,69 @@ namespace KosztorysKierowcy
             }
         }
 
-        //Select statement
+        public void addPerson(string name, string surname, int driver)
+        {
+            string query = "INSERT INTO persons(name, surname, driver) VALUES ('" + name + "', '" + surname + "', " + driver + ")";
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void editRoute(int id, string name, int distance)
+        {
+            string query = "UPDATE routes SET name='" + name + "', distance=" + distance + " WHERE routeid = " + id;
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void addRoute(string name, int distance)
+        {
+            string query = "INSERT INTO routes(name, distance) VALUES ('" + name + "', " + distance + ")";
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void editCar(int id, string name, int consumption, int ownerid)
+        {
+            string query = "UPDATE cars SET name='" + name + "', consumption=" + consumption + ", ownerid = " + ownerid + " WHERE carid = " + id;
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public void addCar(string name, int consumption, int ownerid)
+        {
+            string query = "INSERT INTO cars(name, consumption, ownerid) VALUES ('" + name + "', " + consumption + ", " + ownerid + ")";
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
         public List<Person> getDrivers()
         {
-            string query = "SELECT personid, name, surname, driver FROM persons WHERE driver IS NOT NULL";
+            string query = "SELECT personid, name, surname, driver FROM persons WHERE driver = 1";
 
             //Create a list to store the result
             List<Person> drivers = new List<Person>();
@@ -252,7 +287,7 @@ namespace KosztorysKierowcy
         public List<Transit> getTransitsByDriver(int id)
         {
             string query =
-                "SELECT transitid, p1.personid, p1.name, p1.surname, cars.carid, cars.name, cars.consumption, routes.routeid, routes.name, routes.distance, transits.driven, cost, driver " +
+                "SELECT transitid, p1.personid, p1.name, p1.surname, cars.carid, cars.name, cars.consumption, routes.routeid, routes.name, routes.distance, transits.driven, cost, driver, ownerid " +
                 "FROM persons p1, transits, cars, routes "+
                 "WHERE "+
                     "transits.carid = cars.carid AND "+
@@ -278,7 +313,7 @@ namespace KosztorysKierowcy
                                 (int)dataReader[0],
                                 (double)dataReader[11],
                                 new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), dataReader[12].ToString()),
-                                new Car((int)dataReader[4], dataReader[5].ToString(), (int)dataReader[6]),
+                                new Car((int)dataReader[4], dataReader[5].ToString(), (int)dataReader[6], (int) dataReader[13]),
                                 new Route((int)dataReader[7], dataReader[8].ToString(), (int)dataReader[9]),
                                 (DateTime)dataReader[10]
                                 ));
@@ -288,7 +323,7 @@ namespace KosztorysKierowcy
                 foreach (Transit element in transits)
                 {
                     List<Person> passengers = new List<Person>();
-                    query = "SELECT * FROM passengerstotransit, persons, driver WHERE passengerid = personid AND transitid = " + element.Transitid.ToString() + " ORDER BY name";
+                    query = "SELECT * FROM passengerstotransit, persons WHERE passengerid = personid AND transitid = " + element.Transitid.ToString() + " ORDER BY name";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
@@ -344,7 +379,7 @@ namespace KosztorysKierowcy
 
         public List<Car> getCarsByID(int id)
         {
-            string query = "SELECT cars.carid, cars.name, cars.consumption FROM cars INNER JOIN owned ON cars.carid = owned.carid WHERE owned.ownerid = " + id;
+            string query = "SELECT cars.carid, cars.name, cars.consumption, ownerid FROM cars  WHERE ownerid = " + id;
 
             //Create a list to store the result
             List<Car> cars = new List<Car>();
@@ -359,7 +394,7 @@ namespace KosztorysKierowcy
 
                 //Read the data and store them in the list
                 while (dataReader.Read())
-                    cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"]));
+                    cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (int)dataReader["ownerid"]));
 
                 //close Data Reader
                 dataReader.Close();
