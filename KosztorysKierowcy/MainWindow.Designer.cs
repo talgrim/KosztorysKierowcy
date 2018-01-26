@@ -39,7 +39,10 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.bExit = new System.Windows.Forms.Button();
+            this.bRetry = new System.Windows.Forms.Button();
             this.rbPassenger = new System.Windows.Forms.RadioButton();
+            this.bSettings = new System.Windows.Forms.Button();
             this.rbDriver = new System.Windows.Forms.RadioButton();
             this.cbAddDriver = new System.Windows.Forms.CheckBox();
             this.bDeleteRoute = new System.Windows.Forms.Button();
@@ -61,9 +64,11 @@
             this.bAddCar = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
-            this.bSettings = new System.Windows.Forms.Button();
-            this.bRetry = new System.Windows.Forms.Button();
-            this.bExit = new System.Windows.Forms.Button();
+            this.cbPeriod = new System.Windows.Forms.CheckBox();
+            this.lFrom = new System.Windows.Forms.Label();
+            this.tFrom = new System.Windows.Forms.TextBox();
+            this.lTo = new System.Windows.Forms.Label();
+            this.tTo = new System.Windows.Forms.TextBox();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
@@ -139,7 +144,7 @@
             this.tPetroleum.Size = new System.Drawing.Size(100, 20);
             this.tPetroleum.TabIndex = 9;
             this.tPetroleum.Text = "5,00";
-            this.tPetroleum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tPetroleum_KeyPress);
+            this.tPetroleum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DecimalPragmaCheck);
             // 
             // tRouteCost
             // 
@@ -160,6 +165,11 @@
             // 
             // pMainPanel
             // 
+            this.pMainPanel.Controls.Add(this.tTo);
+            this.pMainPanel.Controls.Add(this.lTo);
+            this.pMainPanel.Controls.Add(this.tFrom);
+            this.pMainPanel.Controls.Add(this.lFrom);
+            this.pMainPanel.Controls.Add(this.cbPeriod);
             this.pMainPanel.Controls.Add(this.bExit);
             this.pMainPanel.Controls.Add(this.bRetry);
             this.pMainPanel.Controls.Add(this.rbPassenger);
@@ -199,6 +209,25 @@
             this.pMainPanel.Size = new System.Drawing.Size(1108, 226);
             this.pMainPanel.TabIndex = 12;
             // 
+            // bExit
+            // 
+            this.bExit.Location = new System.Drawing.Point(969, 2);
+            this.bExit.Name = "bExit";
+            this.bExit.Size = new System.Drawing.Size(139, 23);
+            this.bExit.TabIndex = 16;
+            this.bExit.Text = "Wyjdź";
+            this.bExit.UseVisualStyleBackColor = true;
+            // 
+            // bRetry
+            // 
+            this.bRetry.Location = new System.Drawing.Point(702, 2);
+            this.bRetry.Name = "bRetry";
+            this.bRetry.Size = new System.Drawing.Size(116, 23);
+            this.bRetry.TabIndex = 15;
+            this.bRetry.Text = "Ponów połączenie";
+            this.bRetry.UseVisualStyleBackColor = true;
+            this.bRetry.Click += new System.EventHandler(this.bRetry_Click);
+            // 
             // rbPassenger
             // 
             this.rbPassenger.AutoSize = true;
@@ -209,6 +238,15 @@
             this.rbPassenger.Text = "Pasażer/owie";
             this.rbPassenger.UseVisualStyleBackColor = true;
             this.rbPassenger.CheckedChanged += new System.EventHandler(this.enableCheckboxes);
+            // 
+            // bSettings
+            // 
+            this.bSettings.Location = new System.Drawing.Point(824, 2);
+            this.bSettings.Name = "bSettings";
+            this.bSettings.Size = new System.Drawing.Size(139, 23);
+            this.bSettings.TabIndex = 14;
+            this.bSettings.Text = "Ustawienia";
+            this.bSettings.UseVisualStyleBackColor = true;
             // 
             // rbDriver
             // 
@@ -414,33 +452,54 @@
             this.gTransits.Size = new System.Drawing.Size(1105, 295);
             this.gTransits.TabIndex = 13;
             // 
-            // bSettings
+            // cbPeriod
             // 
-            this.bSettings.Location = new System.Drawing.Point(824, 2);
-            this.bSettings.Name = "bSettings";
-            this.bSettings.Size = new System.Drawing.Size(139, 23);
-            this.bSettings.TabIndex = 14;
-            this.bSettings.Text = "Ustawienia";
-            this.bSettings.UseVisualStyleBackColor = true;
+            this.cbPeriod.AutoSize = true;
+            this.cbPeriod.Location = new System.Drawing.Point(451, 174);
+            this.cbPeriod.Name = "cbPeriod";
+            this.cbPeriod.Size = new System.Drawing.Size(57, 17);
+            this.cbPeriod.TabIndex = 34;
+            this.cbPeriod.Text = "Okres:";
+            this.cbPeriod.UseVisualStyleBackColor = true;
+            this.cbPeriod.CheckedChanged += new System.EventHandler(this.cbPeriod_CheckedChanged);
             // 
-            // bRetry
+            // lFrom
             // 
-            this.bRetry.Location = new System.Drawing.Point(702, 2);
-            this.bRetry.Name = "bRetry";
-            this.bRetry.Size = new System.Drawing.Size(116, 23);
-            this.bRetry.TabIndex = 15;
-            this.bRetry.Text = "Ponów połączenie";
-            this.bRetry.UseVisualStyleBackColor = true;
-            this.bRetry.Click += new System.EventHandler(this.bRetry_Click);
+            this.lFrom.AutoSize = true;
+            this.lFrom.Location = new System.Drawing.Point(500, 175);
+            this.lFrom.Name = "lFrom";
+            this.lFrom.Size = new System.Drawing.Size(22, 13);
+            this.lFrom.TabIndex = 35;
+            this.lFrom.Text = "od:";
+            this.lFrom.Visible = false;
             // 
-            // bExit
+            // tFrom
             // 
-            this.bExit.Location = new System.Drawing.Point(969, 2);
-            this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(139, 23);
-            this.bExit.TabIndex = 16;
-            this.bExit.Text = "Wyjdź";
-            this.bExit.UseVisualStyleBackColor = true;
+            this.tFrom.Location = new System.Drawing.Point(524, 172);
+            this.tFrom.Name = "tFrom";
+            this.tFrom.Size = new System.Drawing.Size(100, 20);
+            this.tFrom.TabIndex = 14;
+            this.tFrom.Visible = false;
+            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
+            // 
+            // lTo
+            // 
+            this.lTo.AutoSize = true;
+            this.lTo.Location = new System.Drawing.Point(626, 175);
+            this.lTo.Name = "lTo";
+            this.lTo.Size = new System.Drawing.Size(22, 13);
+            this.lTo.TabIndex = 36;
+            this.lTo.Text = "do:";
+            this.lTo.Visible = false;
+            // 
+            // tTo
+            // 
+            this.tTo.Location = new System.Drawing.Point(650, 172);
+            this.tTo.Name = "tTo";
+            this.tTo.Size = new System.Drawing.Size(100, 20);
+            this.tTo.TabIndex = 37;
+            this.tTo.Visible = false;
+            this.tTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
             // 
             // MainWindow
             // 
@@ -498,6 +557,11 @@
         private System.Windows.Forms.RadioButton rbPassenger;
         private System.Windows.Forms.RadioButton rbDriver;
         private System.Windows.Forms.Button bExit;
+        private System.Windows.Forms.TextBox tTo;
+        private System.Windows.Forms.Label lTo;
+        private System.Windows.Forms.TextBox tFrom;
+        private System.Windows.Forms.Label lFrom;
+        private System.Windows.Forms.CheckBox cbPeriod;
     }
 }
 

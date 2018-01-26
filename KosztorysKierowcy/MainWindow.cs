@@ -36,7 +36,7 @@ namespace KosztorysKierowcy
             bDeletePerson.Click += (s, e) => { showDialogBox((s as Button).Text); };
             bDeleteRoute.Click += (s, e) => { showDialogBox((s as Button).Text); };
             bDeleteCar.Click += (s, e) => { showDialogBox((s as Button).Text); };
-
+            
             dbm = new DBManager();
             if (dbm.IsCorrect)
             {
@@ -81,21 +81,6 @@ namespace KosztorysKierowcy
             }
         }
 
-        private void tPetroleum_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != ','))
-            {
-                e.Handled = true;
-            }
-
-            // only allow one decimal point
-            if ((e.KeyChar == ',') && ((sender as TextBox).Text.IndexOf(',') > -1))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void InitFields()
         {
             drivers = dbm.getDrivers();
@@ -137,6 +122,7 @@ namespace KosztorysKierowcy
                     text += passenger.FullName + ", ";
                     passengerids.Add(passenger.Id);
                 }
+                text = text.Remove(text.Length - 2, 2);
                 text += "\nKoszt: " + result.ToString("F") + " zł.";
                 DialogResult dialogResult = MessageBox.Show(text, "Potwierdź", MessageBoxButtons.OKCancel);
                 if (dialogResult == DialogResult.OK)
@@ -156,10 +142,9 @@ namespace KosztorysKierowcy
         {
             if (dbm.IsCorrect)
             {
-                List<Transit> transits = new List<Transit>();
                 if (justAdded)
                 {
-                    transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                    gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
                     justAdded = false;
                 }
                 else
@@ -172,15 +157,49 @@ namespace KosztorysKierowcy
                         if (cbAddDriver.Checked)
                             ids.Add((cDrivers.SelectedValue as Person).Id.ToString());
                         string tabids = String.Join(", ", ids);
-                        if (cbNotGrouped.Checked)
-                            transits = dbm.getTransitsByPassengersNotGrouped(tabids);
+                        if(cbPeriod.Checked)
+                        {
+                            string from = tFrom.Text;
+                            string to = tTo.Text;
+                            if (from.Trim().Length > 0 && to.Trim().Length > 0)
+                            {
+                                DateTime From = DateTime.Parse(from);
+                                DateTime To = DateTime.Parse(to);
+                                To = To.AddDays(1);
+                                if (DateTime.Compare(From, To) <= 0)
+                                {
+                                    if (cbNotGrouped.Checked)
+                                        gTransits.DataSource = dbm.getTransitsByPassengersNotGrouped(tabids, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                                    else
+                                        gTransits.DataSource = dbm.getTransitsByPassengers(tabids, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                                }
+                            }
+                        }
                         else
-                            transits = dbm.getTransitsByPassengers(tabids);
+                            if (cbNotGrouped.Checked)
+                                gTransits.DataSource = dbm.getTransitsByPassengersNotGrouped(tabids);
+                            else
+                                gTransits.DataSource = dbm.getTransitsByPassengers(tabids);
                     }
                     else
-                        transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                    {
+                        if (cbPeriod.Checked)
+                        {
+                            string from = tFrom.Text;
+                            string to = tTo.Text;
+                            if (from.Trim().Length > 0 && to.Trim().Length > 0)
+                            { 
+                                DateTime From = DateTime.Parse(from);
+                                DateTime To = DateTime.Parse(to);
+                                To = To.AddDays(1);
+                                if (DateTime.Compare(From, To) <= 0)
+                                    gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                            }
+                        }
+                        else
+                            gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                    }
                 }
-                gTransits.DataSource = transits;
             }
         }
 
@@ -231,6 +250,64 @@ namespace KosztorysKierowcy
                 cbNotGrouped.Enabled = false;
             }
                 
+        }
+
+        private void cbPeriod_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbPeriod.Checked)
+            {
+                lFrom.Visible = true;
+                tFrom.Visible = true;
+                lTo.Visible = true;
+                tTo.Visible = true;
+            }
+            else
+            {
+                lFrom.Visible = false;
+                tFrom.Visible = false;
+                lTo.Visible = false;
+                tTo.Visible = false;
+            }
+        }
+
+        private string formatDate(string date)
+        {
+            string[] result = date.Split('-');
+            List<string> temp = new List<string>();
+            foreach (string str in result)
+                temp.Add(str);
+            temp.Reverse();
+            result = temp.ToArray();
+            string result2 = String.Join("-", result);
+            return result2;
+        }
+
+        private void DatePragmaCheck(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '-'))
+            {
+                e.Handled = true;
+            }
+            
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') != (sender as TextBox).Text.LastIndexOf('-')))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void DecimalPragmaCheck(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != ','))
+            {
+                e.Handled = true;
+            }
+            
+            if ((e.KeyChar == ',') && ((sender as TextBox).Text.IndexOf(',') > -1))
+            {
+                e.Handled = true;
+            }
         }
     }
 }
