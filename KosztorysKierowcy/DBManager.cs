@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
-
+using System.Data;
 
 namespace KosztorysKierowcy
 {
@@ -268,39 +268,39 @@ namespace KosztorysKierowcy
         {
             string query =
                 "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
-                "FROM persons p1, transits, cars, routes " +
-                "WHERE " +
-                    "transits.carid = cars.carid AND " +
-                    "transits.routeid = routes.routeid AND " +
-                    "transits.driverid = p1.personid AND " +
-                    "transits.driverid = " + id + " " +
+                "FROM transits " +
+                "LEFT JOIN persons p1 " +
+                "ON driverid = p1.personid " +
+                "LEFT JOIN cars " +
+                "ON transits.carid = cars.carid " +
+                "LEFT JOIN routes " +
+                "ON transits.routeid = routes.routeid " +
+                "WHERE transits.driverid = " + id + " " +
                 "ORDER BY transits.transitid";
             
             List<Transit> transits = new List<Transit>();
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                        while (dataReader.Read())
-                            transits.Add(new Transit(
-                                    (int)dataReader[0],
-                                    (double)dataReader[1],
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        transits.Add(new Transit(
+                                (int)dataReader[0],
+                                (double)dataReader[1],
+                                dataReader[2].ToString() == "" ?
+                                    new Person(0, "Usunięto", "", "null"):
                                     new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                                dataReader[6].ToString() == "" ?
+                                    new Car(0, "Usunięto", 0, 0):
                                     new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
+                                dataReader[10].ToString()==""?
+                                    new Route(0,"Usunięto",0):
                                     new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
-                                    (DateTime)dataReader[13]
-                                    ));
+                                (DateTime)dataReader[13]
+                                ));
 
                 foreach (Transit element in transits)
-                {
-                    List<Person> passengers = new List<Person>();
-                    query = "SELECT * FROM passengerstotransit, persons WHERE passengerid = personid AND transitid = " + element.Transitid.ToString() + " ORDER BY name";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                        using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                            while (dataReader.Read())
-                                passengers.Add(new Person((int)dataReader["passengerid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
-                            element.Passengers = passengers.ToArray();
-                }
+                    element.Passengers = getPassengersByTransitid(element.Transitid).ToArray();
                 this.CloseConnection();
                 return transits;
             }
@@ -311,7 +311,7 @@ namespace KosztorysKierowcy
         public List<Transit> getTransitsByPassengers(string ids)
         {
             string query =
-                "SELECT * FROM passengersToTransit, persons WHERE passengersToTransit.passengerid = persons.personid AND passengerid IN (" + ids + ") ORDER BY transitid ASC, surname ASC";
+                "SELECT * FROM passengersToTransit LEFT JOIN persons ON passengerid = personid WHERE passengerid IN(" + ids + ") GROUP BY transitid ORDER BY transitid ASC, surname ASC";
             List<Transit> transits = new List<Transit>();
             List<Passengers> passengers = new List<Passengers>();
             if (this.OpenConnection() == true)
@@ -325,32 +325,34 @@ namespace KosztorysKierowcy
                     int transitid = element.TransitId;
                     query =
                         "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
-                        "FROM persons p1, transits, cars, routes " +
-                        "WHERE " +
-                            "transits.carid = cars.carid AND " +
-                            "transits.routeid = routes.routeid AND " +
-                            "transits.driverid = p1.personid AND " +
-                            "transits.transitid = " + transitid + " " +
+                        "FROM transits " +
+                        "LEFT JOIN persons p1 " +
+                        "ON driverid = p1.personid " +
+                        "LEFT JOIN cars " +
+                        "ON transits.carid = cars.carid " +
+                        "LEFT JOIN routes " +
+                        "ON transits.routeid = routes.routeid " +
+                        "WHERE transits.transitid = " + transitid + " " +
                         "ORDER BY transits.transitid";
-
-                    int id = transits.FindIndex(x => x.Transitid == transitid);
-                    if (id == -1)
-                    {
-                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                            using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                                if (dataReader.Read())
-                                    transits.Add(new Transit(
-                                        (int)dataReader[0],
-                                        (double)dataReader[1],
-                                        new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
-                                        new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
-                                        new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
-                                        element.Passenger,
-                                        (DateTime)dataReader[13]
-                                        ));
-                    }
-                    else
-                        transits[id].AddPassenger(element.Passenger);
+                    
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                            if (dataReader.Read())
+                                transits.Add(new Transit(
+                            (int)dataReader[0],
+                            (double)dataReader[1],
+                            dataReader[2].ToString() == "" ?
+                                new Person(0, "Usunięto", "", "null") :
+                                new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                            dataReader[6].ToString() == "" ?
+                                new Car(0, "Usunięto", 0, 0) :
+                                new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], dataReader[9].ToString()==""?0:(int)dataReader[9]),
+                            dataReader[10].ToString() == "" ?
+                                new Route(0, "Usunięto", 0) :
+                                new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
+                            (DateTime)dataReader[13]
+                            ));
+                    transits.Last().Passengers = getPassengersByTransitid(transitid).ToArray();
                 }
                 this.CloseConnection();
                 return transits;
@@ -377,12 +379,14 @@ namespace KosztorysKierowcy
                     int transitid = element.TransitId;
                     query =
                         "SELECT transitid, cost, p1.personid, p1.name, p1.surname, p1.driver, cars.carid, cars.name, cars.consumption, cars.ownerid, routes.routeid, routes.name, routes.distance, transits.driven " +
-                        "FROM persons p1, transits, cars, routes " +
-                        "WHERE " +
-                            "transits.carid = cars.carid AND " +
-                            "transits.routeid = routes.routeid AND " +
-                            "transits.driverid = p1.personid AND " +
-                            "transits.transitid = " + transitid + " " +
+                        "FROM transits " +
+                        "LEFT JOIN persons p1 " +
+                        "ON driverid = p1.personid " +
+                        "LEFT JOIN cars " +
+                        "ON transits.carid = cars.carid " +
+                        "LEFT JOIN routes " +
+                        "ON transits.routeid = routes.routeid " +
+                        "WHERE transits.transitid = " + transitid + " " +
                         "ORDER BY transits.transitid";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
@@ -390,9 +394,15 @@ namespace KosztorysKierowcy
                                 transits.Add(new Transit(
                                     (int)dataReader[0],
                                     (double)dataReader[1],
-                                    new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
-                                    new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], (int)dataReader[9]),
-                                    new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
+                                    dataReader[2].ToString() == "" ?
+                                        new Person(0, "Usunięto", "", "null") :
+                                        new Person((int)dataReader[2], dataReader[3].ToString(), dataReader[4].ToString(), dataReader[5].ToString()),
+                                    dataReader[6].ToString() == "" ?
+                                        new Car(0, "Usunięto", 0, 0) :
+                                        new Car((int)dataReader[6], dataReader[7].ToString(), (int)dataReader[8], dataReader[9].ToString() == "" ? 0 : (int)dataReader[9]),
+                                    dataReader[10].ToString() == "" ?
+                                        new Route(0, "Usunięto", 0) :
+                                        new Route((int)dataReader[10], dataReader[11].ToString(), (int)dataReader[12]),
                                     element.Passenger,
                                     (DateTime)dataReader[13]
                                     ));
@@ -402,6 +412,21 @@ namespace KosztorysKierowcy
             }
             else
                 return transits;
+        }
+
+        private List<Person> getPassengersByTransitid(int id)
+        {
+            string query = "SELECT personid,name,surname,driver FROM passengersToTransit LEFT JOIN persons ON passengerid=personid WHERE transitid = " + id + " ORDER BY surname ASC";
+            List<Person> passengers = new List<Person>();
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        passengers.Add(
+                            dataReader["personid"].ToString() == "" ?
+                                new Person(0, "Usunięto", "", "") :
+                                new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString())
+                            );
+            return passengers;
         }
 
         public List<Route> getRoutes()
@@ -445,9 +470,9 @@ namespace KosztorysKierowcy
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                        while (dataReader.Read())
-                            cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (int)dataReader["ownerid"]));
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        cars.Add(new Car((int)dataReader["carid"], dataReader["name"].ToString(), (int)dataReader["consumption"], (dataReader[3].ToString() == "" ? 0 : (int)dataReader["ownerid"])));
                 this.CloseConnection();
                 return cars;
             }
