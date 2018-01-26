@@ -160,7 +160,10 @@
             // 
             // pMainPanel
             // 
+            this.pMainPanel.Controls.Add(this.bExit);
+            this.pMainPanel.Controls.Add(this.bRetry);
             this.pMainPanel.Controls.Add(this.rbPassenger);
+            this.pMainPanel.Controls.Add(this.bSettings);
             this.pMainPanel.Controls.Add(this.rbDriver);
             this.pMainPanel.Controls.Add(this.cbAddDriver);
             this.pMainPanel.Controls.Add(this.bDeleteRoute);
@@ -191,7 +194,7 @@
             this.pMainPanel.Controls.Add(this.label4);
             this.pMainPanel.Controls.Add(this.label2);
             this.pMainPanel.Controls.Add(this.label3);
-            this.pMainPanel.Location = new System.Drawing.Point(12, 41);
+            this.pMainPanel.Location = new System.Drawing.Point(12, 12);
             this.pMainPanel.Name = "pMainPanel";
             this.pMainPanel.Size = new System.Drawing.Size(1108, 226);
             this.pMainPanel.TabIndex = 12;
@@ -404,7 +407,7 @@
             this.gTransits.AllowUserToResizeRows = false;
             this.gTransits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.gTransits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gTransits.Location = new System.Drawing.Point(12, 273);
+            this.gTransits.Location = new System.Drawing.Point(12, 244);
             this.gTransits.Name = "gTransits";
             this.gTransits.ReadOnly = true;
             this.gTransits.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -413,7 +416,7 @@
             // 
             // bSettings
             // 
-            this.bSettings.Location = new System.Drawing.Point(836, 12);
+            this.bSettings.Location = new System.Drawing.Point(824, 2);
             this.bSettings.Name = "bSettings";
             this.bSettings.Size = new System.Drawing.Size(139, 23);
             this.bSettings.TabIndex = 14;
@@ -422,7 +425,7 @@
             // 
             // bRetry
             // 
-            this.bRetry.Location = new System.Drawing.Point(714, 12);
+            this.bRetry.Location = new System.Drawing.Point(702, 2);
             this.bRetry.Name = "bRetry";
             this.bRetry.Size = new System.Drawing.Size(116, 23);
             this.bRetry.TabIndex = 15;
@@ -432,7 +435,7 @@
             // 
             // bExit
             // 
-            this.bExit.Location = new System.Drawing.Point(981, 12);
+            this.bExit.Location = new System.Drawing.Point(969, 2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(139, 23);
             this.bExit.TabIndex = 16;
@@ -443,10 +446,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1132, 575);
-            this.Controls.Add(this.bExit);
-            this.Controls.Add(this.bRetry);
-            this.Controls.Add(this.bSettings);
+            this.ClientSize = new System.Drawing.Size(1126, 549);
             this.Controls.Add(this.gTransits);
             this.Controls.Add(this.pMainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
