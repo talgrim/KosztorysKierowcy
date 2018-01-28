@@ -108,7 +108,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(48, 161);
+            this.button1.Location = new System.Drawing.Point(48, 152);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -117,7 +117,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(171, 161);
+            this.button2.Location = new System.Drawing.Point(171, 152);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -296,9 +296,9 @@
             this.pSettings.Controls.Add(this.bImport);
             this.pSettings.Controls.Add(this.tPath);
             this.pSettings.Controls.Add(this.label8);
-            this.pSettings.Location = new System.Drawing.Point(12, 196);
+            this.pSettings.Location = new System.Drawing.Point(12, 183);
             this.pSettings.Name = "pSettings";
-            this.pSettings.Size = new System.Drawing.Size(253, 119);
+            this.pSettings.Size = new System.Drawing.Size(253, 139);
             this.pSettings.TabIndex = 8;
             // 
             // label9
@@ -337,20 +337,20 @@
             // 
             // bExport
             // 
-            this.bExport.Location = new System.Drawing.Point(159, 83);
+            this.bExport.Location = new System.Drawing.Point(36, 111);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(75, 23);
+            this.bExport.Size = new System.Drawing.Size(198, 23);
             this.bExport.TabIndex = 5;
-            this.bExport.Text = "Eksportuj";
+            this.bExport.Text = "Eksportuj bazę danych";
             this.bExport.UseVisualStyleBackColor = true;
             // 
             // bImport
             // 
-            this.bImport.Location = new System.Drawing.Point(36, 83);
+            this.bImport.Location = new System.Drawing.Point(36, 82);
             this.bImport.Name = "bImport";
-            this.bImport.Size = new System.Drawing.Size(75, 23);
+            this.bImport.Size = new System.Drawing.Size(198, 23);
             this.bImport.TabIndex = 4;
-            this.bImport.Text = "Importuj";
+            this.bImport.Text = "Importuj bazę danych";
             this.bImport.UseVisualStyleBackColor = true;
             // 
             // tPath
@@ -721,14 +721,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(277, 193);
+            this.ClientSize = new System.Drawing.Size(273, 179);
             this.ControlBox = false;
             this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);
+            this.Controls.Add(this.pSettings);
             this.Controls.Add(this.pEditRoute);
             this.Controls.Add(this.pEditPerson);
             this.Controls.Add(this.pDelete);
-            this.Controls.Add(this.pSettings);
             this.Controls.Add(this.pAddPerson);
             this.Controls.Add(this.pAddCar);
             this.Controls.Add(this.pAddRoute);
