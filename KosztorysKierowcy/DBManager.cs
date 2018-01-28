@@ -149,7 +149,8 @@ namespace KosztorysKierowcy
             List<Debt> debts = new List<Debt>();
             string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date " +
                 "FROM debts " +
-                "LEFT JOIN debtperson d1 ON d1.personid = creditorid LEFT JOIN debtperson d2 ON personid = debtorid " +
+                "LEFT JOIN debtperson d1 ON d1.personid = creditorid " +
+                "LEFT JOIN debtperson d2 ON d2.personid = debtorid " +
                 "WHERE creditorid = " + creditorid + " AND date BETWEEN '" + from + "' AND '" + to + "'";
 
             if (this.OpenConnection() == true)
@@ -199,8 +200,9 @@ namespace KosztorysKierowcy
         {
             List<Debt> debts = new List<Debt>();
             string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date " +
-                "FROM debts LEFT JOIN debtperson d1 ON d1.personid = creditorid " +
-                "LEFT JOIN debtperson d2 ON personid = debtorid " +
+                "FROM debts " +
+                "LEFT JOIN debtperson d1 ON d1.personid = creditorid " +
+                "LEFT JOIN debtperson d2 ON d2.personid = debtorid " +
                 "WHERE debtorid = " + debtorid + " AND date BETWEEN '" + from + "' AND '" + to + "'";
 
             if (this.OpenConnection() == true)

@@ -26,7 +26,7 @@ namespace KosztorysKierowcy
         public string Creditor { get { return creditor.FullName; } }
         [DisplayName("Dłużnik")]
         public string Debtor { get { return debtor.FullName; } }
-        [DisplayName("Koszt")]
+        [DisplayName("Kwota")]
         public string TransitCost { get { return amount.ToString("F") + " zł"; } }
         [DisplayName("Data")]
         public string Date { get { return date.ToString(); } }
