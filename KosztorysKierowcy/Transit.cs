@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KosztorysKierowcy
 {
@@ -31,8 +30,10 @@ namespace KosztorysKierowcy
         public string Date => Driven.ToString();
         [DisplayName("Auto")]
         public string CarName => Car.Name;
-        [DisplayName("Trasa i dystans")]
-        public string RouteName => Route.Information;
+        [DisplayName("Trasa")]
+        public string RouteName => Route.Name;
+        [DisplayName("Dystans")]
+        public string Distance => Route.Distance.ToString() + " km";
         public int Transitid;
         public Person Driver;
         public Car Car;

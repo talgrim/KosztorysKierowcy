@@ -448,6 +448,12 @@ namespace KosztorysKierowcy
                         new List<Transit>(tab.OrderBy(o => o.RouteName).ToList()) :
                         new List<Transit>(tab.OrderByDescending(o => o.RouteName).ToList());
                         break;
+                    case "Distance":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.Distance).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.Distance).ToList());
+                        break;
                 }
 
                 gTransits.DataSource = sorted;
