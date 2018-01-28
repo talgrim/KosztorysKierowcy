@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Car.cs" />
     <Compile Include="DBManager.cs" />
+    <Compile Include="Debt.cs" />
     <Compile Include="DialogBox.cs">
       <SubType>Form</SubType>
     </Compile>

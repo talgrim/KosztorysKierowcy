@@ -22,8 +22,9 @@ namespace KosztorysKierowcy
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
             bExit.Click += (s, e) => { this.Close(); };
-                 
+
             bSettings.Click += (s, e) => { showDialogBox((s as Button).Text); };
+            bDebts.Click += (s, e) => { showDialogBox((s as Button).Text); };
 
             bAddPerson.Click += (s, e) => { showDialogBox((s as Button).Text); };
             bAddRoute.Click += (s, e) => { showDialogBox((s as Button).Text); };
@@ -91,14 +92,17 @@ namespace KosztorysKierowcy
             cRoutes.DisplayMember = "Information";
             cRoutes.DataSource = routes;
 
-            int id = (cDrivers.SelectedValue as Person).Id;
-            cars = dbm.getCarsByID(id);
-            cCars.DisplayMember = "Information";
-            cCars.DataSource = cars;
+            if (cDrivers.SelectedValue != null)
+            {
+                int id = (cDrivers.SelectedValue as Person).Id;
+                cars = dbm.getCarsByID(id);
+                cCars.DisplayMember = "Information";
+                cCars.DataSource = cars;
 
-            passengers = dbm.getPassengersWithoutDriver(id);
-            lPassengers.DisplayMember = "FullName";
-            lPassengers.DataSource = passengers;
+                passengers = dbm.getPassengersWithoutDriver(id);
+                lPassengers.DisplayMember = "FullName";
+                lPassengers.DataSource = passengers;
+            }
         }
 
         private void lPassengers_SelectedIndexChanged(object sender, EventArgs e)
@@ -122,6 +126,8 @@ namespace KosztorysKierowcy
                     text += passenger.FullName + ", ";
                     passengerids.Add(passenger.Id);
                 }
+                if (passengerids.Count == 0)
+                    text += "Brak, ";
                 text = text.Remove(text.Length - 2, 2);
                 text += "\nKoszt: " + result.ToString("F") + " zł.";
                 DialogResult dialogResult = MessageBox.Show(text, "Potwierdź", MessageBoxButtons.OKCancel);
@@ -131,7 +137,11 @@ namespace KosztorysKierowcy
                     int carid = (cCars.SelectedValue as Car).Id;
                     int routeid = (cRoutes.SelectedValue as Route).Id;
                     dbm.insertTransit(driverid, carid, routeid, result);
-                    dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
+                    if (passengerids.Count > 0)
+                    {
+                        dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
+                        dbm.insertDebts(driverid, passengerids.ToArray(), result);
+                    }
                     justAdded = true;
                     bCheckTransits.PerformClick();
                 }
@@ -142,7 +152,7 @@ namespace KosztorysKierowcy
         {
             if (dbm.IsCorrect)
             {
-                if (justAdded)
+                if ((sender as Button).Name == "bAddTransit")
                 {
                     gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
                     justAdded = false;
@@ -209,8 +219,12 @@ namespace KosztorysKierowcy
             {
                 DialogResult dr = form.ShowDialog();
                 if (dr == DialogResult.OK)
-                    if(dbm.IsCorrect)
+                    if (dbm.IsCorrect)
+                    {
                         InitFields();
+                        if (command == bDebts.Text)
+                            gTransits.DataSource = form.Debts;
+                    }
             }
         }
 
@@ -268,18 +282,6 @@ namespace KosztorysKierowcy
                 lTo.Visible = false;
                 tTo.Visible = false;
             }
-        }
-
-        private string formatDate(string date)
-        {
-            string[] result = date.Split('-');
-            List<string> temp = new List<string>();
-            foreach (string str in result)
-                temp.Add(str);
-            temp.Reverse();
-            result = temp.ToArray();
-            string result2 = String.Join("-", result);
-            return result2;
         }
 
         private void DatePragmaCheck(object sender, KeyPressEventArgs e)

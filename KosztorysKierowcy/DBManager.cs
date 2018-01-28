@@ -92,7 +92,154 @@ namespace KosztorysKierowcy
                 return false;
             }
         }
-        
+
+        public void insertDebts(int creditorid, int[] debtorsids, double amount)
+        {
+            if (this.OpenConnection() == true)
+            {
+                foreach (int debtorid in debtorsids)
+                {
+                    string query = "INSERT INTO debts (creditorid, debtorid, date, amount) " +
+                        "VALUES (" + creditorid + ", " + debtorid + ", NOW(), " + amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + ")";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        cmd.ExecuteNonQuery();
+                }
+                this.CloseConnection();
+            }
+        }
+
+        public void addDebtor(string Name, string Surname)
+        {
+            if (this.OpenConnection() == true)
+            {
+                string query = "INSERT INTO debtperson (name, surname) " +
+                    "VALUES ('" + Name + "', '" + Surname + "')";
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public List<Debt> getDebtsByCreditor(int creditorid)
+        {
+            List<Debt> debts = new List<Debt>();
+            string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date FROM debts LEFT JOIN debtperson d1 ON d1.personid = creditorid LEFT JOIN debtperson d2 ON d2.personid = debtorid WHERE creditorid = " + creditorid;
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        while (dataReader.Read())
+                            debts.Add(new Debt(
+                                (int)dataReader[0],
+                                new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), ""),
+                                new Person((int)dataReader[4], dataReader[5].ToString(), dataReader[6].ToString(), ""),
+                                (double)dataReader[7],
+                                (DateTime)dataReader[8]
+                                    ));
+
+                this.CloseConnection();
+                return debts;
+            }
+            return debts;
+        }
+
+        public List<Debt> getDebtsByCreditor(int creditorid, string from, string to)
+        {
+            List<Debt> debts = new List<Debt>();
+            string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date " +
+                "FROM debts " +
+                "LEFT JOIN debtperson d1 ON d1.personid = creditorid LEFT JOIN debtperson d2 ON personid = debtorid " +
+                "WHERE creditorid = " + creditorid + " AND date BETWEEN '" + from + "' AND '" + to + "'";
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        debts.Add(new Debt(
+                            (int)dataReader[0],
+                            new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), ""),
+                            new Person((int)dataReader[4], dataReader[5].ToString(), dataReader[6].ToString(), ""),
+                            (double)dataReader[7],
+                            (DateTime)dataReader[8]
+                                ));
+
+                this.CloseConnection();
+                return debts;
+            }
+            return debts;
+        }
+
+        public List<Debt> getDebtsByDebtor(int debtorid)
+        {
+            List<Debt> debts = new List<Debt>();
+            string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date FROM debts LEFT JOIN debtperson d1 ON d1.personid = creditorid LEFT JOIN debtperson d2 ON d2.personid = debtorid WHERE debtorid = " + debtorid;
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        debts.Add(new Debt(
+                            (int)dataReader[0],
+                            new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), ""),
+                            new Person((int)dataReader[4], dataReader[5].ToString(), dataReader[6].ToString(), ""),
+                            (double)dataReader[7],
+                            (DateTime)dataReader[8]
+                                ));
+
+                this.CloseConnection();
+                return debts;
+            }
+            return debts;
+        }
+
+        public List<Debt> getDebtsByDebtor(int debtorid, string from, string to)
+        {
+            List<Debt> debts = new List<Debt>();
+            string query = "SELECT debtid, creditorid, d1.name, d1.surname, debtorid, d2.name, d2.surname, amount, date " +
+                "FROM debts LEFT JOIN debtperson d1 ON d1.personid = creditorid " +
+                "LEFT JOIN debtperson d2 ON personid = debtorid " +
+                "WHERE debtorid = " + debtorid + " AND date BETWEEN '" + from + "' AND '" + to + "'";
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        debts.Add(new Debt(
+                            (int)dataReader[0],
+                            new Person((int)dataReader[1], dataReader[2].ToString(), dataReader[3].ToString(), ""),
+                            new Person((int)dataReader[4], dataReader[5].ToString(), dataReader[6].ToString(), ""),
+                            (double)dataReader[7],
+                            (DateTime)dataReader[8]
+                                ));
+
+                this.CloseConnection();
+                return debts;
+            }
+            return debts;
+        }
+
+        public List<Person> getDebtpersons()
+        {
+            List<Person> persons = new List<Person>();
+            string query = "SELECT * FROM debtperson ";
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        persons.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), ""));
+
+                this.CloseConnection();
+                return persons;
+            }
+            return persons;
+        }
+
         public void insertTransit(int driverid, int carid, int routeid, double cost)
         {
             string query = "INSERT INTO transits (driverid, carid, routeid, driven, cost) " +
@@ -263,6 +410,9 @@ namespace KosztorysKierowcy
             else
                 return result;
         }
+
+
+
 
         public List<Transit> getTransitsByDriver(int id)
         {

@@ -84,6 +84,16 @@
             this.label11 = new System.Windows.Forms.Label();
             this.tEditConsumption = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.pChoice = new System.Windows.Forms.Panel();
+            this.tTo = new System.Windows.Forms.TextBox();
+            this.rbCreditor = new System.Windows.Forms.RadioButton();
+            this.lTo = new System.Windows.Forms.Label();
+            this.rbDebtor = new System.Windows.Forms.RadioButton();
+            this.tFrom = new System.Windows.Forms.TextBox();
+            this.lFrom = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.cbPeriod = new System.Windows.Forms.CheckBox();
+            this.cChoice = new System.Windows.Forms.ComboBox();
             this.pAddRoute.SuspendLayout();
             this.pAddCar.SuspendLayout();
             this.pAddPerson.SuspendLayout();
@@ -93,6 +103,7 @@
             this.pMain.SuspendLayout();
             this.pEditRoute.SuspendLayout();
             this.pEditCar.SuspendLayout();
+            this.pChoice.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -602,12 +613,117 @@
             this.label12.TabIndex = 4;
             this.label12.Text = "Spalanie";
             // 
+            // pChoice
+            // 
+            this.pChoice.Controls.Add(this.tTo);
+            this.pChoice.Controls.Add(this.rbCreditor);
+            this.pChoice.Controls.Add(this.lTo);
+            this.pChoice.Controls.Add(this.rbDebtor);
+            this.pChoice.Controls.Add(this.tFrom);
+            this.pChoice.Controls.Add(this.lFrom);
+            this.pChoice.Controls.Add(this.label20);
+            this.pChoice.Controls.Add(this.cbPeriod);
+            this.pChoice.Controls.Add(this.cChoice);
+            this.pChoice.Location = new System.Drawing.Point(12, 450);
+            this.pChoice.Name = "pChoice";
+            this.pChoice.Size = new System.Drawing.Size(253, 123);
+            this.pChoice.TabIndex = 10;
+            // 
+            // tTo
+            // 
+            this.tTo.Location = new System.Drawing.Point(149, 68);
+            this.tTo.Name = "tTo";
+            this.tTo.Size = new System.Drawing.Size(100, 20);
+            this.tTo.TabIndex = 42;
+            this.tTo.Visible = false;
+            // 
+            // rbCreditor
+            // 
+            this.rbCreditor.AutoSize = true;
+            this.rbCreditor.Checked = true;
+            this.rbCreditor.Location = new System.Drawing.Point(161, 94);
+            this.rbCreditor.Name = "rbCreditor";
+            this.rbCreditor.Size = new System.Drawing.Size(73, 17);
+            this.rbCreditor.TabIndex = 9;
+            this.rbCreditor.TabStop = true;
+            this.rbCreditor.Text = "Wierzyciel";
+            this.rbCreditor.UseVisualStyleBackColor = true;
+            // 
+            // lTo
+            // 
+            this.lTo.AutoSize = true;
+            this.lTo.Location = new System.Drawing.Point(128, 71);
+            this.lTo.Name = "lTo";
+            this.lTo.Size = new System.Drawing.Size(22, 13);
+            this.lTo.TabIndex = 41;
+            this.lTo.Text = "do:";
+            this.lTo.Visible = false;
+            // 
+            // rbDebtor
+            // 
+            this.rbDebtor.AutoSize = true;
+            this.rbDebtor.Location = new System.Drawing.Point(26, 94);
+            this.rbDebtor.Name = "rbDebtor";
+            this.rbDebtor.Size = new System.Drawing.Size(62, 17);
+            this.rbDebtor.TabIndex = 8;
+            this.rbDebtor.Text = "Dłużnik";
+            this.rbDebtor.UseVisualStyleBackColor = true;
+            // 
+            // tFrom
+            // 
+            this.tFrom.Location = new System.Drawing.Point(27, 68);
+            this.tFrom.Name = "tFrom";
+            this.tFrom.Size = new System.Drawing.Size(100, 20);
+            this.tFrom.TabIndex = 38;
+            this.tFrom.Visible = false;
+            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
+            // 
+            // lFrom
+            // 
+            this.lFrom.AutoSize = true;
+            this.lFrom.Location = new System.Drawing.Point(3, 71);
+            this.lFrom.Name = "lFrom";
+            this.lFrom.Size = new System.Drawing.Size(22, 13);
+            this.lFrom.TabIndex = 40;
+            this.lFrom.Text = "od:";
+            this.lFrom.Visible = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(97, 5);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(77, 13);
+            this.label20.TabIndex = 7;
+            this.label20.Text = "Wybierz osobę";
+            // 
+            // cbPeriod
+            // 
+            this.cbPeriod.AutoSize = true;
+            this.cbPeriod.Location = new System.Drawing.Point(6, 51);
+            this.cbPeriod.Name = "cbPeriod";
+            this.cbPeriod.Size = new System.Drawing.Size(57, 17);
+            this.cbPeriod.TabIndex = 39;
+            this.cbPeriod.Text = "Okres:";
+            this.cbPeriod.UseVisualStyleBackColor = true;
+            this.cbPeriod.CheckedChanged += new System.EventHandler(this.cbPeriod_CheckedChanged);
+            // 
+            // cChoice
+            // 
+            this.cChoice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cChoice.FormattingEnabled = true;
+            this.cChoice.Location = new System.Drawing.Point(4, 23);
+            this.cChoice.Name = "cChoice";
+            this.cChoice.Size = new System.Drawing.Size(246, 21);
+            this.cChoice.TabIndex = 6;
+            // 
             // DialogBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 193);
+            this.ClientSize = new System.Drawing.Size(277, 193);
             this.ControlBox = false;
+            this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);
             this.Controls.Add(this.pEditRoute);
             this.Controls.Add(this.pEditPerson);
@@ -642,6 +758,8 @@
             this.pEditRoute.PerformLayout();
             this.pEditCar.ResumeLayout(false);
             this.pEditCar.PerformLayout();
+            this.pChoice.ResumeLayout(false);
+            this.pChoice.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -703,5 +821,15 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox cEditOwner;
+        private System.Windows.Forms.Panel pChoice;
+        private System.Windows.Forms.RadioButton rbCreditor;
+        private System.Windows.Forms.RadioButton rbDebtor;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox cChoice;
+        private System.Windows.Forms.TextBox tTo;
+        private System.Windows.Forms.Label lTo;
+        private System.Windows.Forms.TextBox tFrom;
+        private System.Windows.Forms.Label lFrom;
+        private System.Windows.Forms.CheckBox cbPeriod;
     }
 }

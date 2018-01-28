@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,10 +8,12 @@ namespace KosztorysKierowcy
     public partial class DialogBox : Form
     {
         private DBManager dbm;
+        public List<Debt> Debts { get; private set; }
         public DialogBox(string command)
         {
             InitializeComponent();
             dbm = new DBManager();
+            Debts = new List<Debt>();
             this.Text = command;
             switch (command)
             {
@@ -44,6 +47,9 @@ namespace KosztorysKierowcy
                 case "Ustawienia":
                     Settings();
                     break;
+                case "Sprawdź długi":
+                    CheckDebts();
+                    break;
             }
             pMain.Visible = false;
             button2.Click += (s, e) => { this.Close(); };
@@ -60,6 +66,7 @@ namespace KosztorysKierowcy
                     string surname = tPersonSurname.Text;
                     int driver = cbDriver.Checked ? 1 : 0;
                     dbm.addPerson(name, surname, driver);
+                    dbm.addDebtor(name, surname);
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -123,9 +130,9 @@ namespace KosztorysKierowcy
                 Person person = cPerson.SelectedValue as Person;
                 if (tEditName.Text.Trim().Length != 0 && tEditSurname.Text.Trim().Length != 0)
                 {
-                    string name = tPersonName.Text;
-                    string surname = tPersonSurname.Text;
-                    int driver = cbDriver.Checked ? 1 : 0;
+                    string name = tEditName.Text;
+                    string surname = tEditSurname.Text;
+                    int driver = cbEditDriver.Checked ? 1 : 0;
                     dbm.editPerson(person.Id, name, surname, driver);
 
                     this.DialogResult = DialogResult.OK;
@@ -287,13 +294,82 @@ namespace KosztorysKierowcy
             };
         }
 
-
-
+        private void CheckDebts()
+        {
+            pChoice.Location = pMain.Location;
+            cChoice.DisplayMember = "FullName";
+            cChoice.DataSource = dbm.getDebtpersons();
+            button1.Click += (s, e) =>
+            {
+                int id = (cChoice.SelectedValue as Person).Id;
+                if (cbPeriod.Checked)
+                {
+                    string from = tFrom.Text;
+                    string to = tTo.Text;
+                    if (from.Trim().Length > 0 && to.Trim().Length > 0)
+                    {
+                        DateTime From = DateTime.Parse(from);
+                        DateTime To = DateTime.Parse(to);
+                        To = To.AddDays(1);
+                        if (DateTime.Compare(From, To) <= 0)
+                        {
+                            if (rbCreditor.Checked)
+                                Debts = dbm.getDebtsByCreditor(id, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                            else
+                                Debts = dbm.getDebtsByDebtor(id, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                        }
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    if (rbCreditor.Checked)
+                        Debts = dbm.getDebtsByCreditor(id);
+                    else
+                        Debts = dbm.getDebtsByDebtor(id);
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+            };
+        }
 
         private void pragmaCheck(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void cbPeriod_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbPeriod.Checked)
+            {
+                lFrom.Visible = true;
+                tFrom.Visible = true;
+                lTo.Visible = true;
+                tTo.Visible = true;
+            }
+            else
+            {
+                lFrom.Visible = false;
+                tFrom.Visible = false;
+                lTo.Visible = false;
+                tTo.Visible = false;
+            }
+        }
+
+        private void DatePragmaCheck(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '-'))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') != (sender as TextBox).Text.LastIndexOf('-')))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

@@ -16,14 +16,12 @@ namespace KosztorysKierowcy
             get
             {
                 string result = "";
-                if (null != Passengers)
-                {
-                    foreach (Person person in Passengers)
-                        result += person.FullName + ", ";
-                    result = result.Remove(result.Length - 2, 2);
-                }
-                else
+                foreach (Person person in Passengers)
+                    result += person.FullName + ", ";
+                if(result == "")
                     result = "Brak";
+                else
+                    result = result.Remove(result.Length - 2, 2);
                 return result;
             }
         }
