@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KosztorysKierowcy
 {
-    public class Person
+    public class Person : IComparable
     {
         public int Id { get; }
         public string Name { get; }
@@ -21,6 +21,12 @@ namespace KosztorysKierowcy
             Driver = "True"==driver?true:false;
         }
 
-        public string FullName { get { return Name + " " + Surname; } }
+        public string FullName => Name + " " + Surname;
+
+    public int CompareTo(object obj)
+    {
+        Person compare = obj as Person;
+        return String.Compare(this.Surname, compare.Surname);
     }
+}
 }

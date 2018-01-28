@@ -21,14 +21,14 @@ namespace KosztorysKierowcy
         }
 
         [DisplayName("ID")]
-        public string Debtid { get { return debtid.ToString(); } }
+        public string Debtid => debtid.ToString();
         [DisplayName("Wierzyciel")]
-        public string Creditor { get { return creditor.FullName; } }
+        public string Creditor => creditor.FullName;
         [DisplayName("Dłużnik")]
-        public string Debtor { get { return debtor.FullName; } }
+        public string Debtor => debtor.FullName;
         [DisplayName("Kwota")]
-        public string TransitCost { get { return amount.ToString("F") + " zł"; } }
+        public string TransitCost => amount.ToString("F") + " zł";
         [DisplayName("Data")]
-        public string Date { get { return date.ToString(); } }
+        public string Date => date.ToString();
     }
 }

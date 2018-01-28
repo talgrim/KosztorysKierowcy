@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace KosztorysKierowcy
@@ -13,10 +15,14 @@ namespace KosztorysKierowcy
         private List<Car> cars;
         private List<Person> passengers;
         private double result;
-        private bool justAdded;
+        private List<Transit> transits;
+        private string[] sorter = new string[2];
+        private bool debt = false;
         public MainWindow()
         {
             InitializeComponent();
+            sorter[0] = "TransitID";
+            sorter[1] = "ASC";
             this.cCars.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
@@ -142,7 +148,6 @@ namespace KosztorysKierowcy
                         dbm.insertPassengers(dbm.getLastTransitID(), passengerids.ToArray());
                         dbm.insertDebts(driverid, passengerids.ToArray(), result);
                     }
-                    justAdded = true;
                     bCheckTransits.PerformClick();
                 }
             }
@@ -153,10 +158,7 @@ namespace KosztorysKierowcy
             if (dbm.IsCorrect)
             {
                 if ((sender as Button).Name == "bAddTransit")
-                {
                     gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
-                    justAdded = false;
-                }
                 else
                 {
                     if (rbPassenger.Checked && lPassengers.SelectedItems.Count >= 1)
@@ -198,7 +200,7 @@ namespace KosztorysKierowcy
                             string from = tFrom.Text;
                             string to = tTo.Text;
                             if (from.Trim().Length > 0 && to.Trim().Length > 0)
-                            { 
+                            {
                                 DateTime From = DateTime.Parse(from);
                                 DateTime To = DateTime.Parse(to);
                                 To = To.AddDays(1);
@@ -207,9 +209,13 @@ namespace KosztorysKierowcy
                             }
                         }
                         else
-                            gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                        {
+                            transits = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id);
+                            gTransits.DataSource = transits;
+                        }
                     }
                 }
+                debt = false;
             }
         }
 
@@ -223,7 +229,10 @@ namespace KosztorysKierowcy
                     {
                         InitFields();
                         if (command == bDebts.Text)
+                        {
                             gTransits.DataSource = form.Debts;
+                            debt = true;
+                        }
                     }
             }
         }
@@ -309,6 +318,148 @@ namespace KosztorysKierowcy
             if ((e.KeyChar == ',') && ((sender as TextBox).Text.IndexOf(',') > -1))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void gTransits_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewColumn column = gTransits.Columns[e.ColumnIndex];
+            ListSortDirection direction;
+
+            if (sorter != null)
+            {
+                if (sorter[0] == column.Name)
+                {
+                    if (sorter[1] == "ASC")
+                    {
+                        direction = ListSortDirection.Descending;
+                        sorter[1] = "DESC";
+                    }
+                    else
+                    {
+                        direction = ListSortDirection.Ascending;
+                        sorter[1] = "ASC";
+                    }
+
+                }
+                else
+                {
+                    sorter[0] = column.Name;
+                    if (sorter[1] == "ASC")
+                    {
+                        direction = ListSortDirection.Descending;
+                        sorter[1] = "DESC";
+                    }
+                    else
+                    {
+                        direction = ListSortDirection.Ascending;
+                        sorter[1] = "ASC";
+                    }
+                }
+            }
+            else
+                direction = ListSortDirection.Ascending;
+            
+            if (debt)
+            {
+                List<Debt> tab = gTransits.DataSource as List<Debt>;
+                List<Debt> sorted = new List<Debt>();
+                switch (column.Name)
+                {
+                    case "Debtid":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Debt>(tab.OrderBy(o => o.Debtid)).ToList() :
+                        new List<Debt>(tab.OrderByDescending(o => o.Debtid)).ToList();
+                        break;
+                    case "Creditor":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Debt>(tab.OrderBy(o => o.Creditor).ToList()) :
+                        new List<Debt>(tab.OrderByDescending(o => o.Creditor).ToList());
+                        break;
+                    case "Debtor":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Debt>(tab.OrderBy(o => o.Debtor).ToList()) :
+                        new List<Debt>(tab.OrderByDescending(o => o.Debtor).ToList());
+                        break;
+                    case "TransitCost":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Debt>(tab.OrderBy(o => o.TransitCost).ToList()) :
+                        new List<Debt>(tab.OrderByDescending(o => o.TransitCost).ToList());
+                        break;
+                    case "Date":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Debt>(tab.OrderBy(o => o.Date).ToList()) :
+                        new List<Debt>(tab.OrderByDescending(o => o.Date).ToList());
+                        break;
+                }
+
+                gTransits.DataSource = sorted;
+            }
+            else
+            { 
+                List<Transit> tab = gTransits.DataSource as List<Transit>;
+                List<Transit> sorted = new List<Transit>();
+                switch (column.Name)
+                {
+                    case "TransitID":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.Transitid)).ToList() :
+                        new List<Transit>(tab.OrderByDescending(o => o.Transitid)).ToList();
+                        break;
+                    case "DriverName":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.Driver).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.Driver).ToList());
+                        break;
+                    case "PassengersList":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.PassengersList).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.PassengersList).ToList());
+                        break;
+                    case "TransitCost":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.Cost).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.Cost).ToList());
+                        break;
+                    case "Date":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.Driven).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.Driven).ToList());
+                        break;
+                    case "CarName":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.CarName).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.CarName).ToList());
+                        break;
+                    case "RouteName":
+                        sorted =
+                        direction == ListSortDirection.Ascending ?
+                        new List<Transit>(tab.OrderBy(o => o.RouteName).ToList()) :
+                        new List<Transit>(tab.OrderByDescending(o => o.RouteName).ToList());
+                        break;
+                }
+
+                gTransits.DataSource = sorted;
+            }
+        }
+
+        private void gTransits_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Put each of the columns into programmatic sort mode.
+            foreach (DataGridViewColumn column in gTransits.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
             }
         }
     }

@@ -7,9 +7,9 @@ namespace KosztorysKierowcy
     class Transit
     {
         [DisplayName("ID")]
-        public string TransitID { get { return Transitid.ToString(); } }
+        public string TransitID => Transitid.ToString();
         [DisplayName("Kierowca")]
-        public string DriverName { get { return Driver.FullName; } }
+        public string DriverName => Driver.FullName;
         [DisplayName("Pasażerowie")]
         public string PassengersList
         {
@@ -26,13 +26,13 @@ namespace KosztorysKierowcy
             }
         }
         [DisplayName("Koszt")]
-        public string TransitCost { get { return Cost.ToString("F") + " zł"; } }
+        public string TransitCost => Cost.ToString("F") + " zł";
         [DisplayName("Data")]
-        public string Date { get { return Driven.ToString(); } }
+        public string Date => Driven.ToString();
         [DisplayName("Auto")]
-        public string CarName { get { return Car.Name; } }
+        public string CarName => Car.Name;
         [DisplayName("Trasa i dystans")]
-        public string RouteName { get { return Route.Information; } }
+        public string RouteName => Route.Information;
         public int Transitid;
         public Person Driver;
         public Car Car;

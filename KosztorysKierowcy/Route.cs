@@ -17,6 +17,6 @@ namespace KosztorysKierowcy
             Name = name;
             Distance = distance;
         }
-        public String Information { get { return Name + ", " + Distance + " km"; } }
+        public String Information => Name + ", " + Distance + " km";
     }
 }

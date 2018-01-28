@@ -39,6 +39,7 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.bDebts = new System.Windows.Forms.Button();
             this.tTo = new System.Windows.Forms.TextBox();
             this.lTo = new System.Windows.Forms.Label();
             this.tFrom = new System.Windows.Forms.TextBox();
@@ -69,7 +70,6 @@
             this.bAddCar = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
-            this.bDebts = new System.Windows.Forms.Button();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
@@ -210,6 +210,15 @@
             this.pMainPanel.Name = "pMainPanel";
             this.pMainPanel.Size = new System.Drawing.Size(1108, 226);
             this.pMainPanel.TabIndex = 12;
+            // 
+            // bDebts
+            // 
+            this.bDebts.Location = new System.Drawing.Point(862, 192);
+            this.bDebts.Name = "bDebts";
+            this.bDebts.Size = new System.Drawing.Size(118, 23);
+            this.bDebts.TabIndex = 38;
+            this.bDebts.Text = "Sprawdź długi";
+            this.bDebts.UseVisualStyleBackColor = true;
             // 
             // tTo
             // 
@@ -492,6 +501,7 @@
             // 
             this.gTransits.AllowUserToAddRows = false;
             this.gTransits.AllowUserToDeleteRows = false;
+            this.gTransits.AllowUserToOrderColumns = true;
             this.gTransits.AllowUserToResizeColumns = false;
             this.gTransits.AllowUserToResizeRows = false;
             this.gTransits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
@@ -502,15 +512,8 @@
             this.gTransits.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.gTransits.Size = new System.Drawing.Size(1105, 295);
             this.gTransits.TabIndex = 13;
-            // 
-            // bDebts
-            // 
-            this.bDebts.Location = new System.Drawing.Point(862, 192);
-            this.bDebts.Name = "bDebts";
-            this.bDebts.Size = new System.Drawing.Size(118, 23);
-            this.bDebts.TabIndex = 38;
-            this.bDebts.Text = "Sprawdź długi";
-            this.bDebts.UseVisualStyleBackColor = true;
+            this.gTransits.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gTransits_ColumnHeaderMouseClick);
+            this.gTransits.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gTransits_DataBindingComplete);
             // 
             // MainWindow
             // 

@@ -19,6 +19,6 @@ namespace KosztorysKierowcy
             Consumption = consumption;
             OwnerID = ownerid;
         }
-        public String Information { get { return Name + ", " + Consumption + "/100"; } }
+        public String Information => Name + ", " + Consumption + "/100";
     }
 }
