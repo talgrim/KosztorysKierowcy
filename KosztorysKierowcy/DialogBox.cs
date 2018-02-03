@@ -117,6 +117,10 @@ namespace KosztorysKierowcy
             pEditPerson.Location = pMain.Location;
             cPerson.DisplayMember = "FullName";
             cPerson.DataSource = dbm.getPassengersWithoutDriver(0);
+            Person start = cPerson.SelectedValue as Person;
+            tEditName.Text = start.Name;
+            tEditSurname.Text = start.Surname;
+            cbEditDriver.Checked = start.Driver;
 
             cPerson.SelectedValueChanged += (s, e) =>
             {
@@ -148,6 +152,9 @@ namespace KosztorysKierowcy
             cCar.DataSource = dbm.getCars();
             cEditOwner.DisplayMember = "FullName";
             cEditOwner.DataSource = dbm.getDrivers();
+            Car start = cCar.SelectedValue as Car;
+            tEditCarName.Text = start.Name;
+            tEditConsumption.Text = start.Consumption.ToString();
 
             cCar.SelectedValueChanged += (s, e) =>
             {
@@ -176,6 +183,9 @@ namespace KosztorysKierowcy
             pEditRoute.Location = pMain.Location;
             cRoute.DisplayMember = "Information";
             cRoute.DataSource = dbm.getRoutes();
+            Route start = cRoute.SelectedValue as Route;
+            tEditRouteName.Text = start.Name;
+            tEditDistance.Text = start.Distance.ToString();
 
             cRoute.SelectedValueChanged += (s, e) =>
             {
