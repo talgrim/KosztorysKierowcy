@@ -49,6 +49,10 @@
             this.tPersonSurname = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pSettings = new System.Windows.Forms.Panel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.tServer = new System.Windows.Forms.TextBox();
+            this.tDatabase = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tPassword = new System.Windows.Forms.TextBox();
@@ -94,10 +98,7 @@
             this.label20 = new System.Windows.Forms.Label();
             this.cbPeriod = new System.Windows.Forms.CheckBox();
             this.cChoice = new System.Windows.Forms.ComboBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.tServer = new System.Windows.Forms.TextBox();
-            this.tDatabase = new System.Windows.Forms.TextBox();
+            this.bCreate = new System.Windows.Forms.Button();
             this.pAddRoute.SuspendLayout();
             this.pAddCar.SuspendLayout();
             this.pAddPerson.SuspendLayout();
@@ -292,6 +293,7 @@
             // 
             // pSettings
             // 
+            this.pSettings.Controls.Add(this.bCreate);
             this.pSettings.Controls.Add(this.label21);
             this.pSettings.Controls.Add(this.label22);
             this.pSettings.Controls.Add(this.tServer);
@@ -308,6 +310,38 @@
             this.pSettings.Name = "pSettings";
             this.pSettings.Size = new System.Drawing.Size(253, 144);
             this.pSettings.TabIndex = 8;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(27, 76);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(69, 13);
+            this.label21.TabIndex = 13;
+            this.label21.Text = "Baza danych";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(154, 77);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(74, 13);
+            this.label22.TabIndex = 14;
+            this.label22.Text = "Adres serwera";
+            // 
+            // tServer
+            // 
+            this.tServer.Location = new System.Drawing.Point(128, 91);
+            this.tServer.Name = "tServer";
+            this.tServer.Size = new System.Drawing.Size(121, 20);
+            this.tServer.TabIndex = 12;
+            // 
+            // tDatabase
+            // 
+            this.tDatabase.Location = new System.Drawing.Point(4, 91);
+            this.tDatabase.Name = "tDatabase";
+            this.tDatabase.Size = new System.Drawing.Size(118, 20);
+            this.tDatabase.TabIndex = 11;
             // 
             // label9
             // 
@@ -345,9 +379,9 @@
             // 
             // bExport
             // 
-            this.bExport.Location = new System.Drawing.Point(128, 115);
+            this.bExport.Location = new System.Drawing.Point(88, 115);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(120, 23);
+            this.bExport.Size = new System.Drawing.Size(73, 23);
             this.bExport.TabIndex = 5;
             this.bExport.Text = "Eksportuj";
             this.bExport.UseVisualStyleBackColor = true;
@@ -356,7 +390,7 @@
             // 
             this.bImport.Location = new System.Drawing.Point(5, 115);
             this.bImport.Name = "bImport";
-            this.bImport.Size = new System.Drawing.Size(117, 23);
+            this.bImport.Size = new System.Drawing.Size(73, 23);
             this.bImport.TabIndex = 4;
             this.bImport.Text = "Importuj";
             this.bImport.UseVisualStyleBackColor = true;
@@ -725,43 +759,20 @@
             this.cChoice.Size = new System.Drawing.Size(246, 21);
             this.cChoice.TabIndex = 6;
             // 
-            // label21
+            // bCreate
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(27, 76);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(69, 13);
-            this.label21.TabIndex = 13;
-            this.label21.Text = "Baza danych";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(154, 77);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(74, 13);
-            this.label22.TabIndex = 14;
-            this.label22.Text = "Adres serwera";
-            // 
-            // tServer
-            // 
-            this.tServer.Location = new System.Drawing.Point(128, 91);
-            this.tServer.Name = "tServer";
-            this.tServer.Size = new System.Drawing.Size(121, 20);
-            this.tServer.TabIndex = 12;
-            // 
-            // tDatabase
-            // 
-            this.tDatabase.Location = new System.Drawing.Point(4, 91);
-            this.tDatabase.Name = "tDatabase";
-            this.tDatabase.Size = new System.Drawing.Size(118, 20);
-            this.tDatabase.TabIndex = 11;
+            this.bCreate.Location = new System.Drawing.Point(176, 115);
+            this.bCreate.Name = "bCreate";
+            this.bCreate.Size = new System.Drawing.Size(73, 23);
+            this.bCreate.TabIndex = 15;
+            this.bCreate.Text = "Utwórz";
+            this.bCreate.UseVisualStyleBackColor = true;
             // 
             // DialogBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(274, 181);
+            this.ClientSize = new System.Drawing.Size(278, 185);
             this.ControlBox = false;
             this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);
@@ -875,5 +886,6 @@
         private System.Windows.Forms.Label label22;
         public System.Windows.Forms.TextBox tServer;
         public System.Windows.Forms.TextBox tDatabase;
+        private System.Windows.Forms.Button bCreate;
     }
 }

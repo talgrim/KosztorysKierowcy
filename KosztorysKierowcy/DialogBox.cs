@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -299,6 +300,7 @@ namespace KosztorysKierowcy
             };
             bImport.Click += (s, e) =>
             {
+                DBManager.database = tDatabase.Text;
                 string path = tPath.Text;
                 if (DBManager.mysqlpath != path)
                     DBManager.mysqlpath = path;
@@ -306,10 +308,30 @@ namespace KosztorysKierowcy
             };
             bExport.Click += (s, e) =>
             {
+                DBManager.database = tDatabase.Text;
                 string path = tPath.Text;
                 if (DBManager.mysqlpath != path)
                     DBManager.mysqlpath = path;
                 dbm.Export();
+            };
+            bCreate.Click += (s, e) =>
+            {
+                DBManager.uid = tUid.Text;
+                DBManager.password = tPassword.Text;
+                DBManager.database = tDatabase.Text;
+                DBManager.server = tServer.Text;
+
+                string connectionString;
+                connectionString = "SERVER=" + DBManager.server + ";" + 
+                "UID=" + DBManager.uid + ";" + "PASSWORD=" + DBManager.password + ";";
+                string query = "CREATE DATABASE " + DBManager.database;
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
             };
         }
 
