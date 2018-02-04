@@ -94,6 +94,10 @@
             this.label20 = new System.Windows.Forms.Label();
             this.cbPeriod = new System.Windows.Forms.CheckBox();
             this.cChoice = new System.Windows.Forms.ComboBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.tServer = new System.Windows.Forms.TextBox();
+            this.tDatabase = new System.Windows.Forms.TextBox();
             this.pAddRoute.SuspendLayout();
             this.pAddCar.SuspendLayout();
             this.pAddPerson.SuspendLayout();
@@ -288,6 +292,10 @@
             // 
             // pSettings
             // 
+            this.pSettings.Controls.Add(this.label21);
+            this.pSettings.Controls.Add(this.label22);
+            this.pSettings.Controls.Add(this.tServer);
+            this.pSettings.Controls.Add(this.tDatabase);
             this.pSettings.Controls.Add(this.label9);
             this.pSettings.Controls.Add(this.label10);
             this.pSettings.Controls.Add(this.tPassword);
@@ -296,15 +304,15 @@
             this.pSettings.Controls.Add(this.bImport);
             this.pSettings.Controls.Add(this.tPath);
             this.pSettings.Controls.Add(this.label8);
-            this.pSettings.Location = new System.Drawing.Point(12, 183);
+            this.pSettings.Location = new System.Drawing.Point(292, 455);
             this.pSettings.Name = "pSettings";
-            this.pSettings.Size = new System.Drawing.Size(253, 139);
+            this.pSettings.Size = new System.Drawing.Size(253, 144);
             this.pSettings.TabIndex = 8;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(9, 43);
+            this.label9.Location = new System.Drawing.Point(9, 41);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(102, 13);
             this.label9.TabIndex = 9;
@@ -313,7 +321,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(166, 45);
+            this.label10.Location = new System.Drawing.Point(166, 43);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(36, 13);
             this.label10.TabIndex = 10;
@@ -321,7 +329,7 @@
             // 
             // tPassword
             // 
-            this.tPassword.Location = new System.Drawing.Point(128, 59);
+            this.tPassword.Location = new System.Drawing.Point(128, 57);
             this.tPassword.Name = "tPassword";
             this.tPassword.PasswordChar = '*';
             this.tPassword.Size = new System.Drawing.Size(121, 20);
@@ -330,32 +338,32 @@
             // 
             // tUid
             // 
-            this.tUid.Location = new System.Drawing.Point(4, 59);
+            this.tUid.Location = new System.Drawing.Point(4, 57);
             this.tUid.Name = "tUid";
             this.tUid.Size = new System.Drawing.Size(118, 20);
             this.tUid.TabIndex = 6;
             // 
             // bExport
             // 
-            this.bExport.Location = new System.Drawing.Point(36, 111);
+            this.bExport.Location = new System.Drawing.Point(128, 115);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(198, 23);
+            this.bExport.Size = new System.Drawing.Size(120, 23);
             this.bExport.TabIndex = 5;
-            this.bExport.Text = "Eksportuj bazę danych";
+            this.bExport.Text = "Eksportuj";
             this.bExport.UseVisualStyleBackColor = true;
             // 
             // bImport
             // 
-            this.bImport.Location = new System.Drawing.Point(36, 82);
+            this.bImport.Location = new System.Drawing.Point(5, 115);
             this.bImport.Name = "bImport";
-            this.bImport.Size = new System.Drawing.Size(198, 23);
+            this.bImport.Size = new System.Drawing.Size(117, 23);
             this.bImport.TabIndex = 4;
-            this.bImport.Text = "Importuj bazę danych";
+            this.bImport.Text = "Importuj";
             this.bImport.UseVisualStyleBackColor = true;
             // 
             // tPath
             // 
-            this.tPath.Location = new System.Drawing.Point(3, 22);
+            this.tPath.Location = new System.Drawing.Point(3, 20);
             this.tPath.Name = "tPath";
             this.tPath.Size = new System.Drawing.Size(247, 20);
             this.tPath.TabIndex = 0;
@@ -365,9 +373,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(57, 6);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(124, 13);
+            this.label8.Size = new System.Drawing.Size(143, 13);
             this.label8.TabIndex = 3;
-            this.label8.Text = "Ścieżka do folderu mysql";
+            this.label8.Text = "Ścieżka do folderu mysql\\bin";
             // 
             // pDelete
             // 
@@ -717,11 +725,43 @@
             this.cChoice.Size = new System.Drawing.Size(246, 21);
             this.cChoice.TabIndex = 6;
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(27, 76);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(69, 13);
+            this.label21.TabIndex = 13;
+            this.label21.Text = "Baza danych";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(154, 77);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(74, 13);
+            this.label22.TabIndex = 14;
+            this.label22.Text = "Adres serwera";
+            // 
+            // tServer
+            // 
+            this.tServer.Location = new System.Drawing.Point(128, 91);
+            this.tServer.Name = "tServer";
+            this.tServer.Size = new System.Drawing.Size(121, 20);
+            this.tServer.TabIndex = 12;
+            // 
+            // tDatabase
+            // 
+            this.tDatabase.Location = new System.Drawing.Point(4, 91);
+            this.tDatabase.Name = "tDatabase";
+            this.tDatabase.Size = new System.Drawing.Size(118, 20);
+            this.tDatabase.TabIndex = 11;
+            // 
             // DialogBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(273, 179);
+            this.ClientSize = new System.Drawing.Size(274, 181);
             this.ControlBox = false;
             this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);
@@ -831,5 +871,9 @@
         private System.Windows.Forms.TextBox tFrom;
         private System.Windows.Forms.Label lFrom;
         private System.Windows.Forms.CheckBox cbPeriod;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        public System.Windows.Forms.TextBox tServer;
+        public System.Windows.Forms.TextBox tDatabase;
     }
 }

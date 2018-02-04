@@ -1,6 +1,6 @@
 -- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
 --
--- Host: localhost    Database: estimate
+-- Host: localhost    Database: estimate3
 -- ------------------------------------------------------
 -- Server version	10.1.28-MariaDB
 
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `cars`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cars` (
   `carid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `consumption` int(11) NOT NULL,
   `ownerid` int(11) DEFAULT NULL,
   PRIMARY KEY (`carid`),
@@ -52,8 +52,8 @@ DROP TABLE IF EXISTS `debtperson`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `debtperson` (
   `personid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `surname` varchar(50) NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `surname` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   PRIMARY KEY (`personid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -64,7 +64,7 @@ CREATE TABLE `debtperson` (
 
 LOCK TABLES `debtperson` WRITE;
 /*!40000 ALTER TABLE `debtperson` DISABLE KEYS */;
-INSERT INTO `debtperson` VALUES (1,'Witold','Domanski'),(2,'Maciej','Hyla'),(3,'Adam','Strachanowski'),(4,'Dawid','Pasek'),(5,'Dawid','Zugaj');
+INSERT INTO `debtperson` VALUES (1,'Witold','DomaĹ„ski'),(2,'Maciej','Hyla'),(3,'Adam','Strachanowski'),(4,'Dawid','Pasek'),(5,'Dawid','Ĺ»ugaj');
 /*!40000 ALTER TABLE `debtperson` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,8 +135,8 @@ DROP TABLE IF EXISTS `persons`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `persons` (
   `personid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `surname` varchar(50) NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `surname` varchar(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `driver` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`personid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
@@ -148,7 +148,7 @@ CREATE TABLE `persons` (
 
 LOCK TABLES `persons` WRITE;
 /*!40000 ALTER TABLE `persons` DISABLE KEYS */;
-INSERT INTO `persons` VALUES (1,'Witold','Domanski',1),(2,'Maciej','Hyla',1),(3,'Adam','Strachanowski',0),(4,'Dawid','Pasek',0),(5,'Dawid','Zugaj',1);
+INSERT INTO `persons` VALUES (1,'Witold','DomaĹ„ski',1),(2,'Maciej','Hyla',1),(3,'Adam','Strachanowski',0),(4,'Dawid','Pasek',0),(5,'Dawid','Zugaj',1);
 /*!40000 ALTER TABLE `persons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +161,7 @@ DROP TABLE IF EXISTS `routes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `routes` (
   `routeid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
   `distance` int(11) NOT NULL,
   PRIMARY KEY (`routeid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -220,5 +220,5 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-03 14:40:00
+-- Dump completed on 2018-02-04 18:54:05
 

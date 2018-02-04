@@ -12,8 +12,8 @@ namespace KosztorysKierowcy
     class DBManager
     {
         private MySqlConnection connection;
-        private string server;
-        private string database;
+        public static string server;
+        public static string database;
         public static string uid;
         public static string password;
         public static string mysqlpath;
@@ -35,16 +35,20 @@ namespace KosztorysKierowcy
             uidtemp = uidtemp.Split('=')[1];
             string passwordtemp = file.ReadLine();
             passwordtemp = passwordtemp.Split('=')[1];
+            string databasetemp = file.ReadLine();
+            databasetemp = databasetemp.Split('=')[1];
+            string servertemp = file.ReadLine();
+            servertemp = servertemp.Split('=')[1];
             mysqlpath = mysqlpathtemp;
             uid = uidtemp;
             password = passwordtemp;
+            database = databasetemp;
+            server = servertemp;
             file.Close();
         }
 
         private void Initialize()
         {
-            server = "localhost";
-            database = "estimate";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
@@ -386,11 +390,17 @@ namespace KosztorysKierowcy
             List<Person> drivers = new List<Person>();
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    using(MySqlDataReader dataReader = cmd.ExecuteReader())
+                try
+                {
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
                         while (dataReader.Read())
                             drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
-                
+                }
+                catch(MySqlException e)
+                {
+                    Import();
+                }
                 this.CloseConnection();
                 return drivers;
             }
@@ -788,21 +798,21 @@ namespace KosztorysKierowcy
         public List<Person> getPassengersWithoutDriver(int id)
         {
             string query = "SELECT personid, name, surname, driver FROM persons WHERE personid <> " + id;
-            List <Person> passengers = new List<Person>();
+            List<Person> passengers = new List<Person>();
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    using(MySqlDataReader dataReader = cmd.ExecuteReader())
-                        while (dataReader.Read())
-                            passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        passengers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
                 this.CloseConnection();
                 return passengers;
             }
             else
                 return passengers;
         }
-        
-        public void Backup()
+
+        public void Export()
         {
             try
             {
@@ -848,7 +858,7 @@ namespace KosztorysKierowcy
             }
         }
 
-        public void Restore()
+        public void Import()
         {
             try
             {

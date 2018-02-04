@@ -274,13 +274,22 @@ namespace KosztorysKierowcy
             tPath.Text = DBManager.mysqlpath;
             tUid.Text = DBManager.uid;
             tPassword.Text = DBManager.password;
+            tDatabase.Text = DBManager.database;
+            tServer.Text = DBManager.server;
             button1.Click += (s, e) =>
             {
                 DBManager.mysqlpath = tPath.Text;
                 DBManager.uid = tUid.Text;
                 DBManager.password = tPassword.Text;
+                DBManager.database = tDatabase.Text;
+                DBManager.server = tServer.Text;
 
-                string output = "mysqlpath=" + tPath.Text + "\nuid=" + tUid.Text + "\npassword=" + tPassword.Text;
+                string output = 
+                "mysqlpath=" + tPath.Text + 
+                "\nuid=" + tUid.Text +
+                "\npassword=" + tPassword.Text + 
+                "\ndatabase=" + tDatabase.Text + 
+                "\nserver=" + tServer.Text;
                 StreamWriter file = new StreamWriter("config.ini");
                 file.WriteLine(output);
                 file.Close();
@@ -293,14 +302,14 @@ namespace KosztorysKierowcy
                 string path = tPath.Text;
                 if (DBManager.mysqlpath != path)
                     DBManager.mysqlpath = path;
-                dbm.Restore();
+                dbm.Import();
             };
             bExport.Click += (s, e) =>
             {
                 string path = tPath.Text;
                 if (DBManager.mysqlpath != path)
                     DBManager.mysqlpath = path;
-                dbm.Backup();
+                dbm.Export();
             };
         }
 
