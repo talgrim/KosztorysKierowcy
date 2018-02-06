@@ -326,12 +326,30 @@ namespace KosztorysKierowcy
 
         public void editRoute(int id, string name, int distance)
         {
+            //przed
+            /*
             string query = "UPDATE routes SET name='" + name + "', distance=" + distance + " WHERE routeid = " + id;
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            */
+
+            //po
+            string query = "UPDATE routes SET name= @name, distance= @distance WHERE routeid = @id";
+
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@distance", distance);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
