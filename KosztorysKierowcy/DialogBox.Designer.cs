@@ -49,6 +49,7 @@
             this.tPersonSurname = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pSettings = new System.Windows.Forms.Panel();
+            this.bCreate = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.tServer = new System.Windows.Forms.TextBox();
@@ -98,7 +99,6 @@
             this.label20 = new System.Windows.Forms.Label();
             this.cbPeriod = new System.Windows.Forms.CheckBox();
             this.cChoice = new System.Windows.Forms.ComboBox();
-            this.bCreate = new System.Windows.Forms.Button();
             this.pAddRoute.SuspendLayout();
             this.pAddCar.SuspendLayout();
             this.pAddPerson.SuspendLayout();
@@ -162,7 +162,7 @@
             this.tDistance.Name = "tDistance";
             this.tDistance.Size = new System.Drawing.Size(246, 20);
             this.tDistance.TabIndex = 5;
-            this.tDistance.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaCheck);
+            this.tDistance.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaNumericInteger);
             // 
             // label2
             // 
@@ -226,7 +226,7 @@
             this.tConsumption.Name = "tConsumption";
             this.tConsumption.Size = new System.Drawing.Size(246, 20);
             this.tConsumption.TabIndex = 5;
-            this.tConsumption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaCheck);
+            this.tConsumption.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaNumericInteger);
             // 
             // label4
             // 
@@ -310,6 +310,15 @@
             this.pSettings.Name = "pSettings";
             this.pSettings.Size = new System.Drawing.Size(253, 144);
             this.pSettings.TabIndex = 8;
+            // 
+            // bCreate
+            // 
+            this.bCreate.Location = new System.Drawing.Point(176, 115);
+            this.bCreate.Name = "bCreate";
+            this.bCreate.Size = new System.Drawing.Size(73, 23);
+            this.bCreate.TabIndex = 15;
+            this.bCreate.Text = "Utwórz";
+            this.bCreate.UseVisualStyleBackColor = true;
             // 
             // label21
             // 
@@ -718,7 +727,7 @@
             this.tFrom.Size = new System.Drawing.Size(100, 20);
             this.tFrom.TabIndex = 38;
             this.tFrom.Visible = false;
-            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
+            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaData);
             // 
             // lFrom
             // 
@@ -759,20 +768,11 @@
             this.cChoice.Size = new System.Drawing.Size(246, 21);
             this.cChoice.TabIndex = 6;
             // 
-            // bCreate
-            // 
-            this.bCreate.Location = new System.Drawing.Point(176, 115);
-            this.bCreate.Name = "bCreate";
-            this.bCreate.Size = new System.Drawing.Size(73, 23);
-            this.bCreate.TabIndex = 15;
-            this.bCreate.Text = "Utwórz";
-            this.bCreate.UseVisualStyleBackColor = true;
-            // 
             // DialogBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 185);
+            this.ClientSize = new System.Drawing.Size(911, 626);
             this.ControlBox = false;
             this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);

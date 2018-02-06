@@ -104,22 +104,31 @@ namespace KosztorysKierowcy
                 foreach (int debtorid in debtorsids)
                 {
                     string query = "INSERT INTO debts (creditorid, debtorid, date, amount) " +
-                        "VALUES (" + creditorid + ", " + debtorid + ", NOW(), " + amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + ")";
+                        "VALUES (@creditorid, @debtorid, NOW(), @amount)";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@creditorid", creditorid);
+                        cmd.Parameters.AddWithValue("@debtorid", debtorid);
+                        cmd.Parameters.AddWithValue("@amount", amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
                         cmd.ExecuteNonQuery();
+                    }
                 }
                 this.CloseConnection();
             }
         }
 
-        public void addDebtor(string Name, string Surname)
+        public void addDebtor(string name, string surname)
         {
             if (this.OpenConnection() == true)
             {
                 string query = "INSERT INTO debtperson (name, surname) " +
-                    "VALUES ('" + Name + "', '" + Surname + "')";
+                    "VALUES (@name, @surname)";
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@surname", surname);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -249,12 +258,19 @@ namespace KosztorysKierowcy
         public void insertTransit(int driverid, int carid, int routeid, double cost)
         {
             string query = "INSERT INTO transits (driverid, carid, routeid, driven, cost) " +
-                "VALUES (" + driverid.ToString() + ", " + carid.ToString() + ", " + routeid.ToString() + ", NOW(), " + cost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + " );";
-            
+                "VALUES (@driverid, @carid, @routeid, NOW(), @cost );";
+
+
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@driverid", driverid);
+                    cmd.Parameters.AddWithValue("@carid", carid);
+                    cmd.Parameters.AddWithValue("@routeid", routeid);
+                    cmd.Parameters.AddWithValue("@cost", cost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -262,16 +278,26 @@ namespace KosztorysKierowcy
         public void insertPassengers(int transitid, int[] passengersid)
         {
             string query = "INSERT INTO passengersToTransit VALUES ";
-            foreach (int x in passengersid)
-                if (x != passengersid.Last())
-                    query += "(" + transitid.ToString() + ", " + x.ToString() + "), ";
+            for(int i = 0; i < passengersid.Count(); i++)
+            {
+                if (i < passengersid.Count()-1)
+                    query += "(@transitid, @passenger_" + i.ToString() + "), ";
                 else
-                    query += "(" + transitid.ToString() + ", " + x.ToString() + ")";
+                    query += "(@transitid, @passenger_" + i.ToString() + ")";
+            }
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@transitid", transitid);
+                    for (int i = 0; i < passengersid.Count(); i++)
+                    {
+                        string field = "@passenger_" + i.ToString();
+                        cmd.Parameters.AddWithValue(field,passengersid[i]);
+                    }
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -290,24 +316,35 @@ namespace KosztorysKierowcy
 
         public void editPerson(int id, string name, string surname, int driver)
         {
-            string query = "UPDATE persons SET name='" + name + "', surname='" + surname + "', driver= " + driver + " WHERE personid = " + id;
+            string query = "UPDATE persons SET name=@name, surname=@surname, driver= @driver WHERE personid = @id";
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@surname", surname);
+                    cmd.Parameters.AddWithValue("@driver", driver);
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
 
         public void addPerson(string name, string surname, int driver)
         {
-            string query = "INSERT INTO persons(name, surname, driver) VALUES ('" + name + "', '" + surname + "', " + driver + ")";
+            string query = "INSERT INTO persons(name, surname, driver) VALUES (@name, @surname, @driver)";
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@surname", surname);
+                    cmd.Parameters.AddWithValue("@driver", driver);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -356,12 +393,16 @@ namespace KosztorysKierowcy
 
         public void addRoute(string name, int distance)
         {
-            string query = "INSERT INTO routes(name, distance) VALUES ('" + name + "', " + distance + ")";
+            string query = "INSERT INTO routes(name, distance) VALUES (@name, @distance)";
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@distance", distance);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -380,24 +421,35 @@ namespace KosztorysKierowcy
 
         public void editCar(int id, string name, int consumption, int ownerid)
         {
-            string query = "UPDATE cars SET name='" + name + "', consumption=" + consumption + ", ownerid = " + ownerid + " WHERE carid = " + id;
+            string query = "UPDATE cars SET name=@name, consumption=@consumption, ownerid = @ownerid WHERE carid = @carid";
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@consumption", consumption);
+                    cmd.Parameters.AddWithValue("@ownerid", ownerid);
+                    cmd.Parameters.AddWithValue("@carid", id);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
 
         public void addCar(string name, int consumption, int ownerid)
         {
-            string query = "INSERT INTO cars(name, consumption, ownerid) VALUES ('" + name + "', " + consumption + ", " + ownerid + ")";
+            string query = "INSERT INTO cars(name, consumption, ownerid) VALUES (@name, @consumption, @ownerid)";
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@consumption", consumption);
+                    cmd.Parameters.AddWithValue("@ownerid", ownerid);
                     cmd.ExecuteNonQuery();
+                }
                 this.CloseConnection();
             }
         }
@@ -408,17 +460,11 @@ namespace KosztorysKierowcy
             List<Person> drivers = new List<Person>();
             if (this.OpenConnection() == true)
             {
-                try
-                {
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                        while (dataReader.Read())
-                            drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
-                }
-                catch(MySqlException e)
-                {
-                    Import();
-                }
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    while (dataReader.Read())
+                        drivers.Add(new Person((int)dataReader["personid"], dataReader["name"].ToString(), dataReader["surname"].ToString(), dataReader["driver"].ToString()));
+                
                 this.CloseConnection();
                 return drivers;
             }

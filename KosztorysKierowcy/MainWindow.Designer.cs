@@ -145,7 +145,7 @@
             this.tPetroleum.Size = new System.Drawing.Size(100, 20);
             this.tPetroleum.TabIndex = 9;
             this.tPetroleum.Text = "5,00";
-            this.tPetroleum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DecimalPragmaCheck);
+            this.tPetroleum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaNumericDecimal);
             // 
             // tRouteCost
             // 
@@ -227,7 +227,7 @@
             this.tTo.Size = new System.Drawing.Size(100, 20);
             this.tTo.TabIndex = 37;
             this.tTo.Visible = false;
-            this.tTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
+            this.tTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaDate);
             // 
             // lTo
             // 
@@ -246,7 +246,7 @@
             this.tFrom.Size = new System.Drawing.Size(100, 20);
             this.tFrom.TabIndex = 14;
             this.tFrom.Visible = false;
-            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DatePragmaCheck);
+            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaDate);
             // 
             // lFrom
             // 

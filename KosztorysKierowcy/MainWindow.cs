@@ -293,7 +293,7 @@ namespace KosztorysKierowcy
             }
         }
 
-        private void DatePragmaCheck(object sender, KeyPressEventArgs e)
+        private void pragmaDate(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
                 (e.KeyChar != '-'))
@@ -307,7 +307,7 @@ namespace KosztorysKierowcy
             }
         }
 
-        private void DecimalPragmaCheck(object sender, KeyPressEventArgs e)
+        private void pragmaNumericDecimal(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
                 (e.KeyChar != ','))
