@@ -90,24 +90,33 @@ namespace KosztorysKierowcy
 
         private void InitFields()
         {
-            drivers = dbm.getDrivers();
-            cDrivers.DisplayMember = "FullName";
-            cDrivers.DataSource = drivers;
-
-            routes = dbm.getRoutes();
-            cRoutes.DisplayMember = "Information";
-            cRoutes.DataSource = routes;
-
-            if (cDrivers.SelectedValue != null)
+            try
             {
-                int id = (cDrivers.SelectedValue as Person).Id;
-                cars = dbm.getCarsByID(id);
-                cCars.DisplayMember = "Information";
-                cCars.DataSource = cars;
 
-                passengers = dbm.getPassengersWithoutDriver(id);
-                lPassengers.DisplayMember = "FullName";
-                lPassengers.DataSource = passengers;
+
+                drivers = dbm.getDrivers();
+                cDrivers.DisplayMember = "FullName";
+                cDrivers.DataSource = drivers;
+
+                routes = dbm.getRoutes();
+                cRoutes.DisplayMember = "Information";
+                cRoutes.DataSource = routes;
+
+                if (cDrivers.SelectedValue != null)
+                {
+                    int id = (cDrivers.SelectedValue as Person).Id;
+                    cars = dbm.getCarsByID(id);
+                    cCars.DisplayMember = "Information";
+                    cCars.DataSource = cars;
+
+                    passengers = dbm.getPassengersWithoutDriver(id);
+                    lPassengers.DisplayMember = "FullName";
+                    lPassengers.DataSource = passengers;
+                }
+            }
+            catch (Exception e)
+            {
+                dbm.Import();
             }
         }
 
@@ -258,7 +267,6 @@ namespace KosztorysKierowcy
             dbm = new DBManager();
             if (dbm.IsCorrect)
             {
-                bRetry.Visible = false;
                 InitFields();
             }
         }
