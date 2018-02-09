@@ -70,13 +70,13 @@ namespace KosztorysKierowcy
                     MessageBox.Show("Nie może być puste", "Bład", MessageBoxButtons.OK);
                     return;
                 }
-                string regexString = "^\\p{L}";
-                string regexStringNice = regexString + "{" + tPersonName.Text.Trim().Length + "}";
-                if (!System.Text.RegularExpressions.Regex.IsMatch(tPersonName.Text.Trim(), regexStringNice))
-                {
-                    MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
-                    return;
-                }
+                //string regexString = "^\\p{L}";
+                //string regexStringNice = regexString + "{" + tPersonName.Text.Trim().Length + "}";
+                //if (!System.Text.RegularExpressions.Regex.IsMatch(tPersonName.Text.Trim(), regexStringNice))
+                //{
+                //    MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
+                //    return;
+                //}
                 if (dbm.checkPerson(name,surname))
                 {
                     MessageBox.Show("Osoba już istnieje. Może dodaj pseudonim do imienia?", "Bład", MessageBoxButtons.OK);
@@ -401,11 +401,35 @@ namespace KosztorysKierowcy
         {
             if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
                 (e.KeyChar != '-'))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Niepoprawny znak! Tylko litery i jeden myślnik!", TB, 0, TB.Height, VisibleTime);
+
                 e.Handled = true;
+            }
 
             if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
             {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Tylko jeden myślnik!", TB, 0, TB.Height, VisibleTime);
+
                 e.Handled = true;
+            }
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') == -1) && (sender as TextBox).Text.Length==0)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Myślnik nie może być na początku", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
             }
         }
 
