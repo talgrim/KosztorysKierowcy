@@ -284,7 +284,7 @@
             this.bRetry.Name = "bRetry";
             this.bRetry.Size = new System.Drawing.Size(116, 23);
             this.bRetry.TabIndex = 15;
-            this.bRetry.Text = "Ponów połączenie";
+            this.bRetry.Text = "Odśwież";
             this.bRetry.UseVisualStyleBackColor = true;
             this.bRetry.Click += new System.EventHandler(this.bRetry_Click);
             // 

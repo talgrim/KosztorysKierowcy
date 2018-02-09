@@ -61,17 +61,26 @@ namespace KosztorysKierowcy
             pAddPerson.Location = pMain.Location;
             button1.Click += (s, e) =>
             {
-                if (tPersonName.Text.Trim().Length != 0 && tPersonSurname.Text.Trim().Length != 0)
+                if (tPersonName.Text.Trim().Length == 0 || tPersonSurname.Text.Trim().Length == 0)
                 {
-                    string name = tPersonName.Text;
-                    string surname = tPersonSurname.Text;
-                    int driver = cbDriver.Checked ? 1 : 0;
-                    dbm.addPerson(name, surname, driver);
-                    dbm.addDebtor(name, surname);
-
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    MessageBox.Show("Nie może być puste", "Bład", MessageBoxButtons.OK);
+                    return;
                 }
+                string regexString = "^\\p{L}";
+                string regexStringNice = regexString + "{" + tPersonName.Text.Trim().Length + "}";
+                if (!System.Text.RegularExpressions.Regex.IsMatch(tPersonName.Text.Trim(), regexStringNice))
+                {
+                    MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
+                    return;
+                } 
+                string name = tPersonName.Text;
+                string surname = tPersonSurname.Text;
+                int driver = cbDriver.Checked ? 1 : 0;
+                dbm.addPerson(name, surname, driver);
+                dbm.addDebtor(name, surname);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             };
         }
 

@@ -47,11 +47,9 @@ namespace KosztorysKierowcy
             dbm = new DBManager();
             if (dbm.IsCorrect)
             {
-                bRetry.Visible = false;
                 InitFields();
             }
-            else
-                bRetry.Visible = true;
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)

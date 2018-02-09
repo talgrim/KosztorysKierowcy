@@ -262,6 +262,7 @@
             // tPersonName
             // 
             this.tPersonName.Location = new System.Drawing.Point(3, 22);
+            this.tPersonName.MaxLength = 20;
             this.tPersonName.Name = "tPersonName";
             this.tPersonName.Size = new System.Drawing.Size(247, 20);
             this.tPersonName.TabIndex = 0;
@@ -772,7 +773,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 626);
+            this.ClientSize = new System.Drawing.Size(885, 653);
             this.ControlBox = false;
             this.Controls.Add(this.pChoice);
             this.Controls.Add(this.pEditCar);
