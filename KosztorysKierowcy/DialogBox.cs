@@ -59,6 +59,8 @@ namespace KosztorysKierowcy
         private void AddPerson()
         {
             pAddPerson.Location = pMain.Location;
+            tPersonSurname.KeyPress += new KeyPressEventHandler(pragmaTextSurname);
+            tPersonName.KeyPress += new KeyPressEventHandler(pragmaTextName);
             button1.Click += (s, e) =>
             {
                 if (tPersonName.Text.Trim().Length == 0 || tPersonSurname.Text.Trim().Length == 0)
@@ -72,7 +74,8 @@ namespace KosztorysKierowcy
                 {
                     MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
                     return;
-                } 
+                }
+
                 string name = tPersonName.Text;
                 string surname = tPersonSurname.Text;
                 int driver = cbDriver.Checked ? 1 : 0;
@@ -388,6 +391,30 @@ namespace KosztorysKierowcy
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void pragmaTextSurname(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
+                (e.KeyChar != '-'))
+                e.Handled = true;
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void pragmaTextName(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
+                (e.KeyChar != '"'))
+                e.Handled = true;
+
+            if ((e.KeyChar == '"') && ((sender as TextBox).Text.IndexOf('"') != (sender as TextBox).Text.LastIndexOf('"')))
+            {
+                e.Handled = true;
+            }
         }
 
         private void cbPeriod_CheckedChanged(object sender, EventArgs e)
