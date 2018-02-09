@@ -63,7 +63,9 @@ namespace KosztorysKierowcy
             tPersonName.KeyPress += new KeyPressEventHandler(pragmaTextName);
             button1.Click += (s, e) =>
             {
-                if (tPersonName.Text.Trim().Length == 0 || tPersonSurname.Text.Trim().Length == 0)
+                string name = tPersonName.Text;
+                string surname = tPersonSurname.Text;
+                if (name.Trim().Length == 0 || surname.Trim().Length == 0)
                 {
                     MessageBox.Show("Nie może być puste", "Bład", MessageBoxButtons.OK);
                     return;
@@ -75,9 +77,11 @@ namespace KosztorysKierowcy
                     MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
                     return;
                 }
-
-                string name = tPersonName.Text;
-                string surname = tPersonSurname.Text;
+                if (dbm.checkPerson(name,surname))
+                {
+                    MessageBox.Show("Osoba już istnieje. Może dodaj pseudonim do imienia?", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
                 int driver = cbDriver.Checked ? 1 : 0;
                 dbm.addPerson(name, surname, driver);
                 dbm.addDebtor(name, surname);
@@ -408,10 +412,16 @@ namespace KosztorysKierowcy
         private void pragmaTextName(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
-                (e.KeyChar != '"'))
+                (e.KeyChar != '"') &&
+                (e.KeyChar != ' '))
                 e.Handled = true;
 
             if ((e.KeyChar == '"') && ((sender as TextBox).Text.IndexOf('"') != (sender as TextBox).Text.LastIndexOf('"')))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
             {
                 e.Handled = true;
             }

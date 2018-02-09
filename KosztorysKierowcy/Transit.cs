@@ -5,7 +5,7 @@ namespace KosztorysKierowcy
 {
     class Transit
     {
-        [DisplayName("ID")]
+        [DisplayName("LP.")]
         public string TransitID => Transitid.ToString();
         [DisplayName("Kierowca")]
         public string DriverName => Driver.FullName;

@@ -20,7 +20,7 @@ namespace KosztorysKierowcy
             this.date = date;
         }
 
-        [DisplayName("ID")]
+        [DisplayName("LP.")]
         public string Debtid => debtid.ToString();
         [DisplayName("Wierzyciel")]
         public string Creditor => creditor.FullName;

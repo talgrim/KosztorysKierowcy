@@ -487,9 +487,26 @@ namespace KosztorysKierowcy
                 return result;
         }
 
-
-
-
+        public bool checkPerson(string name, string surname)
+        {
+            string query = "SELECT * FROM persons WHERE name = @name AND surname = @surname";
+            bool result = true;
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@surname", surname);
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        result = dataReader.HasRows;
+                }
+                this.CloseConnection();
+                return result;
+            }
+            else
+                return result;
+        }
+        
         public List<Transit> getTransitsByDriver(int id)
         {
             string query =
