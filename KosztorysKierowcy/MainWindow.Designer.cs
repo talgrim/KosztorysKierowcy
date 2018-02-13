@@ -40,9 +40,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
             this.bDebts = new System.Windows.Forms.Button();
-            this.tTo = new System.Windows.Forms.TextBox();
             this.lTo = new System.Windows.Forms.Label();
-            this.tFrom = new System.Windows.Forms.TextBox();
             this.lFrom = new System.Windows.Forms.Label();
             this.cbPeriod = new System.Windows.Forms.CheckBox();
             this.bExit = new System.Windows.Forms.Button();
@@ -70,6 +68,8 @@
             this.bAddCar = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
+            this.tFrom = new System.Windows.Forms.DateTimePicker();
+            this.tTo = new System.Windows.Forms.DateTimePicker();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
@@ -166,10 +166,10 @@
             // 
             // pMainPanel
             // 
-            this.pMainPanel.Controls.Add(this.bDebts);
             this.pMainPanel.Controls.Add(this.tTo);
-            this.pMainPanel.Controls.Add(this.lTo);
             this.pMainPanel.Controls.Add(this.tFrom);
+            this.pMainPanel.Controls.Add(this.bDebts);
+            this.pMainPanel.Controls.Add(this.lTo);
             this.pMainPanel.Controls.Add(this.lFrom);
             this.pMainPanel.Controls.Add(this.cbPeriod);
             this.pMainPanel.Controls.Add(this.bExit);
@@ -213,40 +213,22 @@
             // 
             // bDebts
             // 
-            this.bDebts.Location = new System.Drawing.Point(862, 192);
+            this.bDebts.Location = new System.Drawing.Point(862, 197);
             this.bDebts.Name = "bDebts";
             this.bDebts.Size = new System.Drawing.Size(118, 23);
             this.bDebts.TabIndex = 38;
             this.bDebts.Text = "Sprawdź długi";
             this.bDebts.UseVisualStyleBackColor = true;
             // 
-            // tTo
-            // 
-            this.tTo.Location = new System.Drawing.Point(650, 172);
-            this.tTo.Name = "tTo";
-            this.tTo.Size = new System.Drawing.Size(100, 20);
-            this.tTo.TabIndex = 37;
-            this.tTo.Visible = false;
-            this.tTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaDate);
-            // 
             // lTo
             // 
             this.lTo.AutoSize = true;
-            this.lTo.Location = new System.Drawing.Point(626, 175);
+            this.lTo.Location = new System.Drawing.Point(735, 175);
             this.lTo.Name = "lTo";
             this.lTo.Size = new System.Drawing.Size(22, 13);
             this.lTo.TabIndex = 36;
             this.lTo.Text = "do:";
             this.lTo.Visible = false;
-            // 
-            // tFrom
-            // 
-            this.tFrom.Location = new System.Drawing.Point(524, 172);
-            this.tFrom.Name = "tFrom";
-            this.tFrom.Size = new System.Drawing.Size(100, 20);
-            this.tFrom.TabIndex = 14;
-            this.tFrom.Visible = false;
-            this.tFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pragmaDate);
             // 
             // lFrom
             // 
@@ -515,6 +497,22 @@
             this.gTransits.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gTransits_ColumnHeaderMouseClick);
             this.gTransits.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gTransits_DataBindingComplete);
             // 
+            // tFrom
+            // 
+            this.tFrom.Location = new System.Drawing.Point(528, 171);
+            this.tFrom.Name = "tFrom";
+            this.tFrom.Size = new System.Drawing.Size(200, 20);
+            this.tFrom.TabIndex = 39;
+            this.tFrom.Visible = false;
+            // 
+            // tTo
+            // 
+            this.tTo.Location = new System.Drawing.Point(763, 171);
+            this.tTo.Name = "tTo";
+            this.tTo.Size = new System.Drawing.Size(200, 20);
+            this.tTo.TabIndex = 40;
+            this.tTo.Visible = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -571,12 +569,12 @@
         private System.Windows.Forms.RadioButton rbPassenger;
         private System.Windows.Forms.RadioButton rbDriver;
         private System.Windows.Forms.Button bExit;
-        private System.Windows.Forms.TextBox tTo;
         private System.Windows.Forms.Label lTo;
-        private System.Windows.Forms.TextBox tFrom;
         private System.Windows.Forms.Label lFrom;
         private System.Windows.Forms.CheckBox cbPeriod;
         private System.Windows.Forms.Button bDebts;
+        private System.Windows.Forms.DateTimePicker tFrom;
+        private System.Windows.Forms.DateTimePicker tTo;
     }
 }
 
