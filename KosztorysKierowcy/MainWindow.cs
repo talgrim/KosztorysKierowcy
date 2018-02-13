@@ -216,6 +216,12 @@ namespace KosztorysKierowcy
                                 To = To.AddDays(1);
                                 if (DateTime.Compare(From, To) <= 0)
                                     gTransits.DataSource = dbm.getTransitsByDriver((cDrivers.SelectedValue as Person).Id, From.ToString("yyyy-MM-dd"), To.ToString("yyyy-MM-dd"));
+                                else
+                                {
+                                    DialogResult dialogResult = MessageBox.Show("Błedny zakres daty.", "Ok", MessageBoxButtons.OK);
+                                    gTransits.DataSource = null;
+                                }
+                                   
                             }
                         }
                         else

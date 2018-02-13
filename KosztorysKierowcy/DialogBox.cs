@@ -487,15 +487,28 @@ namespace KosztorysKierowcy
                 e.Handled = true;
             }
 
-            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
-            {
-                TextBox TB = sender as TextBox;
-                int VisibleTime = 1000;
 
-                ToolTip tt = new ToolTip();
-                tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
-                e.Handled = true;
-            }
+
+            //if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf('"') > -1) && ((sender as TextBox).Text.IndexOf('"') == (sender as TextBox).Text.LastIndexOf('"'))
+            //    && !((sender as TextBox).Text.IndexOf(' ') > -1))
+            //{
+            //    TextBox TB = sender as TextBox;
+            //    int VisibleTime = 1000;
+
+            //    ToolTip tt = new ToolTip();
+            //    tt.Show("W pseudonimie nie powinno być spacji", TB, 0, TB.Height, VisibleTime);
+            //    e.Handled = true;
+            //}
+
+            //if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1) && ((sender as TextBox).Text.IndexOf(' ')+1 == (sender as TextBox).Text.LastIndexOf(' ')))
+            //{
+            //    TextBox TB = sender as TextBox;
+            //    int VisibleTime = 1000;
+
+            //    ToolTip tt = new ToolTip();
+            //    tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
+            //    e.Handled = true;
+            //}
             if ((e.KeyChar == '"') && ((sender as TextBox).Text.IndexOf('"') == -1) && (sender as TextBox).Text.Length == 0)
             {
                 TextBox TB = sender as TextBox;
