@@ -262,7 +262,7 @@
             // tPersonName
             // 
             this.tPersonName.Location = new System.Drawing.Point(3, 22);
-            this.tPersonName.MaxLength = 20;
+            this.tPersonName.MaxLength = 51;
             this.tPersonName.Name = "tPersonName";
             this.tPersonName.Size = new System.Drawing.Size(247, 20);
             this.tPersonName.TabIndex = 0;

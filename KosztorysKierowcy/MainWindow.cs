@@ -27,6 +27,7 @@ namespace KosztorysKierowcy
             this.cRoutes.SelectedIndexChanged += new EventHandler(this.Calculate);
             this.tPetroleum.TextChanged += new EventHandler(this.Calculate);
             this.lPassengers.SelectedIndexChanged += new EventHandler(this.Calculate);
+            this.tPetroleum.KeyPress += new KeyPressEventHandler(pragmaPetroleumValue);
             bExit.Click += (s, e) => { this.Close(); };
 
             bSettings.Click += (s, e) => { showDialogBox((s as Button).Text); };
@@ -72,7 +73,9 @@ namespace KosztorysKierowcy
 
         private void Calculate(object sender, EventArgs e)
         {
-            double petroleum = Double.Parse(tPetroleum.Text);
+            double petroleum;
+            Double.TryParse(tPetroleum.Text,out petroleum);
+
             if (cRoutes.SelectedIndex > -1 && cCars.SelectedIndex > -1)
             {
                 int distance = routes[cRoutes.SelectedIndex].Distance;
@@ -325,6 +328,74 @@ namespace KosztorysKierowcy
             {
                 e.Handled = true;
             }
+        }
+
+        private void pragmaPetroleumValue(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsNumber(e.KeyChar) &&
+               (e.KeyChar != ','))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("W tym polu możesz wpisać tylko liczbę z przecinkiem lub bez", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
+
+            if ((e.KeyChar == ',') && ((sender as TextBox).Text.IndexOf(',') >- 1) && !char.IsNumber(e.KeyChar))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Nie może być więcej niż 1 przecinek", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == ',') && ((sender as TextBox).Text.IndexOf(',') == -1) && ((sender as TextBox).Text.Length == 0))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Przecinek nie może być pierwszy", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+
+            if (((sender as TextBox).Text.IndexOf(',') == -1) && ((sender as TextBox).Text.IndexOf('0') == 0) && e.KeyChar=='0')
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Po co ci więcej zer", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+            if (char.IsNumber(e.KeyChar) &&
+                (sender as TextBox).Text.IndexOf(',')>-1 &&
+                ((sender as TextBox).Text.IndexOf(',')+3 ==  (sender as TextBox).Text.Length) )
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Maksymalnie 2 miejsca po przecinku", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+            if (char.IsNumber(e.KeyChar) &&
+                ((sender as TextBox).Text.IndexOf(',') == -1) && ((sender as TextBox).Text.Length>1))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+                ToolTip tt = new ToolTip();
+                tt.Show("Maksymalne spalanie to 99", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
         }
 
         private void gTransits_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)

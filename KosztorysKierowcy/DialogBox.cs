@@ -70,13 +70,7 @@ namespace KosztorysKierowcy
                     MessageBox.Show("Nie może być puste", "Bład", MessageBoxButtons.OK);
                     return;
                 }
-                //string regexString = "^\\p{L}";
-                //string regexStringNice = regexString + "{" + tPersonName.Text.Trim().Length + "}";
-                //if (!System.Text.RegularExpressions.Regex.IsMatch(tPersonName.Text.Trim(), regexStringNice))
-                //{
-                //    MessageBox.Show("W polu mogą być tylko litery", "Bład", MessageBoxButtons.OK);
-                //    return;
-                //}
+
                 if (dbm.checkPerson(name,surname))
                 {
                     MessageBox.Show("Osoba już istnieje. Może dodaj pseudonim do imienia?", "Bład", MessageBoxButtons.OK);
@@ -94,6 +88,8 @@ namespace KosztorysKierowcy
         private void AddCar()
         {
             pAddCar.Location = pMain.Location;
+            tCarName.KeyPress += new KeyPressEventHandler(pragmaCarName);
+            tConsumption.KeyPress += new KeyPressEventHandler(pragmaConsumption);
             cOwner.DisplayMember = "FullName";
             cOwner.DataSource = dbm.getDrivers();
 
@@ -115,6 +111,8 @@ namespace KosztorysKierowcy
         private void AddRoute()
         {
             pAddRoute.Location = pMain.Location;
+            tDistance.KeyPress += new KeyPressEventHandler(pragmaDistance);
+            tRouteName.KeyPress += new KeyPressEventHandler(pragmaRouteName);
             button1.Click += (s, e) =>
             {
                 if (tRouteName.Text.Trim().Length != 0 && Int16.Parse(tDistance.Text) > 0)
@@ -131,7 +129,10 @@ namespace KosztorysKierowcy
 
         private void EditPerson()
         {
+            
             pEditPerson.Location = pMain.Location;
+            tEditSurname.KeyPress += new KeyPressEventHandler(pragmaTextSurname);
+            tEditName.KeyPress += new KeyPressEventHandler(pragmaTextName);
             cPerson.DisplayMember = "FullName";
             cPerson.DataSource = dbm.getPassengersWithoutDriver(0);
             Person start = cPerson.SelectedValue as Person;
@@ -149,6 +150,20 @@ namespace KosztorysKierowcy
             button1.Click += (s, e) =>
             {
                 Person person = cPerson.SelectedValue as Person;
+
+                if (tEditName.Text.Trim().Length == 0 || tEditSurname.Text.Trim().Length == 0)
+                {
+                    MessageBox.Show("Nie może być puste", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+                if (dbm.checkPerson(tEditName.Text, tEditSurname.Text))
+                {
+                    MessageBox.Show("Osoba już istnieje. Może dodaj pseudonim do imienia?", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+
                 if (tEditName.Text.Trim().Length != 0 && tEditSurname.Text.Trim().Length != 0)
                 {
                     string name = tEditName.Text;
@@ -165,6 +180,8 @@ namespace KosztorysKierowcy
         private void EditCar()
         {
             pEditCar.Location = pMain.Location;
+            tEditCarName.KeyPress += new KeyPressEventHandler(pragmaCarName);
+            tEditConsumption.KeyPress += new KeyPressEventHandler(pragmaConsumption);
             cCar.DisplayMember = "Information";
             cCar.DataSource = dbm.getCars();
             cEditOwner.DisplayMember = "FullName";
@@ -198,6 +215,8 @@ namespace KosztorysKierowcy
         private void EditRoute()
         {
             pEditRoute.Location = pMain.Location;
+            tEditDistance.KeyPress += new KeyPressEventHandler(pragmaDistance);
+            tEditRouteName.KeyPress += new KeyPressEventHandler(pragmaRouteName);
             cRoute.DisplayMember = "Information";
             cRoute.DataSource = dbm.getRoutes();
             Route start = cRoute.SelectedValue as Route;
@@ -431,6 +450,16 @@ namespace KosztorysKierowcy
                 e.Handled = true;
 
             }
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length > 49)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("To pole może mieć maksymalnie 50 znaków", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
         }
 
         private void pragmaTextName(object sender, KeyPressEventArgs e)
@@ -438,16 +467,197 @@ namespace KosztorysKierowcy
             if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
                 (e.KeyChar != '"') &&
                 (e.KeyChar != ' '))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("W tym polu możesz wpisać tylko litery", TB, 0, TB.Height, VisibleTime);
                 e.Handled = true;
+            }
+                
 
             if ((e.KeyChar == '"') && ((sender as TextBox).Text.IndexOf('"') != (sender as TextBox).Text.LastIndexOf('"')))
             {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Nie może być więcej niż 2 cudzysłowiów", TB, 0, TB.Height, VisibleTime);
                 e.Handled = true;
             }
 
             if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
             {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
                 e.Handled = true;
+            }
+            if ((e.KeyChar == '"') && ((sender as TextBox).Text.IndexOf('"') == -1) && (sender as TextBox).Text.Length == 0)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Cudzysłów nie może być pierwszy", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+
+            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') == -1) && (sender as TextBox).Text.Length == 0)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Spacja nie może być pierwsza", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length > 49)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("To pole może mieć maksymalnie 50 znaków", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+        }
+
+        private void pragmaCarName(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) &&
+                (e.KeyChar != '-') && 
+                (e.KeyChar != ' '))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Niepoprawny znak! Tylko litery i jeden myślnik!", TB, 0, TB.Height, VisibleTime);
+
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Tylko jeden myślnik!", TB, 0, TB.Height, VisibleTime);
+
+                e.Handled = true;
+            }
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') == -1) && (sender as TextBox).Text.Length == 0)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Myślnik nie może być na początku", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+
+
+
+            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') == -1) && (sender as TextBox).Text.Length == 0)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Spacja nie może być pierwsza", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length > 49)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("To pole może mieć maksymalnie 50 znaków", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+
+        }
+
+        private void pragmaConsumption(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsNumber(e.KeyChar))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("W tym polu możesz wpisać tylko liczbę", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length>1)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Liczba może być maksymalnie dwucyfrowa", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
+        }
+
+        private void pragmaDistance(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsNumber(e.KeyChar))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("W tym polu możesz wpisać tylko liczbę", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
+
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length > 3)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Maksymalna wartość to 9999", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
+            }
+        }
+
+        private void pragmaRouteName(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && (sender as TextBox).Text.Length > 99)
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("To pole może mieć maksymalnie 100 znaków", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+
             }
         }
 
