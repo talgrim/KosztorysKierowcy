@@ -95,16 +95,33 @@ namespace KosztorysKierowcy
 
             button1.Click += (s, e) =>
             {
-                if (tCarName.Text.Trim().Length != 0 && Int16.Parse(tConsumption.Text) > 0)
+                string name = tCarName.Text;
+                short consumption;
+                if (name.Trim().Length == 0)
                 {
-                    string name = tCarName.Text;
-                    int consumption = Int16.Parse(tConsumption.Text);
-                    int ownerid = (cOwner.SelectedValue as Person).Id;
-                    dbm.addCar(name, consumption, ownerid);
-
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    MessageBox.Show("Nazwa samochodu nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
                 }
+
+                if (!Int16.TryParse(tConsumption.Text,out consumption))
+                {
+                    MessageBox.Show("Spalanie nie może być puste", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+                if (consumption==0)
+                {
+                    MessageBox.Show("Spalanie nie może wynosić 0", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+
+                int ownerid = (cOwner.SelectedValue as Person).Id;
+                dbm.addCar(name, consumption, ownerid);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             };
         }
 
@@ -115,15 +132,33 @@ namespace KosztorysKierowcy
             tRouteName.KeyPress += new KeyPressEventHandler(pragmaRouteName);
             button1.Click += (s, e) =>
             {
-                if (tRouteName.Text.Trim().Length != 0 && Int16.Parse(tDistance.Text) > 0)
+               
+                string name = tRouteName.Text;
+                short distance;
+                if (name.Trim().Length == 0)
                 {
-                    string name = tRouteName.Text;
-                    int distance = Int16.Parse(tDistance.Text);
-                    dbm.addRoute(name, distance);
-
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    MessageBox.Show("Nazwa trasy nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
                 }
+
+                if (!Int16.TryParse(tConsumption.Text, out distance))
+                {
+                    MessageBox.Show("Długość trasy nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+                if (distance == 0)
+                {
+                    MessageBox.Show("Długość traasy nie może wynosić 0", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+
+                dbm.addRoute(name, distance);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                
             };
         }
 
@@ -199,16 +234,35 @@ namespace KosztorysKierowcy
 
             button1.Click += (s, e) =>
             {
-                if (tEditCarName.Text.Trim().Length != 0 && Int16.Parse(tEditConsumption.Text) > 0)
-                {
-                    string name = tEditCarName.Text;
-                    int consumption = Int16.Parse(tEditConsumption.Text);
-                    int ownerid = (cEditOwner.SelectedValue as Person).Id;
-                    dbm.editCar((cCar.SelectedValue as Car).Id, name, consumption, ownerid);
+                string name = tEditCarName.Text;
+                short consumption;
 
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                if (name.Trim().Length == 0)
+                {
+                    MessageBox.Show("Nazwa samochodu nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
                 }
+
+                if (!Int16.TryParse(tConsumption.Text, out consumption))
+                {
+                    MessageBox.Show("Spalanie nie może być puste", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+                if (consumption == 0)
+                {
+                    MessageBox.Show("Spalanie nie może wynosić 0", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+                
+                int ownerid = (cEditOwner.SelectedValue as Person).Id;
+                dbm.editCar((cCar.SelectedValue as Car).Id, name, consumption, ownerid);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+
             };
         }
 
@@ -232,15 +286,33 @@ namespace KosztorysKierowcy
 
             button1.Click += (s, e) =>
             {
-                if (tEditRouteName.Text.Trim().Length != 0 && Int16.Parse(tEditDistance.Text) > 0)
-                {
-                    string name = tEditRouteName.Text;
-                    int consumption = Int16.Parse(tEditDistance.Text);
-                    dbm.editRoute((cRoute.SelectedValue as Route).Id, name, consumption);
 
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                string name = tRouteName.Text;
+                short distance;
+                if (name.Trim().Length == 0)
+                {
+                    MessageBox.Show("Nazwa trasy nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
                 }
+
+                if (!Int16.TryParse(tConsumption.Text, out distance))
+                {
+                    MessageBox.Show("Długość trasy nie może być pusta", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+                if (distance == 0)
+                {
+                    MessageBox.Show("Długość traasy nie może wynosić 0", "Bład", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+                dbm.editRoute((cRoute.SelectedValue as Route).Id, name, distance);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                
             };
         }
 
@@ -487,6 +559,15 @@ namespace KosztorysKierowcy
                 e.Handled = true;
             }
 
+            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') != (sender as TextBox).Text.LastIndexOf(' ')))
+            {
+                TextBox TB = sender as TextBox;
+                int VisibleTime = 1000;
+
+                ToolTip tt = new ToolTip();
+                tt.Show("Nie może być więcej niż 2 spacje", TB, 0, TB.Height, VisibleTime);
+                e.Handled = true;
+            }
 
 
             //if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf('"') > -1) && ((sender as TextBox).Text.IndexOf('"') == (sender as TextBox).Text.LastIndexOf('"'))
@@ -580,15 +661,15 @@ namespace KosztorysKierowcy
 
 
 
-            if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
-            {
-                TextBox TB = sender as TextBox;
-                int VisibleTime = 1000;
+            //if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') > -1))
+            //{
+            //    TextBox TB = sender as TextBox;
+            //    int VisibleTime = 1000;
 
-                ToolTip tt = new ToolTip();
-                tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
-                e.Handled = true;
-            }
+            //    ToolTip tt = new ToolTip();
+            //    tt.Show("Może być tylko jedna spacja", TB, 0, TB.Height, VisibleTime);
+            //    e.Handled = true;
+            //}
 
             if ((e.KeyChar == ' ') && ((sender as TextBox).Text.IndexOf(' ') == -1) && (sender as TextBox).Text.Length == 0)
             {

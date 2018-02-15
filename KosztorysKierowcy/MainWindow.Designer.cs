@@ -39,6 +39,8 @@
             this.tRouteCost = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pMainPanel = new System.Windows.Forms.Panel();
+            this.tTo = new System.Windows.Forms.DateTimePicker();
+            this.tFrom = new System.Windows.Forms.DateTimePicker();
             this.bDebts = new System.Windows.Forms.Button();
             this.lTo = new System.Windows.Forms.Label();
             this.lFrom = new System.Windows.Forms.Label();
@@ -68,8 +70,6 @@
             this.bAddCar = new System.Windows.Forms.Button();
             this.bAddPerson = new System.Windows.Forms.Button();
             this.gTransits = new System.Windows.Forms.DataGridView();
-            this.tFrom = new System.Windows.Forms.DateTimePicker();
-            this.tTo = new System.Windows.Forms.DateTimePicker();
             this.pMainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gTransits)).BeginInit();
             this.SuspendLayout();
@@ -78,16 +78,16 @@
             // 
             this.cDrivers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cDrivers.FormattingEnabled = true;
-            this.cDrivers.Location = new System.Drawing.Point(9, 36);
+            this.cDrivers.Location = new System.Drawing.Point(64, 7);
             this.cDrivers.Name = "cDrivers";
-            this.cDrivers.Size = new System.Drawing.Size(121, 21);
+            this.cDrivers.Size = new System.Drawing.Size(438, 21);
             this.cDrivers.TabIndex = 2;
             this.cDrivers.SelectedIndexChanged += new System.EventHandler(this.cDrivers_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 6);
+            this.label1.Location = new System.Drawing.Point(12, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 3;
@@ -97,15 +97,15 @@
             // 
             this.cCars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cCars.FormattingEnabled = true;
-            this.cCars.Location = new System.Drawing.Point(136, 36);
+            this.cCars.Location = new System.Drawing.Point(64, 61);
             this.cCars.Name = "cCars";
-            this.cCars.Size = new System.Drawing.Size(149, 21);
+            this.cCars.Size = new System.Drawing.Size(438, 21);
             this.cCars.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(196, 7);
+            this.label2.Location = new System.Drawing.Point(12, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 5;
@@ -114,7 +114,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(377, 6);
+            this.label3.Location = new System.Drawing.Point(12, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 6;
@@ -124,9 +124,9 @@
             // 
             this.cRoutes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cRoutes.FormattingEnabled = true;
-            this.cRoutes.Location = new System.Drawing.Point(291, 36);
+            this.cRoutes.Location = new System.Drawing.Point(64, 34);
             this.cRoutes.Name = "cRoutes";
-            this.cRoutes.Size = new System.Drawing.Size(211, 21);
+            this.cRoutes.Size = new System.Drawing.Size(438, 21);
             this.cRoutes.TabIndex = 7;
             // 
             // label4
@@ -210,6 +210,22 @@
             this.pMainPanel.Name = "pMainPanel";
             this.pMainPanel.Size = new System.Drawing.Size(1108, 226);
             this.pMainPanel.TabIndex = 12;
+            // 
+            // tTo
+            // 
+            this.tTo.Location = new System.Drawing.Point(763, 171);
+            this.tTo.Name = "tTo";
+            this.tTo.Size = new System.Drawing.Size(200, 20);
+            this.tTo.TabIndex = 40;
+            this.tTo.Visible = false;
+            // 
+            // tFrom
+            // 
+            this.tFrom.Location = new System.Drawing.Point(528, 171);
+            this.tFrom.Name = "tFrom";
+            this.tFrom.Size = new System.Drawing.Size(200, 20);
+            this.tFrom.TabIndex = 39;
+            this.tFrom.Visible = false;
             // 
             // bDebts
             // 
@@ -496,22 +512,6 @@
             this.gTransits.TabIndex = 13;
             this.gTransits.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gTransits_ColumnHeaderMouseClick);
             this.gTransits.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gTransits_DataBindingComplete);
-            // 
-            // tFrom
-            // 
-            this.tFrom.Location = new System.Drawing.Point(528, 171);
-            this.tFrom.Name = "tFrom";
-            this.tFrom.Size = new System.Drawing.Size(200, 20);
-            this.tFrom.TabIndex = 39;
-            this.tFrom.Visible = false;
-            // 
-            // tTo
-            // 
-            this.tTo.Location = new System.Drawing.Point(763, 171);
-            this.tTo.Name = "tTo";
-            this.tTo.Size = new System.Drawing.Size(200, 20);
-            this.tTo.TabIndex = 40;
-            this.tTo.Visible = false;
             // 
             // MainWindow
             // 
